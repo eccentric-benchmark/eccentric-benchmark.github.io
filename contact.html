@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overview - ECCentric Bench</title>
+    <title>Contact - ECCentric Bench</title>
     <link rel="stylesheet" type="text/css" href="assets/css/styles_feeling_responsive.css"> 
     <script src="assets/js/modernizr.min.js"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script> 
@@ -13,6 +13,7 @@
     <noscript>
         <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'> 
     </noscript>
+    <meta name="description" content="Contact the ECCentric Bench team at Systems Research Group, TUM.">
 </head>
 <body id="top-of-page">
     <div id="navigation" class="sticky">
@@ -27,7 +28,7 @@
                 <ul class="left">
                     <li><a href="index.html" class="icon-home"> Home</a></li>
                     <li class="divider"></li>
-                    <li class="active"><a href="overview.html">Overview</a></li>
+                    <li><a href="overview.html">Overview</a></li>
                     <li class="divider"></li>
                     <li><a href="scope.html">Research Scope</a></li>
                     <li class="divider"></li>
@@ -45,7 +46,7 @@
                 </ul>
                 <ul class="right">
                     <li class="divider"></li>
-                    <li class="contact-link"><a href="contact.html" class="icon-mail"> Contact</a></li>
+                    <li class="contact-link active"><a href="contact.html" class="icon-mail"> Contact</a></li>
                 </ul>
             </section>
         </nav>
@@ -53,31 +54,57 @@
     
     <div class="row t60">
         <div class="medium-12 columns">
-            <h1>The ECCentric Framework</h1>
+            <h1>Contact Us</h1>
             <p>
-                To experimentally explore our research questions while systematically exploring the important parameters, we require a high-performance and modular framework that incorporates different compilation stages, topology constraints, and detailed noise models. <strong>ECCentric</strong> is our dedicated, fully modular, extensible framework for systematic evaluation of QEC codes.
+                ECCentric is a research project conducted at the <strong><a href="https://dse.in.tum.de/">Systems Research Group</a></strong> within the Technical University of Munich (TUM).
             </p>
             
-            <div style="text-align: center; margin: 2em 0;">
-                <img src="images/pipeline_squeezed.png" alt="ECCentric Pipeline" style="max-width: 100%; border: 1px solid #ddd;">
-                <p style="font-style: italic; color: #666;">Figure: The end-to-end benchmarking pipeline of ECCentric.</p>
+            <hr>
+            
+            <h3>Authors</h3>
+            <div class="row">
+                <div class="medium-6 columns">
+                    <div style="padding: 1.5em; border: 1px solid #eee; border-radius: 8px; margin-bottom: 1.5em;">
+                        <h4><a href="https://aswierkowska.github.io/">Aleksandra Świerkowska</a></h4>
+                        <p style="margin-bottom: 0.5em;">PhD Student</p>
+                        <p><a href="mailto:aleksandra.swierkowska@tum.de" class="icon-mail"> aleksandra.swierkowska@tum.de</a></p>
+                    </div>
+                </div>
+                <div class="medium-6 columns">
+                    <div style="padding: 1.5em; border: 1px solid #eee; border-radius: 8px; margin-bottom: 1.5em;">
+                        <h4><a href="https://manosgior.github.io/">Emmanouil Giortamis</a></h4>
+                        <p style="margin-bottom: 0.5em;">PhD Student</p>
+                        <p><a href="mailto:emmanouil.giortamis@tum.de" class="icon-mail"> emmanouil.giortamis@tum.de</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="medium-6 columns">
+                    <div style="padding: 1.5em; border: 1px solid #eee; border-radius: 8px; margin-bottom: 1.5em;">
+                        <h4>Jannik Pflieger</h4>
+                        <p style="margin-bottom: 0.5em;">Researcher</p>
+                        <p><a href="mailto:jannik.pflieger@tum.de" class="icon-mail"> jannik.pflieger@tum.de</a></p>
+                    </div>
+                </div>
+                <div class="medium-6 columns">
+                    <div style="padding: 1.5em; border: 1px solid #eee; border-radius: 8px; margin-bottom: 1.5em;">
+                        <h4><a href="https://dse.in.tum.de/bhatotia/">Prof. Pramod Bhatotia</a></h4>
+                        <p style="margin-bottom: 0.5em;">Professor</p>
+                        <p><a href="mailto:pramod.bhatotia@tum.de" class="icon-mail"> pramod.bhatotia@tum.de</a></p>
+                    </div>
+                </div>
             </div>
             
-            <h3>Key Components</h3>
-            <ul>
-                <li><strong>Encoded Quantum Memory Generation:</strong> Supports arbitrary error-correction rounds and flexible code distances for major QEC families (Surface, Color, Bacon-Shor, Heavy-hex, Gross, Concatenated Steane).</li>
-                <li><strong>Transpilation:</strong>
-                    <ul>
-                        <li><em>Translation:</em> Transpiles circuits to native gate sets using high-performance SDKs (Qiskit, TKET, BQSKit).</li>
-                        <li><em>Mapping and Routing:</em> Adapts circuits to target device topologies (Willow, Apollo, Infleqtion, Flamingo) while exploring layout and routing strategies.</li>
-                    </ul>
-                </li>
-                <li><strong>Noise Addition:</strong> Injects gate-by-gate noise, including idle noise, leakage, crosstalk, readout errors, and shuttling errors.</li>
-                <li><strong>Stabilizer Simulation:</strong> Efficiently samples physical error propagation using Stim and infers corrections via general-purpose decoders (BP-OSD, MWPM).</li>
-            </ul>
+            <hr>
             
+            <h3>Group Information</h3>
             <p>
-                By integrating these stages, ECCentric allows for a holistic assessment of how various factors—from compiler choices to hardware connectivity—influence final logical error rates.
+                <strong>Systems Research Group</strong><br>
+                Department of Computer Science<br>
+                Technical University of Munich (TUM)<br>
+                Boltzmannstraße 3<br>
+                85748 Garching bei München, Germany<br>
+                Website: <a href="https://dse.in.tum.de/">https://dse.in.tum.de/</a>
             </p>
         </div>
     </div>
