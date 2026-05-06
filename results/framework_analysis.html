@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Framework Analysis - ECCentric Bench</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css"> 
+    <script src="../assets/js/modernizr.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script> 
+    <script> 
+        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } }); 
+    </script> 
+    <noscript>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'> 
+    </noscript>
+</head>
+<body id="top-of-page">
+    <div id="navigation" class="sticky">
+        <nav class="top-bar" role="navigation" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li><a href="../index.html">Home</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../overview.html">Overview</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../scope.html">Research Scope</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../methodology.html">Methodology</a></li>
+                    <li class="divider"></li>
+                    <li class="has-dropdown active">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li class="active"><a href="framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+    
+    <div class="row t60">
+        <div class="medium-12 columns">
+            <h1>Framework Analysis</h1>
+            <p>
+                This section evaluates how the internal stages of the benchmarking framework—specifically mapping, routing, and translation—contribute to the overall overhead and effectiveness of QEC codes.
+            </p>
+            
+            <hr>
+            
+            <h3>1. Mapping and Routing Overhead</h3>
+            <p>
+                We show that mapping and routing stages add <strong>134.095%</strong> more two-qubit gates on average due to SWAP overhead. In practical applications, this corresponds to just over four extra two-qubit gates for every original one, which greatly amplifies two-qubit errors.
+            </p>
+            
+            <div style="text-align: center; margin: 2em 0;">
+                <img src="../images/mapping_overhead.png" alt="Mapping and Routing Overhead" style="max-width: 100%; border: 1px solid #ddd;">
+                <p style="font-style: italic; color: #666;">Figure 1: Comparison of gate overhead introduced by different mapping and routing strategies.</p>
+            </div>
+
+            <div style="background-color: #fdf2e9; border-left: 6px solid #e67e22; padding: 1.5em; margin: 2em 0;">
+                <strong>Takeaway #6:</strong> Mapping and routing add significant gate overhead, highlighting the need for strategies tailored specifically to QEC codes to preserve fault tolerance.
+            </div>
+
+            <hr>
+
+            <h3>2. Translation Overhead</h3>
+            <p>
+                Our investigation shows that even the most optimized translation into native gate sets introduces significant overhead, with an average of <strong>3.166</strong> additional two-qubit gates per original gate.
+            </p>
+
+            <div style="text-align: center; margin: 2em 0;">
+                <img src="../images/translation_overhead.png" alt="Translation Overhead" style="max-width: 100%; border: 1px solid #ddd;">
+                <p style="font-style: italic; color: #666;">Figure 2: Gate count increase across various translation SDKs (Qiskit, TKET, BQSKit).</p>
+            </div>
+
+            <div style="background-color: #fdf2e9; border-left: 6px solid #e67e22; padding: 1.5em; margin: 2em 0;">
+                <strong>Takeaway #7:</strong> Compared to unoptimized circuits, careful compilation and translation are crucial to minimize overhead and limit error accumulation.
+            </div>
+
+        </div>
+    </div>
+
+    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
+        <div id="subfooter">
+            <nav class="row">
+                <section class="small-12 columns credits" style="text-align: center; color: #666;">
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                </section>
+            </nav>
+        </div>
+    </footer>
+    
+    <script src="../assets/js/javascript.min.js"></script>
+</body>
+</html>

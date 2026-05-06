@@ -28,13 +28,20 @@
                 <ul class="left">
                     <li class="active"><a href="index.html">Home</a></li>
                     <li class="divider"></li>
-                    <li><a href="results/intra_vs_dist.html">Intra-QPU vs Distributed</a></li>
+                    <li><a href="overview.html">Overview</a></li>
                     <li class="divider"></li>
-                    <li><a href="results/connectivity.html">Connectivity</a></li>
+                    <li><a href="scope.html">Research Scope</a></li>
                     <li class="divider"></li>
-                    <li><a href="results/compiler_overhead.html">Compiler Overhead</a></li>
+                    <li><a href="methodology.html">Methodology</a></li>
                     <li class="divider"></li>
-                    <li><a href="results/hardware.html">Hardware Platforms</a></li>
+                    <li class="has-dropdown">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li><a href="results/hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li><a href="results/framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="results/qec_analysis.html">QEC Analysis</a></li>
+                        </ul>
+                    </li>
                     <li class="divider"></li>
                 </ul>
             </section>
@@ -82,7 +89,15 @@
                 <hr />
                 <h3 style="text-align:center; margin-top: 0; margin-bottom: 1em; font-size: 1.8em;">What is ECCentric?</h3>
                 <p>
-                    Quantum error correction (QEC) is essential for building scalable quantum computers, but a lack of systematic, end-to-end evaluation methods makes it difficult to assess how different QEC codes perform under realistic conditions. The vast diversity of codes, an expansive experimental search space, and the absence of a standardized framework prevent a thorough, holistic analysis. To address this, we introduce ECCentric, an end-to-end benchmarking framework designed to systematically evaluate QEC codes across the full quantum computing stack. ECCentric is designed to be modular, extensible, and general, allowing for a comprehensive analysis of QEC code families under varying hardware topologies, noise models, and compilation strategies.
+                    Quantum Error Correction (QEC) is essential for building scalable quantum computers, but a lack of systematic, end-to-end evaluation methods makes it difficult to assess how different QEC codes perform under realistic conditions. To address this, we introduce <strong>ECCentric</strong>, a modular, extensible, and general end-to-end benchmarking framework designed to systematically evaluate QEC codes across the full quantum computing stack—from code construction and compilation to simulated execution on devices with specified topologies and noise characteristics.
+                </p>
+                
+                <div style="background-color: #f9f9f9; border-left: 10px solid #007095; margin: 2em 0; padding: 1.5em; font-style: italic; font-size: 1.2em; text-align: center;">
+                    "How can we systematically evaluate the suitability of quantum error correction (QEC) codes for practical applications on current and near-term quantum devices?"
+                </div>
+                
+                <p>
+                    ECCentric bridges the gap between theoretical potential and real-world implementation, providing actionable insights into the trade-offs, overheads, and practical feasibility of leading QEC codes.
                 </p>
             </div>
         </div>
@@ -91,43 +106,38 @@
         <div class="row">
             <div class="medium-12 columns">
                 <hr />
-                <h3 style="text-align:center; margin-top: 0; margin-bottom: 1em; font-size: 1.8em;">Results</h3>
-                <div style="text-align:center; margin-bottom: 2em;">
-                    <a href="#results" class="button radius large" style="background-color: #007095; color: white; padding: 15px 30px; border-radius: 5px; text-decoration: none; font-size: 1.2em; font-weight: bold;">View Results</a>
-                </div>
+                <h3 style="text-align:center; margin-top: 0; margin-bottom: 1em; font-size: 1.8em;">Key Results</h3>
+                <p style="text-align:center;">
+                    Our findings are organized into three core areas:
+                </p>
             </div>
         </div>
         
-        <div id="results" class="row">
-            <div class="large-3 columns">
-                <div style="text-align:center;">
-                    <a href="results/intra_vs_dist.html">
-                        <div style="font-size: 3em; margin-bottom: 0.2em;">🔄</div>
-                        <h4 style="text-align:center; margin: 0 0 1em 0;">Intra-QPU vs Distributed</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div style="text-align:center;">
-                    <a href="results/connectivity.html">
-                        <div style="font-size: 3em; margin-bottom: 0.2em;">🔗</div>
-                        <h4 style="text-align:center; margin: 0 0 1em 0;">Connectivity</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div style="text-align:center;">
-                    <a href="results/compiler_overhead.html">
-                        <div style="font-size: 3em; margin-bottom: 0.2em;">⚙️</div>
-                        <h4 style="text-align:center; margin: 0 0 1em 0;">Compiler Overhead</h4>
-                    </a>
-                </div>
-            </div>
-            <div class="large-3 columns">
-                <div style="text-align:center;">
-                    <a href="results/hardware.html">
+        <div id="results-summary" class="row">
+            <div class="large-4 columns">
+                <div style="text-align:center; padding: 1em; border: 1px solid #eee; border-radius: 8px;">
+                    <a href="results/hardware_restrictions.html">
                         <div style="font-size: 3em; margin-bottom: 0.2em;">🖥️</div>
-                        <h4 style="text-align:center; margin: 0 0 1em 0;">Hardware Platforms</h4>
+                        <h4 style="text-align:center; margin: 0 0 0.5em 0;">Hardware Restrictions</h4>
+                        <p style="font-size: 0.9em; color: #666;">Analysis of topology, connectivity, and device variance.</p>
+                    </a>
+                </div>
+            </div>
+            <div class="large-4 columns">
+                <div style="text-align:center; padding: 1em; border: 1px solid #eee; border-radius: 8px;">
+                    <a href="results/framework_analysis.html">
+                        <div style="font-size: 3em; margin-bottom: 0.2em;">⚙️</div>
+                        <h4 style="text-align:center; margin: 0 0 0.5em 0;">Framework Analysis</h4>
+                        <p style="font-size: 0.9em; color: #666;">Impact of mapping, routing, and translation overhead.</p>
+                    </a>
+                </div>
+            </div>
+            <div class="large-4 columns">
+                <div style="text-align:center; padding: 1em; border: 1px solid #eee; border-radius: 8px;">
+                    <a href="results/qec_analysis.html">
+                        <div style="font-size: 3em; margin-bottom: 0.2em;">🔬</div>
+                        <h4 style="text-align:center; margin: 0 0 0.5em 0;">QEC Analysis</h4>
+                        <p style="font-size: 0.9em; color: #666;">Decoder performance and selective QEC benefits.</p>
                     </a>
                 </div>
             </div>
@@ -145,7 +155,13 @@
         <div id="subfooter">
             <nav class="row">
                 <section class="small-12 columns credits" style="text-align: center; color: #666;">
-                    <p>ECCentric Benchmark. Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
                 </section>
             </nav>
         </div>

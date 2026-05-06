@@ -1,0 +1,110 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hardware Restrictions - ECCentric Bench</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css"> 
+    <script src="../assets/js/modernizr.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script> 
+    <script> 
+        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } }); 
+    </script> 
+    <noscript>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'> 
+    </noscript>
+</head>
+<body id="top-of-page">
+    <div id="navigation" class="sticky">
+        <nav class="top-bar" role="navigation" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li><a href="../index.html">Home</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../overview.html">Overview</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../scope.html">Research Scope</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../methodology.html">Methodology</a></li>
+                    <li class="divider"></li>
+                    <li class="has-dropdown active">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li class="active"><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+    
+    <div class="row t60">
+        <div class="medium-12 columns">
+            <h1>Hardware Restriction Analysis</h1>
+            <p>
+                This section explores how physical hardware constraints—specifically code scaling and qubit connectivity—impact the effectiveness of QEC codes.
+            </p>
+            
+            <hr>
+
+            <h3>1. The Overhead of Increasing Code Distance</h3>
+            <p>
+                Contrary to theoretical expectations, increasing code distance does not consistently improve logical performance on realistic hardware. On average, raising the distance (e.g., from 3 to 5) actually raises logical error rates by approximately <strong>0.012</strong> due to the overhead of additional qubits and gates.
+            </p>
+
+            <div style="text-align: center; margin: 2em 0;">
+                <img src="../images/distance_overhead.png" alt="Distance Scaling Overhead" style="max-width: 100%; border: 1px solid #ddd;">
+                <p style="font-style: italic; color: #666;">Figure 1: Scaling of logical error rate with increased code distance on constrained topologies.</p>
+            </div>
+
+            <div style="background-color: #e7f3f8; border-left: 6px solid #2980b9; padding: 1.5em; margin: 2em 0;">
+                <strong>Takeaway #1:</strong> Increasing code distance does not consistently improve logical performance due to overhead. This suggests that once a code shows effectiveness, we should use available device scale to run larger protected circuits instead of just raising the distance.
+            </div>
+
+            <hr>
+            
+            <h3>2. The Dominance of Qubit Connectivity</h3>
+            <p>
+                Our experiments show that qubit connectivity is the most critical factor for QEC effectiveness. Transitioning from a 2D grid to an idealized fully connected layout reduces the logical error rate by <strong>81.92%</strong> on average. In realistic mid-term devices, mechanisms like qubit shuttling (trapped-ion) improve performance by <strong>45%</strong> compared to static constrained layouts.
+            </p>
+            
+            <div style="text-align: center; margin: 2em 0;">
+                <img src="../images/connectivity_impact.png" alt="Connectivity Impact" style="max-width: 100%; border: 1px solid #ddd;">
+                <p style="font-style: italic; color: #666;">Figure 2: Impact of various topologies on logical error rates across different code families.</p>
+            </div>
+
+            <div style="background-color: #e7f3f8; border-left: 6px solid #2980b9; padding: 1.5em; margin: 2em 0;">
+                <strong>Takeaway #2:</strong> Connectivity is a crucial factor in the effectiveness of QEC. While fully connected topologies are currently physically unrealistic for superconducting qubits, realistic partial-connectivity mechanisms like shuttling are essential to unlock the full potential of QEC.
+            </div>
+
+        </div>
+    </div>
+
+    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
+        <div id="subfooter">
+            <nav class="row">
+                <section class="small-12 columns credits" style="text-align: center; color: #666;">
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                </section>
+            </nav>
+        </div>
+    </footer>
+    
+    <script src="../assets/js/javascript.min.js"></script>
+</body>
+</html>
