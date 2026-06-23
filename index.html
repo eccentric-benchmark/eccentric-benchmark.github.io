@@ -153,14 +153,23 @@
                 <hr />
                 <h3 style="text-align:center; margin-top: 0; margin-bottom: 1em; font-size: 1.8em;">Cite ECCentric</h3>
                 <p style="text-align:center;">If you find our work useful in your research, please cite our SIGMETRICS'26 paper:</p>
-                <div style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 1.5em; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; white-space: pre-wrap;">@misc{świerkowska2025eccentricempiricalanalysisquantum,
-      title={ECCentric: An Empirical Analysis of Quantum Error Correction Codes}, 
-      author={Aleksandra Świerkowska and Jannik Pflieger and Emmanouil Giortamis and Pramod Bhatotia},
-      year={2025},
-      eprint={2511.01062},
-      archivePrefix={arXiv},
-      primaryClass={quant-ph},
-      url={https://arxiv.org/abs/2511.01062}, 
+                <div style="background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 5px; padding: 1.5em; font-family: 'Courier New', Courier, monospace; font-size: 0.9em; white-space: pre-wrap;">@article{10.1145/3805635,
+author = {\'{S}wierkowska, Aleksandra and Pflieger, Jannik and Giortamis, Emmanouil and Bhatotia, Pramod},
+title = {ECCentric: An Empirical Analysis of Quantum Error Correction Codes},
+year = {2026},
+issue_date = {June 2026},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {10},
+number = {2},
+url = {https://doi.org/10.1145/3805635},
+doi = {10.1145/3805635},
+abstract = {Quantum Error Correction (QEC) is essential for building scalable quantum computers, but a lack of systematic, end-to-end evaluation methods makes it difficult to assess how different QEC codes perform under realistic conditions. The vast diversity of codes, an expansive experimental search space, and the absence of a standardized framework prevent a thorough, holistic analysis. To address this, we introduce ECCentric, an end-to-end benchmarking framework designed to systematically evaluate QEC codes across the full quantum computing stack. ECCentric is designed to be modular, extensible, and general, allowing for a comprehensive analysis of QEC code families under varying hardware topologies, noise models, and compilation strategies.Using ECCentric, we conduct the first systematic benchmarking of major QEC code families against realistic, mid-term quantum device parameters. Our empirical analysis reveals that intra-QPU execution significantly outperforms distributed methods, that qubit connectivity is a far more critical factor for reducing logical errors than increasing code distance, and that compiler overhead remains a major source of error. Furthermore, our findings suggest that trapped-ion architectures with qubit shuttling are the most promising near-term platforms and that on noisy devices, a strategic and selective application of QEC is necessary to avoid introducing more errors than are corrected. This study provides crucial, actionable insights for both hardware designers and practitioners, guiding the development of fault-tolerant quantum systems.},
+journal = {Proc. ACM Meas. Anal. Comput. Syst.},
+month = may,
+articleno = {37},
+numpages = {33},
+keywords = {quantum computing, quantum error correction, benchmarking}
 }</div>
             </div>
         </div>
