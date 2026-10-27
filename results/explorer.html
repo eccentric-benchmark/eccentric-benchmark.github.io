@@ -1,0 +1,360 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results Explorer - ECCentric Bench</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css">
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } });
+    </script>
+    <noscript>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'>
+    </noscript>
+    <style>
+        .explorer-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6em 1em; margin: 1em 0; }
+        .explorer-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
+        .explorer-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
+        .explorer-toggles { display: flex; flex-wrap: wrap; gap: 0.4em 1.5em; margin: 0.5em 0 1em 0; font-size: 0.9em; }
+        .explorer-toggles label { font-weight: normal; margin: 0; }
+        .explorer-toggles input { margin: 0 0.3em 0 0; }
+        .explorer-summary { font-size: 0.9em; color: #555; margin: 0.5em 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5em; }
+        .explorer-table-wrap { overflow-x: auto; border: 1px solid #ddd; max-height: 70vh; overflow-y: auto; }
+        table.explorer { width: 100%; border-collapse: collapse; font-size: 0.82em; margin: 0; border: none; }
+        table.explorer th { position: sticky; top: 0; background: #f4ecf7; cursor: pointer; white-space: nowrap; padding: 0.5em; text-align: left; user-select: none; }
+        table.explorer th.sorted-asc::after { content: " \25B2"; font-size: 0.8em; }
+        table.explorer th.sorted-desc::after { content: " \25BC"; font-size: 0.8em; }
+        table.explorer td { padding: 0.35em 0.5em; white-space: nowrap; border-top: 1px solid #eee; }
+        table.explorer tr:nth-child(even) td { background: #fafafa; }
+        td.num { text-align: right; font-variant-numeric: tabular-nums; }
+        .status { padding: 0.1em 0.5em; border-radius: 0.8em; font-size: 0.85em; }
+        .status-measured { background: #d5f5e3; color: #1d6b3b; }
+        .status-low { background: #fdebd0; color: #8a5a12; }
+        .status-upper { background: #d6eaf8; color: #1f5f8b; }
+        .status-nofit { background: #eeeeee; color: #666; }
+        .status-na, .status-failed { background: #fadbd8; color: #8e2b20; }
+        .status-pending { background: #f4f4f4; color: #999; }
+        .explorer-chart { margin: 1em 0; }
+        .explorer-chart svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 0 auto; }
+        .explorer-note { background-color: #f4ecf7; border-left: 6px solid #8e44ad; padding: 1em 1.5em; margin: 1.5em 0; font-size: 0.9em; }
+        button.explorer-button { margin: 0; padding: 0.4em 1em; font-size: 0.85em; }
+    </style>
+</head>
+<body id="top-of-page">
+    <div id="navigation" class="sticky">
+        <nav class="top-bar" role="navigation" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li><a href="../index.html" class="icon-home"> Home</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../overview.html">Overview</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../scope.html">Research Scope</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../methodology.html">Methodology</a></li>
+                    <li class="divider"></li>
+                    <li class="has-dropdown active">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
+                            <li class="active"><a href="explorer.html">Results Explorer</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                <ul class="right">
+                    <li class="divider"></li>
+                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+
+    <div class="row t60">
+        <div class="medium-12 columns">
+            <h1>Results Explorer</h1>
+            <p>
+                Logical error rates of quantum error correction codes, simulated with ECCentric for combinations of
+                code, syndrome-extraction schedule, device, noise model and decoder. Pick the configurations you are
+                interested in below; every row is one configuration decoded with one decoder.
+            </p>
+            <p id="data-status" style="font-size: 0.9em; color: #666;">Loading results…</p>
+
+            <div class="explorer-controls" id="controls"></div>
+            <div class="explorer-toggles">
+                <label><input type="checkbox" id="hide-nofit" checked>Hide configurations that do not fit the device</label>
+                <label><input type="checkbox" id="hide-pending" checked>Hide configurations not computed yet</label>
+                <label><input type="checkbox" id="best-only">Best decoder per configuration only</label>
+            </div>
+
+            <div class="explorer-chart" id="chart"></div>
+
+            <div class="explorer-summary">
+                <span id="summary"></span>
+                <span><button class="explorer-button" id="download">Download as CSV</button></span>
+            </div>
+            <div class="explorer-table-wrap">
+                <table class="explorer" id="table"><thead></thead><tbody></tbody></table>
+            </div>
+
+            <div class="explorer-note">
+                <p><strong>How to read the results.</strong> The logical error rate is the fraction of shots in which any
+                logical qubit failed over all syndrome-extraction rounds (by default as many rounds as the code
+                distance), with a 95% Wilson confidence interval. The per-round rate assumes independent rounds:
+                ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2. Shots are sampled until 100 logical errors, 100,000 shots
+                or one hour of decoding.</p>
+                <p style="margin-bottom: 0;"><strong>Status.</strong>
+                    <span class="status status-measured">measured</span> at least 100 logical errors;
+                    <span class="status status-low">low statistics</span> stopped by the shot or time limit before 100 errors;
+                    <span class="status status-upper">upper bound</span> no logical error seen, the 95% upper bound is given;
+                    <span class="status status-nofit">does not fit</span> the code needs more qubits than the device has;
+                    <span class="status status-na">decoder not applicable</span> e.g. matching on a code that is not matchable.
+                    "Qubits" counts the code's data and ancilla qubits, "circuit qubits" all qubits of the compiled circuit.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
+        <div id="subfooter">
+            <nav class="row">
+                <section class="small-12 columns credits" style="text-align: center; color: #666;">
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                </section>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="../assets/js/javascript.min.js"></script>
+    <script>
+    (function () {
+        const STATUS_CLASS = {
+            "measured": "status-measured", "low statistics": "status-low", "upper bound": "status-upper",
+            "does not fit": "status-nofit", "decoder not applicable": "status-na", "failed": "status-failed",
+            "pending": "status-pending",
+        };
+        const FILTERS = [
+            ["slice", "Dataset"], ["taxonomy", "Code taxonomy"], ["family", "Code family"], ["code", "Code"],
+            ["schedule", "Schedule"], ["backend", "Device"], ["error_type", "Noise model"],
+            ["error_probability", "Physical error rate"], ["decoder", "Decoder"],
+        ];
+        const TABLE = [
+            ["code", "Code"], ["schedule", "Schedule"], ["distance", "d"], ["k", "k"], ["backend", "Device"],
+            ["error_type", "Noise"], ["error_probability", "p"], ["decoder", "Decoder"],
+            ["logical_error_rate", "Logical error rate [95% CI]"], ["ler_per_round", "Per round"], ["status", "Status"],
+            ["rounds", "Rounds"], ["code_qubits", "Qubits"], ["circuit_qubits", "Circuit qubits"], ["swaps", "SWAPs"],
+            ["two_qubit_gates", "2q gates"], ["shots", "Shots"],
+        ];
+        const SHORT = {
+            backend: { real_torino: "Heron", real_loon_1_qpu: "Loon, 1 QPU", real_loon: "Loon, 2 QPUs",
+                       real_flamingo_1_qpu: "Flamingo, 1 QPU", real_flamingo: "Flamingo, 3 QPUs", custom_full: "All-to-all" },
+            error_type: { real_heron: "Heron", real_flamingo: "Flamingo", real_flamingo_downscaled: "Flamingo ÷10", sd6: "SD6" },
+        };
+        const CONFIG_KEY = ["slice", "code", "schedule", "distance", "rounds", "backend", "error_type", "error_probability"];
+
+        let data = [], labels = {}, sort = { key: "logical_error_rate", dir: 1 };
+        const $ = (id) => document.getElementById(id);
+
+        function label(kind, value) {
+            if (value === null || value === undefined || value === "") return "–";
+            const table = { backend: labels.devices, error_type: labels.noise, decoder: labels.decoders, slice: labels.slices }[kind];
+            return (table && table[value]) || String(value);
+        }
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        }
+        function sci(x) {
+            if (x === null || x === undefined) return "";
+            if (x === 0) return "0";
+            return x >= 0.01 ? x.toFixed(3) : x.toExponential(1);
+        }
+        function lerText(r) {
+            if (r.status === "upper bound") return "< " + sci(r.ler_high);
+            if (r.logical_error_rate === null) return "";
+            return sci(r.logical_error_rate) + " [" + sci(r.ler_low) + ", " + sci(r.ler_high) + "]";
+        }
+        function lerValue(r) {
+            if (r.logical_error_rate !== null) return r.logical_error_rate;
+            if (r.status === "upper bound") return r.ler_high / 2;
+            return null;
+        }
+
+        function buildControls() {
+            const box = $("controls");
+            for (const [key, title] of FILTERS) {
+                const wrap = document.createElement("div");
+                wrap.innerHTML = '<label for="f-' + key + '">' + title + '</label><select id="f-' + key + '"></select>';
+                box.appendChild(wrap);
+                wrap.querySelector("select").addEventListener("change", () => { refreshOptions(key); render(); });
+            }
+            for (const id of ["hide-nofit", "hide-pending", "best-only"]) $(id).addEventListener("change", render);
+            refreshOptions(null);
+        }
+
+        // Options of each filter list the values present under the other filters' current choices
+        function refreshOptions(changed) {
+            for (const [key] of FILTERS) {
+                if (key === changed) continue;
+                const select = $("f-" + key), current = select.value;
+                const rows = data.filter((r) => FILTERS.every(([k]) => k === key || matches(r, k)));
+                const values = [...new Set(rows.map((r) => r[key]))].filter((v) => v !== null && v !== undefined).sort((a, b) =>
+                    (typeof a === "number" && typeof b === "number") ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true }));
+                const isSlice = key === "slice";
+                select.innerHTML = (isSlice ? "" : '<option value="">All</option>') + values.map((v) =>
+                    '<option value="' + escapeHtml(v === null ? "" : v) + '">' + escapeHtml(label(key, v)) + "</option>").join("");
+                if ([...select.options].some((o) => o.value === current)) select.value = current;
+            }
+        }
+        function matches(r, key) {
+            const value = $("f-" + key) ? $("f-" + key).value : "";
+            if (value === "") return true;
+            return String(r[key] === null ? "" : r[key]) === value;
+        }
+
+        function selectedRows() {
+            let rows = data.filter((r) => FILTERS.every(([k]) => matches(r, k)));
+            if ($("hide-nofit").checked) rows = rows.filter((r) => r.status !== "does not fit");
+            if ($("hide-pending").checked) rows = rows.filter((r) => r.status !== "pending");
+            if ($("best-only").checked) {
+                const best = new Map();
+                for (const r of rows) {
+                    const v = lerValue(r);
+                    if (v === null) continue;
+                    const key = CONFIG_KEY.map((k) => r[k]).join("|");
+                    if (!best.has(key) || v < lerValue(best.get(key))) best.set(key, r);
+                }
+                rows = [...best.values()];
+            }
+            return rows;
+        }
+
+        function sortRows(rows) {
+            const key = sort.key;
+            const value = key === "logical_error_rate" ? lerValue : (r) => r[key];
+            return rows.slice().sort((a, b) => {
+                const x = value(a), y = value(b);
+                if (x === null || x === undefined) return 1;
+                if (y === null || y === undefined) return -1;
+                if (typeof x === "number" && typeof y === "number") return sort.dir * (x - y);
+                return sort.dir * String(x).localeCompare(String(y), undefined, { numeric: true });
+            });
+        }
+
+        function renderTable(rows) {
+            const head = $("table").querySelector("thead"), body = $("table").querySelector("tbody");
+            head.innerHTML = "<tr>" + TABLE.map(([key, title]) =>
+                '<th data-key="' + key + '" class="' + (sort.key === key ? (sort.dir > 0 ? "sorted-asc" : "sorted-desc") : "") + '">' + title + "</th>").join("") + "</tr>";
+            head.querySelectorAll("th").forEach((th) => th.addEventListener("click", () => {
+                sort = { key: th.dataset.key, dir: sort.key === th.dataset.key ? -sort.dir : 1 };
+                render();
+            }));
+            const shown = sortRows(rows).slice(0, 2000);
+            body.innerHTML = shown.map((r) => "<tr>" + TABLE.map(([key]) => {
+                if (key === "logical_error_rate") return '<td class="num">' + lerText(r) + "</td>";
+                if (key === "ler_per_round") return '<td class="num">' + (r.status === "upper bound" ? "< " + sci(r.ler_per_round_high) : sci(r.ler_per_round)) + "</td>";
+                if (key === "status") return '<td><span class="status ' + (STATUS_CLASS[r.status] || "") + '" title="' + escapeHtml(r.note || "") + '">' + escapeHtml(r.status) + "</span></td>";
+                if (key === "error_probability") return '<td class="num">' + (r[key] === null ? "–" : r[key]) + "</td>";
+                const v = r[key];
+                const numeric = typeof v === "number";
+                const text = SHORT[key] && SHORT[key][v] ? SHORT[key][v] : (["backend", "error_type", "decoder"].includes(key) ? label(key, v) : (v === null ? "–" : v));
+                return '<td class="' + (numeric ? "num" : "") + '" title="' + escapeHtml(label(key, v)) + '">' + escapeHtml(text) + "</td>";
+            }).join("") + "</tr>").join("");
+            $("summary").textContent = rows.length + " results" + (rows.length > shown.length ? " (first " + shown.length + " shown, download for all)" : "");
+        }
+
+        // Log-log plot of logical vs. physical error rate, one line per distance and decoder
+        function renderChart(rows) {
+            const chart = $("chart");
+            const codes = new Set(rows.map((r) => r.code));
+            const points = rows.filter((r) => r.error_probability !== null && lerValue(r) !== null);
+            if (codes.size !== 1 || new Set(points.map((r) => r.error_probability)).size < 2) { chart.innerHTML = ""; return; }
+            // Color by distance, dash pattern by decoder
+            const distances = [...new Set(points.map((r) => r.distance))].sort((a, b) => a - b);
+            const decoders = [...new Set(points.map((r) => r.decoder))].sort();
+            const series = new Map();
+            for (const r of points) {
+                const key = "d=" + r.distance + (decoders.length > 1 ? ", " + label("decoder", r.decoder) : "");
+                if (!series.has(key)) series.set(key, { distance: r.distance, decoder: r.decoder, rows: [] });
+                series.get(key).rows.push(r);
+            }
+            const W = 760, H = 380, m = { l: 70, r: 170, t: 20, b: 50 };
+            const xs = points.map((r) => r.error_probability), ys = points.flatMap((r) => [lerValue(r), r.ler_high, r.ler_low || lerValue(r)]).filter((v) => v > 0);
+            const lx = [Math.log10(Math.min(...xs)) - 0.1, Math.log10(Math.max(...xs)) + 0.1];
+            const ly = [Math.floor(Math.log10(Math.min(...ys))), Math.ceil(Math.log10(Math.max(...ys)))];
+            const X = (v) => m.l + (Math.log10(v) - lx[0]) / (lx[1] - lx[0]) * (W - m.l - m.r);
+            const Y = (v) => H - m.b - (Math.log10(Math.max(v, 10 ** ly[0])) - ly[0]) / (ly[1] - ly[0] || 1) * (H - m.t - m.b);
+            const colors = ["#8e44ad", "#2e86c1", "#28b463", "#d68910", "#c0392b", "#17a589", "#7f8c8d", "#a04000"];
+            const dashes = ["", "6 4", "2 3", "10 3 2 3", "1 5"];
+            let svg = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Logical error rate vs physical error rate">';
+            for (let e = ly[0]; e <= ly[1]; e++) {
+                svg += '<line x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + Y(10 ** e) + '" y2="' + Y(10 ** e) + '" stroke="#eee"/>';
+                svg += '<text x="' + (m.l - 8) + '" y="' + (Y(10 ** e) + 4) + '" font-size="11" text-anchor="end" fill="#666">1e' + e + "</text>";
+            }
+            for (const p of [...new Set(xs)].sort((a, b) => a - b)) {
+                svg += '<text x="' + X(p) + '" y="' + (H - m.b + 18) + '" font-size="11" text-anchor="middle" fill="#666">' + p + "</text>";
+            }
+            svg += '<text x="' + ((m.l + W - m.r) / 2) + '" y="' + (H - 8) + '" font-size="12" text-anchor="middle" fill="#333">Physical error rate p</text>';
+            svg += '<text transform="translate(16,' + ((m.t + H - m.b) / 2) + ') rotate(-90)" font-size="12" text-anchor="middle" fill="#333">Logical error rate</text>';
+            [...series.entries()].forEach(([name, s], i) => {
+                const c = colors[distances.indexOf(s.distance) % colors.length];
+                const dash = dashes[decoders.indexOf(s.decoder) % dashes.length];
+                const rs = s.rows.sort((a, b) => a.error_probability - b.error_probability);
+                svg += '<polyline fill="none" stroke="' + c + '" stroke-width="2" stroke-dasharray="' + dash + '" points="' + rs.map((r) => X(r.error_probability) + "," + Y(lerValue(r))).join(" ") + '"/>';
+                for (const r of rs) {
+                    svg += '<line x1="' + X(r.error_probability) + '" x2="' + X(r.error_probability) + '" y1="' + Y(r.ler_low || lerValue(r)) + '" y2="' + Y(r.ler_high) + '" stroke="' + c + '"/>';
+                    svg += '<circle cx="' + X(r.error_probability) + '" cy="' + Y(lerValue(r)) + '" r="3.5" fill="' + (r.status === "upper bound" ? "white" : c) + '" stroke="' + c + '"><title>' + escapeHtml(name + ", p=" + r.error_probability + ": " + lerText(r)) + "</title></circle>";
+                }
+                svg += '<line x1="' + (W - m.r + 15) + '" x2="' + (W - m.r + 35) + '" y1="' + (m.t + 10 + i * 18) + '" y2="' + (m.t + 10 + i * 18) + '" stroke="' + c + '" stroke-width="2" stroke-dasharray="' + dash + '"/>';
+                svg += '<text x="' + (W - m.r + 40) + '" y="' + (m.t + 14 + i * 18) + '" font-size="11" fill="#333">' + escapeHtml(name) + "</text>";
+            });
+            chart.innerHTML = svg + "</svg>";
+        }
+
+        function render() {
+            const rows = selectedRows();
+            renderChart(rows);
+            renderTable(rows);
+        }
+
+        $("download").addEventListener("click", () => {
+            const cols = Object.keys(data[0] || {});
+            const csv = [cols.join(",")].concat(sortRows(selectedRows()).map((r) => cols.map((c) => {
+                const v = r[c] === null || r[c] === undefined ? "" : String(r[c]);
+                return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+            }).join(","))).join("\n");
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+            link.download = "eccentric_results.csv";
+            link.click();
+        });
+
+        // ?data=<path> loads another export, e.g. to preview a new sweep
+        const source = new URLSearchParams(location.search).get("data") || "../data/sweep.json";
+        fetch(source).then((r) => r.json()).then((json) => {
+            labels = json.labels;
+            data = json.rows.map((row) => Object.fromEntries(json.columns.map((c, i) => [c, row[i]])));
+            $("data-status").textContent = "Results generated " + json.generated + " with ECCentric commit " + json.commits.join(", ") +
+                (json.complete ? "." : ". The search is still running; configurations not computed yet are marked as pending.");
+            buildControls();
+            render();
+        }).catch(() => { $("data-status").textContent = "The results could not be loaded."; });
+    })();
+    </script>
+</body>
+</html>
