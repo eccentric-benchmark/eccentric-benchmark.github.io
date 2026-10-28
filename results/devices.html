@@ -1,0 +1,454 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devices - ECCentric Bench</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css">
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } });
+    </script>
+    <noscript>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'>
+    </noscript>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ibm-blue: #0f62fe; --ibm-blue-dark: #002d9c; --ibm-purple: #8a3ffc; --ibm-red: #da1e28;
+            --ibm-cyan: #1192e8; --ibm-gray: #8d8d8d; --ibm-gray-light: #c6c6c6; --ibm-ink: #161616; --ibm-panel: #f4f4f4;
+        }
+        .device-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.6em 1em; margin: 1em 0; }
+        .device-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
+        .device-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
+        .device-card { border: 1px solid #e0e0e0; background: #fff; padding: 1.2em 1.4em; margin: 0.5em 0 1.5em 0; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-head { display: flex; justify-content: space-between; gap: 1.5em; flex-wrap: wrap; }
+        .device-head > div:first-child { flex: 1 1 min(320px, 100%); min-width: 0; }
+        .device-maker { font-size: 0.75em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ibm-blue); font-weight: 600; }
+        .device-title { font-family: 'IBM Plex Sans', Lato, sans-serif; font-size: 1.5em; margin: 0.1em 0 0.3em 0; color: var(--ibm-ink); font-weight: 400; }
+        .device-description { font-size: 0.9em; color: #525252; margin: 0; max-width: 46em; }
+        .device-stats { display: grid; grid-template-columns: repeat(2, minmax(7em, auto)); gap: 0.6em 1.6em; align-content: start; }
+        .device-stat .value { font-size: 1.5em; color: var(--ibm-ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+        .device-stat .name { font-size: 0.72em; color: #6f6f6f; }
+        .device-legend { display: flex; flex-wrap: wrap; gap: 0.3em 1.2em; margin: 1em 0 0.4em 0; font-size: 0.82em; color: #393939; }
+        .device-legend label { font-weight: normal; margin: 0; display: inline-flex; align-items: center; gap: 0.4em; cursor: pointer; }
+        .device-legend input { margin: 0; }
+        .device-legend svg { flex: none; }
+        .device-banner { font-size: 0.85em; color: #393939; background: #edf5ff; border-left: 4px solid var(--ibm-blue); padding: 0.5em 0.9em; margin: 0.4em 0; }
+        .device-banner:empty { display: none; }
+        .device-map { position: relative; width: 100%; margin-top: 0.4em; }
+        .device-map svg { width: 100%; height: auto; display: block; max-height: 72vh; }
+        .device-map .coupler { fill: none; stroke-linecap: round; }
+        .device-map .qubit { stroke: #fff; stroke-width: 0.06; cursor: pointer; }
+        .device-map .qubit-label { font-family: 'IBM Plex Mono', monospace; fill: #fff; pointer-events: none; text-anchor: middle; dominant-baseline: central; }
+        .device-map.focus .coupler { opacity: 0.12; }
+        .device-map.focus .coupler.on { opacity: 1; }
+        .device-map.focus .qubit { opacity: 0.35; }
+        .device-map.focus .qubit.on { opacity: 1; }
+        .device-tooltip { position: absolute; pointer-events: none; background: var(--ibm-ink); color: #f4f4f4; font-size: 0.78em; padding: 0.45em 0.7em; line-height: 1.45; white-space: nowrap; z-index: 2; display: none; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-colorbar { display: flex; align-items: center; gap: 0.6em; font-size: 0.78em; color: #525252; margin-top: 0.6em; }
+        .device-colorbar:empty { display: none; }
+        .device-colorbar .bar { width: 200px; max-width: 45vw; height: 10px; }
+        .device-noise { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 0 2em; }
+        .device-noise h3 { font-size: 1.05em; margin: 0 0 0.4em 0; }
+        table.device-table { width: 100%; border-collapse: collapse; font-size: 0.86em; margin: 0 0 1em 0; border: none; }
+        table.device-table td { padding: 0.35em 0.5em; border-top: 1px solid #e0e0e0; background: #fff; }
+        table.device-table tr:nth-child(even) td { background: #fafafa; }
+        table.device-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.95em; }
+        .device-footnote { font-size: 0.8em; color: #6f6f6f; margin-top: -0.5em; }
+        .explorer-note { background-color: #f4ecf7; border-left: 6px solid #8e44ad; padding: 1em 1.5em; margin: 1.5em 0; font-size: 0.9em; }
+    </style>
+</head>
+<body id="top-of-page">
+    <div id="navigation" class="sticky">
+        <nav class="top-bar" role="navigation" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li><a href="../index.html" class="icon-home"> Home</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../overview.html">Overview</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../scope.html">Research Scope</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../methodology.html">Methodology</a></li>
+                    <li class="divider"></li>
+                    <li class="has-dropdown active">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
+                            <li><a href="explorer.html">Results Explorer</a></li>
+                            <li class="active"><a href="devices.html">Devices</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                <ul class="right">
+                    <li class="divider"></li>
+                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+
+    <div class="row t60">
+        <div class="medium-12 columns">
+            <h1>Devices</h1>
+            <p>
+                The devices ECCentric compiles codes onto: where their qubits sit, which pairs are coupled and how,
+                and the noise they are simulated with. Pick a device below. Hover over a qubit to see its couplers.
+            </p>
+            <p id="data-status" style="font-size: 0.9em; color: #666;">Loading devices…</p>
+
+            <div class="device-controls">
+                <div><label for="device">Device</label><select id="device"></select></div>
+                <div><label for="noise">Noise model</label><select id="noise"></select></div>
+                <div><label for="color-by">Colour qubits by</label><select id="color-by"></select></div>
+            </div>
+
+            <div class="device-card">
+                <div class="device-head">
+                    <div>
+                        <div class="device-maker" id="maker"></div>
+                        <h2 class="device-title" id="title"></h2>
+                        <p class="device-description" id="description"></p>
+                    </div>
+                    <div class="device-stats" id="stats"></div>
+                </div>
+                <div class="device-legend" id="legend"></div>
+                <div class="device-banner" id="banner"></div>
+                <div class="device-map" id="map"></div>
+                <div class="device-colorbar" id="colorbar"></div>
+            </div>
+
+            <div class="device-noise">
+                <div>
+                    <h3>Error probabilities</h3>
+                    <table class="device-table" id="noise-params"></table>
+                </div>
+                <div>
+                    <h3>Durations</h3>
+                    <table class="device-table" id="noise-times"></table>
+                </div>
+            </div>
+            <p class="device-footnote" id="noise-note"></p>
+
+            <div class="explorer-note">
+                <p style="margin-bottom: 0;"><strong>How the devices are modelled.</strong> Every two-qubit gate of a
+                compiled circuit acts on a coupled pair; others need SWAPs, which the compiler inserts. Gates on
+                remote couplers between QPUs, and on long-range couplers of the bicycle module where they are marked
+                as noisy, get the remote error and duration instead of the local ones. On shuttling devices (trapped
+                ions, neutral atoms) any two qubits interact: neighbours in place, others after a move, which costs
+                the move error, its duration and, for the Harvard array, atom loss. The T1 and T2 of the qubits of
+                IBM's planned devices are drawn at random per qubit (T1 around 190 µs, T2 around 130 µs). The layouts follow the
+                <a href="https://www.ibm.com/quantum/blog/large-scale-ftqc">IBM roadmap</a>,
+                <a href="https://www.nature.com/articles/s41586-024-07107-7">Bravyi et al. (2024)</a> for the bicycle
+                module, <a href="https://www.nature.com/articles/s41586-024-08449-y">Google (2025)</a> for Willow and
+                <a href="https://arxiv.org/abs/2506.20661">Bluvstein et al. (2025)</a> for the
+                Harvard/MIT array.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
+        <div id="subfooter">
+            <nav class="row">
+                <section class="small-12 columns credits" style="text-align: center; color: #666;">
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                </section>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="../assets/js/javascript.min.js"></script>
+    <script>
+    (function () {
+        const SVG = "http://www.w3.org/2000/svg";
+        const MAKERS = ["IBM", "Google", "Quantinuum", "Infleqtion", "Harvard/MIT", "Synthetic"];
+        const KINDS = {
+            local: { label: "Coupler", short: ["local coupler", "local couplers"], color: "#8d8d8d", width: 0.13, curve: false, on: true },
+            c: { label: "Long-range c-coupler", short: ["c-coupler", "c-couplers"], color: "#8a3ffc", width: 0.07, curve: true, on: true },
+            c_remote: { label: "c-coupler, noisy as remote", short: ["noisy c-coupler", "noisy c-couplers"], color: "#da1e28", width: 0.07, curve: true, on: true },
+            link: { label: "Remote coupler between QPUs", short: ["remote coupler", "remote couplers"], color: "#da1e28", width: 0.16, curve: true, dash: "0.35 0.25", on: true },
+            wrap: { label: "Torus coupler around the edge", short: ["coupler around the torus", "couplers around the torus"], color: "#1192e8", width: 0.13, curve: false, on: true },
+            layer: { label: "Coupler between layers", short: ["coupler to another layer", "couplers to other layers"], color: "#a8a8a8", width: 0.05, curve: true, dash: "0.2 0.2", on: false },
+        };
+        const RAMP = ["#491d8b", "#6929c4", "#1192e8", "#08bdba", "#9ef0f0"];
+        const ROLES = [["X check", "#da1e28"], ["Data (L)", "#0f62fe"], ["Data (R)", "#4589ff"], ["Z check", "#198038"]];
+        const QUBIT = "#0f62fe";
+
+        const el = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+        let data, device, hidden = {};
+
+        function make(tag, attrs, parent) {
+            const node = document.createElementNS(SVG, tag);
+            for (const [k, v] of Object.entries(attrs || {})) node.setAttribute(k, v);
+            if (parent) parent.appendChild(node);
+            return node;
+        }
+
+        function ramp(t) {
+            t = Math.max(0, Math.min(1, t)) * (RAMP.length - 1);
+            const i = Math.min(Math.floor(t), RAMP.length - 2), f = t - i;
+            const a = RAMP[i].match(/\w\w/g).map((h) => parseInt(h, 16)), b = RAMP[i + 1].match(/\w\w/g).map((h) => parseInt(h, 16));
+            return "rgb(" + a.map((x, k) => Math.round(x + (b[k] - x) * f)).join(",") + ")";
+        }
+
+        function fmt(n, digits) { return Number(n).toLocaleString("en-US", { maximumFractionDigits: digits || 0 }); }
+
+        function percent(p) {
+            const v = p * 100;
+            return (v >= 1 ? v.toPrecision(3) : v.toPrecision(2)).replace(/\.?0+$/, "").replace(/\.$/, "") + "%";
+        }
+
+        function duration(s) {
+            if (s >= 1e-3) return fmt(s * 1e3, 2) + " ms";
+            if (s >= 1e-6) return fmt(s * 1e6, 2) + " µs";
+            return fmt(s * 1e9, 1) + " ns";
+        }
+
+        function micro(us) { return us >= 1000 ? duration(us * 1e-6) : fmt(us, us >= 100 ? 0 : 1) + " µs"; }
+
+        function median(values) {
+            const v = values.filter((x) => x != null).sort((a, b) => a - b);
+            return v.length ? v[Math.floor(v.length / 2)] : null;
+        }
+
+        function edgePath(d, a, b, kind) {
+            const p = d.positions[a], q = d.positions[b];
+            if (kind === "wrap") {
+                // Stubs at both ends, pointing out of the module
+                const dx = Math.abs(p[0] - q[0]) > 1 ? Math.sign(p[0] - q[0]) * 0.5 : 0;
+                const dy = Math.abs(p[1] - q[1]) > 1 ? Math.sign(p[1] - q[1]) * 0.5 : 0;
+                return `M${p[0]},${p[1]}L${p[0] + dx},${p[1] + dy}M${q[0]},${q[1]}L${q[0] - dx},${q[1] - dy}`;
+            }
+            if (!KINDS[kind].curve) return `M${p[0]},${p[1]}L${q[0]},${q[1]}`;
+            const mx = (p[0] + q[0]) / 2, my = (p[1] + q[1]) / 2, len = Math.hypot(q[0] - p[0], q[1] - p[1]);
+            const bend = Math.min(0.15 * len, 3) / (len || 1);
+            return `M${p[0]},${p[1]}Q${mx - (q[1] - p[1]) * bend},${my + (q[0] - p[0]) * bend} ${q[0]},${q[1]}`;
+        }
+
+        function qubitColors(d, by) {
+            const n = d.qubits;
+            if (by === "role") return Array.from({ length: n }, (_, q) => ROLES[Math.floor((q % 288) / 72)][1]);
+            if (by === "qpu") return Array.from({ length: n }, (_, q) => ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b"][Math.floor(q / d.qpu_size) % 4]);
+            const values = by === "degree" ? d.degree : by === "t1" ? d.t1 : by === "t2" ? d.t2 : null;
+            if (!values) return Array(n).fill(QUBIT);
+            const known = values.filter((v) => v != null), lo = Math.min(...known), hi = Math.max(...known);
+            return values.map((v) => (v == null ? "#c6c6c6" : ramp(hi > lo ? (v - lo) / (hi - lo) : 0.5)));
+        }
+
+        function colorbar(d, by) {
+            const box = el("colorbar");
+            box.innerHTML = "";
+            if (by === "role" || by === "qpu") {
+                const items = by === "role" ? ROLES : Array.from({ length: d.qpus }, (_, k) => ["QPU " + (k + 1), ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b"][k % 4]]);
+                box.innerHTML = items.map(([name, c]) => `<span><svg width="12" height="12"><circle cx="6" cy="6" r="5.5" fill="${c}"/></svg> ${name}</span>`).join("");
+                return;
+            }
+            const values = by === "degree" ? d.degree : by === "t1" ? d.t1 : by === "t2" ? d.t2 : null;
+            if (!values) return;
+            const known = values.filter((v) => v != null), lo = Math.min(...known), hi = Math.max(...known);
+            const unit = by === "degree" ? "" : " µs", name = { degree: "Couplers per qubit", t1: "T1", t2: "T2" }[by];
+            box.innerHTML = `<span>${name}</span><span>${fmt(lo, 1)}${unit}</span><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none">` +
+                `<defs><linearGradient id="ramp">${RAMP.map((c, i) => `<stop offset="${i / (RAMP.length - 1)}" stop-color="${c}"/>`).join("")}</linearGradient></defs>` +
+                `<rect width="100" height="10" fill="url(#ramp)"/></svg><span>${fmt(hi, 1)}${unit}</span>`;
+        }
+
+        function render() {
+            const d = device, map = el("map");
+            const by = el("color-by").value;
+            map.innerHTML = "";
+            map.classList.remove("focus");
+            const xs = d.positions.map((p) => p[0]), ys = d.positions.map((p) => p[1]);
+            const minX = Math.min(...xs) - 1, minY = Math.min(...ys) - 1, w = Math.max(...xs) - minX + 1, h = Math.max(...ys) - minY + 1;
+            const svg = make("svg", { viewBox: `${minX} ${minY} ${w} ${h}`, role: "img", "aria-label": d.label + " coupling map" }, map);
+            const edges = make("g", {}, svg), hover = make("g", {}, svg), nodes = make("g", {}, svg);
+            const byQubit = Array.from({ length: d.qubits }, () => []);
+            const order = ["layer", "local", "wrap", "c", "c_remote", "link"];
+            const sorted = d.edges.slice().sort((x, y) => order.indexOf(x[2]) - order.indexOf(y[2]));
+            for (const [a, b, kind] of sorted) {
+                if (hidden[kind] ?? !KINDS[kind].on) continue;
+                const style = KINDS[kind];
+                const path = make("path", { d: edgePath(d, a, b, kind), class: "coupler", stroke: style.color, "stroke-width": style.width }, edges);
+                if (style.dash) path.setAttribute("stroke-dasharray", style.dash);
+                byQubit[a].push([path, b, kind]);
+                byQubit[b].push([path, a, kind]);
+            }
+            const colors = qubitColors(d, by), r = 0.32;
+            const labels = d.qubits <= 160;
+            const circles = d.positions.map((p, q) => {
+                const c = make("circle", { cx: p[0], cy: p[1], r: r, class: "qubit", fill: colors[q] }, nodes);
+                if (labels) {
+                    const t = make("text", { x: p[0], y: p[1], class: "qubit-label", "font-size": q >= 100 ? 0.2 : 0.25 }, nodes);
+                    t.textContent = q;
+                }
+                c.addEventListener("mouseenter", (e) => focus(q, e));
+                c.addEventListener("mousemove", (e) => moveTip(e));
+                c.addEventListener("mouseleave", unfocus);
+                return c;
+            });
+            const tip = document.createElement("div");
+            tip.className = "device-tooltip";
+            map.appendChild(tip);
+
+            function focus(q, e) {
+                map.classList.add("focus");
+                circles[q].classList.add("on");
+                const counts = {};
+                for (const [path, other, kind] of byQubit[q]) {
+                    path.classList.add("on");
+                    circles[other].classList.add("on");
+                    counts[kind] = (counts[kind] || 0) + 1;
+                }
+                if (d.all_to_all) {
+                    const p = d.positions[q];
+                    for (let o = 0; o < d.qubits; o++) {
+                        if (o === q) continue;
+                        const s = d.positions[o];
+                        make("path", { d: `M${p[0]},${p[1]}L${s[0]},${s[1]}`, class: "coupler on", stroke: "#8d8d8d", "stroke-width": 0.03 }, hover);
+                    }
+                }
+                const lines = [`<strong>Qubit ${q}</strong>` + (d.qpus > 1 ? ` · QPU ${Math.floor(q / d.qpu_size) + 1}` : "")];
+                if (d.torus) lines[0] += " · " + ROLES[Math.floor((q % 288) / 72)][0];
+                const parts = Object.entries(counts).map(([k, v]) => `${v} ${KINDS[k].short[v > 1 ? 1 : 0]}`);
+                if (d.all_to_all) parts.push(`${d.qubits - 1} couplers`);
+                if (parts.length) lines.push(parts.join(", "));
+                if (d.moves) lines.push("any other qubit after a move");
+                if (d.t1 && d.t1[q] != null) lines.push(`T1 ${micro(d.t1[q])} · T2 ${micro(d.t2[q])}`);
+                tip.innerHTML = lines.join("<br>");
+                tip.style.display = "block";
+                moveTip(e);
+            }
+            function moveTip(e) {
+                const box = map.getBoundingClientRect();
+                let x = e.clientX - box.left + 14, y = e.clientY - box.top + 14;
+                if (x + tip.offsetWidth > box.width) x = e.clientX - box.left - tip.offsetWidth - 14;
+                tip.style.left = x + "px";
+                tip.style.top = y + "px";
+            }
+            function unfocus() {
+                map.classList.remove("focus");
+                map.querySelectorAll(".on").forEach((n) => n.classList.remove("on"));
+                hover.innerHTML = "";
+                tip.style.display = "none";
+            }
+            colorbar(d, by);
+        }
+
+        function legend() {
+            const d = device, box = el("legend");
+            const counts = {};
+            for (const e of d.edges) counts[e[2]] = (counts[e[2]] || 0) + 1;
+            box.innerHTML = "";
+            for (const kind of Object.keys(KINDS)) {
+                if (!counts[kind]) continue;
+                const style = KINDS[kind], shown = !(hidden[kind] ?? !style.on);
+                const label = document.createElement("label");
+                label.innerHTML = `<input type="checkbox" ${shown ? "checked" : ""}>` +
+                    `<svg width="26" height="10"><line x1="1" y1="5" x2="25" y2="5" stroke="${style.color}" stroke-width="${Math.max(2, style.width * 18)}" ${style.dash ? 'stroke-dasharray="5 4"' : ""} stroke-linecap="round"/></svg>` +
+                    `${style.label} (${fmt(counts[kind])})`;
+                label.querySelector("input").addEventListener("change", (e) => { hidden[kind] = !e.target.checked; render(); });
+                box.appendChild(label);
+            }
+        }
+
+        function details() {
+            const d = device;
+            el("maker").textContent = d.maker;
+            el("title").textContent = d.label;
+            el("description").textContent = d.description;
+            const couplers = d.all_to_all ? d.qubits * (d.qubits - 1) / 2 : d.edges.length;
+            const stats = [[fmt(d.qubits), "Qubits"], [fmt(couplers), d.moves ? "In-place couplers" : "Couplers"]];
+            if (d.qpus > 1) stats.push([d.qpus, "QPUs of " + fmt(d.qpu_size) + " qubits"]);
+            const deg = d.degree.filter((x) => x > 0);
+            if (!d.all_to_all) stats.push([fmt(deg.reduce((s, x) => s + x, 0) / d.qubits, 2), "Couplers per qubit (mean)"]);
+            const t1 = d.t1 ? median(d.t1) : null, t2 = d.t2 ? median(d.t2) : null;
+            if (t1 != null) stats.push([micro(t1), "T1 (median)"]);
+            if (t2 != null) stats.push([micro(t2), "T2 (median)"]);
+            el("stats").innerHTML = stats.map(([v, n]) => `<div class="device-stat"><div class="value">${v}</div><div class="name">${n}</div></div>`).join("");
+            const notes = [];
+            if (d.moves) notes.push("Any two qubits can interact: neighbours on the grid in place, all other pairs after a move, which adds the move's error and duration. Only the in-place couplers are drawn.");
+            if (d.all_to_all) notes.push("Every pair of qubits is coupled. Hover over a qubit to draw its couplers.");
+            if (d.torus) notes.push("Each module is a torus: its left and right edges, and its top and bottom edges, are joined. Couplers that wrap around are drawn as short stubs at the edge. Hover over a qubit to follow its long-range c-couplers.");
+            el("banner").textContent = notes.join(" ");
+
+            const by = el("color-by"), current = by.value;
+            const options = [["none", "Uniform"], ["degree", "Couplers per qubit"]];
+            if (d.torus) options.push(["role", "Role in the gross code"]);
+            if (d.qpus > 1) options.push(["qpu", "QPU"]);
+            if (d.t1 && new Set(d.t1).size > 1) options.push(["t1", "T1"], ["t2", "T2"]);
+            by.innerHTML = options.map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+            by.value = options.some((o) => o[0] === current) ? current : (d.torus ? "role" : d.t1 && new Set(d.t1).size > 1 ? "t1" : "none");
+
+            const noise = el("noise"), chosen = params.get("noise");
+            noise.innerHTML = d.noise.map((m) => `<option value="${m.id}">${m.label}</option>`).join("");
+            if (d.noise.some((m) => m.id === chosen)) noise.value = chosen;
+        }
+
+        function noiseTables() {
+            const d = device, m = d.noise.find((x) => x.id === el("noise").value) || d.noise[0];
+            const scaled = (p) => p.scale ? (p.value === 1 ? "p" : `${+p.value.toPrecision(3)} p`) : percent(p.value);
+            el("noise-params").innerHTML = m.params.map((p) => `<tr><td>${p.label}</td><td class="num">${scaled(p)}</td></tr>`).join("") ||
+                '<tr><td colspan="2">None</td></tr>';
+            el("noise-times").innerHTML = m.times.length ? m.times.map((t) => `<tr><td>${t.label}</td><td class="num">${duration(t.seconds)}</td></tr>`).join("") :
+                '<tr><td colspan="2">Not modelled: errors per gate only</td></tr>';
+            const notes = [];
+            if (m.params.some((p) => p.scale)) notes.push("p is the physical error rate, the parameter the experiments vary (for example 0.1%).");
+            const links = d.edges.some((e) => e[2] === "link"), noisyC = d.edges.some((e) => e[2] === "c_remote");
+            if (m.params.some((p) => p.label.startsWith("Remote")) && (links || noisyC))
+                notes.push("The remote error and duration apply to " + [links ? "the couplers between QPUs" : "", noisyC ? "the c-couplers of this module" : ""].filter(Boolean).join(" and ") + ".");
+            else if (m.params.some((p) => p.label.startsWith("Remote"))) notes.push("The remote error applies only to devices with remote couplers; this one has none.");
+            if (m.params.some((p) => p.label.startsWith("Move"))) notes.push("The move error applies to every gate between qubits that are not neighbours.");
+            el("noise-note").textContent = notes.join(" ");
+        }
+
+        function select(id) {
+            device = data.devices.find((d) => d.id === id) || data.devices[0];
+            hidden = {};
+            details();
+            legend();
+            render();
+            noiseTables();
+            history.replaceState(null, "", `?device=${device.id}&noise=${el("noise").value}`);
+        }
+
+        const source = params.get("data") || "../data/devices.json";
+        fetch(source).then((r) => r.json()).then((json) => {
+            data = json;
+            for (const d of data.devices) {
+                d.degree = Array(d.qubits).fill(0);
+                for (const [a, b] of d.edges) { d.degree[a]++; d.degree[b]++; }
+                if (d.all_to_all) d.degree.fill(d.qubits - 1);
+            }
+            const sel = el("device");
+            sel.innerHTML = MAKERS.map((maker) => {
+                const items = data.devices.filter((d) => d.maker === maker);
+                return items.length ? `<optgroup label="${maker}">${items.map((d) => `<option value="${d.id}">${d.label} (${fmt(d.qubits)} qubits)</option>`).join("")}</optgroup>` : "";
+            }).join("");
+            sel.value = data.devices.some((d) => d.id === params.get("device")) ? params.get("device") : "real_bicycle";
+            sel.addEventListener("change", () => select(sel.value));
+            el("noise").addEventListener("change", () => { noiseTables(); history.replaceState(null, "", `?device=${device.id}&noise=${el("noise").value}`); });
+            el("color-by").addEventListener("change", render);
+            el("data-status").textContent = `${data.devices.length} devices, exported ${data.generated}.`;
+            select(sel.value);
+        }).catch((err) => { el("data-status").textContent = "Could not load the devices: " + err; });
+    })();
+    </script>
+</body>
+</html>

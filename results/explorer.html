@@ -68,6 +68,7 @@
                             <li><a href="framework_analysis.html">Framework Analysis</a></li>
                             <li><a href="qec_analysis.html">QEC Analysis</a></li>
                             <li class="active"><a href="explorer.html">Results Explorer</a></li>
+                            <li><a href="devices.html">Devices</a></li>
                         </ul>
                     </li>
                     <li class="divider"></li>
@@ -120,6 +121,13 @@
                     <span class="status status-nofit">does not fit</span> the code needs more qubits than the device has;
                     <span class="status status-na">decoder not applicable</span> e.g. matching on a code that is not matchable.
                     "Qubits" counts the code's data and ancilla qubits, "circuit qubits" all qubits of the compiled circuit.
+                    Devices marked * are projections, not announced devices: a chain of as many Loon or Flamingo QPUs as
+                    the code needs, each linked to the next by four l-couplers.
+                    "Native layout" is a device built for the code, with a coupler for every pair of qubits its syndrome
+                    circuit entangles, so no SWAPs are needed; for bivariate bicycle codes this is IBM's planned layout,
+                    with its long-range couplers assumed to be as good as nearest-neighbour ones. "Native, noisy long-range" is the
+                    same layout with the two long-range couplers of each qubit as noisy and slow as IBM's remote couplers
+                    (3% error, 300 ns; 0.3% at tenfold lower noise).
                 </p>
             </div>
         </div>
@@ -163,8 +171,15 @@
         ];
         const SHORT = {
             backend: { real_torino: "Heron", real_loon_1_qpu: "Loon, 1 QPU", real_loon: "Loon, 2 QPUs",
-                       real_flamingo_1_qpu: "Flamingo, 1 QPU", real_flamingo: "Flamingo, 3 QPUs", custom_full: "All-to-all" },
-            error_type: { real_heron: "Heron", real_flamingo: "Flamingo", real_flamingo_downscaled: "Flamingo ÷10", sd6: "SD6" },
+                       real_flamingo_1_qpu: "Flamingo, 1 QPU", real_flamingo: "Flamingo, 3 QPUs", custom_full: "All-to-all",
+                       native: "Native layout", native_lr: "Native, noisy long-range", real_willow: "Willow",
+                       real_bicycle: "Bicycle module", real_bicycle_lr: "Bicycle, noisy c-couplers",
+                       real_bicycle_2_qpus: "Bicycle, 2 modules", real_bicycle_lr_2_qpus: "Bicycle, 2 modules, noisy c",
+                       real_apollo: "Apollo", real_nsapollo: "Apollo, no shuttling", real_infleqtion: "Infleqtion",
+                       real_nsinfleqtion: "Infleqtion, no shuttling", real_harvard: "Harvard/MIT", custom_grid: "Grid", custom_cube: "Cube" },
+            error_type: { real_heron: "Heron", real_flamingo: "Flamingo", real_flamingo_downscaled: "Flamingo ÷10", sd6: "SD6",
+                          real_willow: "Willow", real_willow_spec: "Willow spec", real_apollo: "Apollo",
+                          real_infleqtion: "Infleqtion", real_harvard: "Harvard/MIT", modsi1000: "SI1000" },
         };
         const CONFIG_KEY = ["slice", "code", "schedule", "distance", "rounds", "backend", "error_type", "error_probability"];
 
@@ -272,7 +287,8 @@
                 if (key === "error_probability") return '<td class="num">' + (r[key] === null ? "–" : r[key]) + "</td>";
                 const v = r[key];
                 const numeric = typeof v === "number";
-                const text = SHORT[key] && SHORT[key][v] ? SHORT[key][v] : (["backend", "error_type", "decoder"].includes(key) ? label(key, v) : (v === null ? "–" : v));
+                const projected = key === "backend" && /^real_(loon|flamingo)_(\d+)_qpus$/.exec(v);
+                const text = projected ? `${projected[1] === "loon" ? "Loon" : "Flamingo"}, ${projected[2]} QPUs*` : SHORT[key] && SHORT[key][v] ? SHORT[key][v] : (["backend", "error_type", "decoder"].includes(key) ? label(key, v) : (v === null ? "–" : v));
                 return '<td class="' + (numeric ? "num" : "") + '" title="' + escapeHtml(label(key, v)) + '">' + escapeHtml(text) + "</td>";
             }).join("") + "</tr>").join("");
             $("summary").textContent = rows.length + " results" + (rows.length > shown.length ? " (first " + shown.length + " shown, download for all)" : "");
