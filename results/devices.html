@@ -145,7 +145,9 @@
                 <p style="margin-bottom: 0;"><strong>How the devices are modelled.</strong> Every two-qubit gate of a
                 compiled circuit acts on a coupled pair; others need SWAPs, which the compiler inserts. Gates on
                 remote couplers between QPUs, and on long-range couplers of the bicycle module where they are marked
-                as noisy, get the remote error and duration instead of the local ones. On shuttling devices (trapped
+                as noisy, get the remote error and duration instead of the local ones. Every qubit decays by its T1 and T2 for as long as it waits in each layer
+                of the circuit, for example while other qubits are measured (1.56 µs on IBM devices, as on Heron
+                today; the tenfold-lower IBM model also has threefold longer T1 and T2). On shuttling devices (trapped
                 ions, neutral atoms) any two qubits interact: neighbours in place, others after a move, which costs
                 the move error, its duration and, for the Harvard array, atom loss. The T1 and T2 of the qubits of
                 IBM's planned devices are drawn at random per qubit (T1 around 190 µs, T2 around 130 µs). The layouts follow the

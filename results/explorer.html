@@ -128,6 +128,10 @@
                     with its long-range couplers assumed to be as good as nearest-neighbour ones. "Native, noisy long-range" is the
                     same layout with the two long-range couplers of each qubit as noisy and slow as IBM's remote couplers
                     (3% error, 300 ns; 0.3% at tenfold lower noise).
+                    On devices with T1 and T2 (IBM, Infleqtion, Harvard/MIT), qubits decay for as long as they wait,
+                    for example while others are measured; IBM readout takes 1.56 µs, as on Heron today, and the tenfold-lower
+                    IBM model has threefold longer T1 and T2. Until 28 October 2026 waiting qubits did not decay and IBM
+                    readout took 70 ns; the results on these devices are being recomputed and appear here as they finish.
                 </p>
             </div>
         </div>
@@ -179,7 +183,8 @@
                        real_nsinfleqtion: "Infleqtion, no shuttling", real_harvard: "Harvard/MIT", custom_grid: "Grid", custom_cube: "Cube" },
             error_type: { real_heron: "Heron", real_flamingo: "Flamingo", real_flamingo_downscaled: "Flamingo ÷10", sd6: "SD6",
                           real_willow: "Willow", real_willow_spec: "Willow spec", real_apollo: "Apollo",
-                          real_infleqtion: "Infleqtion", real_harvard: "Harvard/MIT", modsi1000: "SI1000" },
+                          real_infleqtion: "Infleqtion", real_harvard: "Harvard/MIT", modsi1000: "SI1000",
+                          real_flamingo_m700: "Flamingo, 700 ns readout", real_flamingo_downscaled_m700: "Flamingo ÷10, 700 ns readout" },
         };
         const CONFIG_KEY = ["slice", "code", "schedule", "distance", "rounds", "backend", "error_type", "error_probability"];
 
