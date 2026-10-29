@@ -371,7 +371,7 @@
         fetch(source).then((r) => r.json()).then((json) => {
             labels = json.labels;
             data = json.rows.map((row) => Object.fromEntries(json.columns.map((c, i) => [c, row[i]])));
-            $("data-status").textContent = "Results generated " + json.generated + " with ECCentric commit " + json.commits.join(", ") +
+            $("data-status").textContent = "Results generated " + json.generated + " with ECCentric up to commit " + (json.commit || (json.commits || []).slice(-1)[0]) +
                 (json.complete ? "." : ". The search is still running; configurations not computed yet are marked as pending.");
             buildControls();
             render();
