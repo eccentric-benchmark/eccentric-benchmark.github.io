@@ -1,0 +1,11 @@
+{
+ "updated": "2026-10-29",
+ "jobs": 25477,
+ "cpu_hours": 9977,
+ "shots": 385712029,
+ "logical_errors": 1892458,
+ "codes": 58,
+ "devices": 25,
+ "noise_models": 12,
+ "decoders": 7
+}

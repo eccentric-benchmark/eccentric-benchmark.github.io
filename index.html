@@ -108,6 +108,49 @@
             </div>
         </div>
         
+        <div class="row">
+            <div class="medium-12 columns">
+                <h3 style="text-align:center; margin-top: 1em; margin-bottom: 0.5em; font-size: 1.5em;">The effort behind the results</h3>
+                <div class="effort-band" id="effort" style="display:none;">
+                    <style>
+                        .effort-band { margin: 1.5em 0; }
+                        .effort-band .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 1em; text-align: center; }
+                        .effort-band .tile { background: #f4f8fb; border-top: 4px solid #007095; padding: 1em 0.6em; }
+                        .effort-band .value { font-size: 1.9em; font-weight: 700; color: #00475e; line-height: 1.1; font-variant-numeric: tabular-nums; }
+                        .effort-band .name { font-size: 0.85em; color: #555; margin-top: 0.3em; }
+                        .effort-band .note { font-size: 0.75em; color: #888; text-align: center; margin-top: 0.6em; }
+                    </style>
+                    <div class="tiles"></div>
+                    <div class="note"></div>
+                </div>
+                <script>
+                (function () {
+                    // At least: every figure rounded down to two significant digits
+                    function atLeast(n) {
+                        if (n >= 1e9) return Math.floor(n / 1e8) / 10 + " billion";
+                        if (n >= 1e6) return Math.floor(n / 1e6).toLocaleString("en-US") + " million";
+                        const step = Math.pow(10, Math.max(0, Math.floor(Math.log10(n)) - 1));
+                        return (Math.floor(n / step) * step).toLocaleString("en-US") + "+";
+                    }
+                    fetch("data/effort.json").then((r) => r.json()).then((e) => {
+                        const box = document.getElementById("effort");
+                        const years = e.cpu_hours / 8766;
+                        const tiles = [
+                            [atLeast(e.jobs), "simulation jobs run"],
+                            [atLeast(e.cpu_hours), "CPU-hours" + (years >= 1 ? ", over " + Math.floor(years) + " year" + (years >= 2 ? "s" : "") + " on one core" : "")],
+                            [atLeast(e.shots), "shots simulated and decoded"],
+                            [e.codes + " · " + e.devices + " · " + e.noise_models + " · " + e.decoders, "codes · devices · noise models · decoders"],
+                        ];
+                        box.querySelector(".tiles").innerHTML = tiles.map(([v, n]) => `<div class="tile"><div class="value">${v}</div><div class="name">${n}</div></div>`).join("");
+                        box.querySelector(".note").textContent = "Lower bounds, counted from the record every finished job left, as of " + e.updated + ". " +
+                            atLeast(e.logical_errors).replace("+", "") + " logical errors observed. Each job runs on one core.";
+                        box.style.display = "block";
+                    }).catch(() => {});
+                })();
+                </script>
+            </div>
+        </div>
+
         <div class="row t60"></div>
         <div class="row">
             <div class="medium-12 columns">
