@@ -114,7 +114,8 @@
                     const box = document.getElementById("effort");
                     const years = e.cpu_hours / 8766;
                     const tiles = [
-                        [atLeast(e.jobs), "simulation jobs run"],
+                        ...(e.results ? [[atLeast(e.results), "results in the explorer"]] : []),
+            [atLeast(e.jobs), "simulation jobs run"],
                         [atLeast(e.cpu_hours), "CPU-hours" + (years >= 1 ? ", over " + Math.floor(years) + " year" + (years >= 2 ? "s" : "") + " on one core" : "")],
                         [atLeast(e.shots), "shots simulated and decoded"],
                         [e.codes + " · " + e.devices + " · " + e.noise_models + " · " + e.decoders, "codes · devices · noise models · decoders"],

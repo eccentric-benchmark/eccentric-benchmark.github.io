@@ -7,5 +7,6 @@
  "codes": 58,
  "devices": 25,
  "noise_models": 12,
- "decoders": 7
+ "decoders": 7,
+ "results": 8170
 }
