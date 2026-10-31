@@ -114,15 +114,15 @@
                     const box = document.getElementById("effort");
                     const years = e.cpu_hours / 8766;
                     const tiles = [
-                        ...(e.results ? [[atLeast(e.results), "results in the explorer"]] : []),
+                        ...(e.results ? [[atLeast(e.results), "logical error rates measured"]] : []),
             [atLeast(e.jobs), "simulation jobs run"],
                         [atLeast(e.cpu_hours), "CPU-hours" + (years >= 1 ? ", over " + Math.floor(years) + " year" + (years >= 2 ? "s" : "") + " on one core" : "")],
                         [atLeast(e.shots), "shots simulated and decoded"],
                         [e.codes + " · " + e.devices + " · " + e.noise_models + " · " + e.decoders, "codes · devices · noise models · decoders"],
                     ];
                     box.querySelector(".tiles").innerHTML = tiles.map(([v, n]) => `<div class="tile"><div class="value">${v}</div><div class="name">${n}</div></div>`).join("");
-                    box.querySelector(".note").textContent = "Lower bounds, counted from the record every finished job left, as of " + e.updated + ". " +
-                        atLeast(e.logical_errors).replace("+", "") + " logical errors observed. Each job runs on one core.";
+                    box.querySelector(".note").textContent = "Only the jobs behind these results count, as of " + e.updated + ": none that failed, and none that later runs replaced. " +
+                        atLeast(e.logical_errors).replace("+", "") + " logical errors observed. Each job ran on one core.";
                     box.style.display = "block";
                 }).catch(() => {});
             })();
