@@ -35,6 +35,8 @@
         .status-upper { background: #d6eaf8; color: #1f5f8b; }
         .status-nofit { background: #eeeeee; color: #666; }
         .status-na, .status-failed { background: #fadbd8; color: #8e2b20; }
+        .status-timeout { background: #ebdef0; color: #6c3483; }
+        .undetectable { color: #b9770e; cursor: help; margin-left: 0.3em; }
         .status-pending { background: #f4f4f4; color: #999; }
         .explorer-chart { margin: 1em 0; }
         .explorer-chart svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 0 auto; }
@@ -157,7 +159,11 @@
                     <span class="status status-low">low statistics</span> stopped by the shot or time limit before 100 errors;
                     <span class="status status-upper">upper bound</span> no logical error seen, the 95% upper bound is given;
                     <span class="status status-nofit">does not fit</span> the code needs more qubits than the device has;
-                    <span class="status status-na">decoder not applicable</span> e.g. matching on a code that is not matchable.
+                    <span class="status status-na">decoder not applicable</span> e.g. matching on a code that is not matchable (hover for the reason);
+                    <span class="status status-timeout">timeout after 9 h</span> the decoder did not finish a single batch of shots
+                    within the time limit, typically a large code far above threshold;
+                    <span class="undetectable">&#9888;</span> the compiled circuit has distance 1: single faults (e.g. on a SWAP
+                    between two data qubits that routing added) flip a logical qubit without any detector noticing.
                     "Qubits" counts the code's data and ancilla qubits, "circuit qubits" all qubits of the compiled circuit.
                     Devices marked * are projections, not announced devices: a chain of as many Loon or Flamingo QPUs as
                     the code needs, each linked to the next by four l-couplers.
@@ -198,7 +204,7 @@
         const STATUS_CLASS = {
             "measured": "status-measured", "low statistics": "status-low", "upper bound": "status-upper",
             "does not fit": "status-nofit", "decoder not applicable": "status-na", "failed": "status-failed",
-            "pending": "status-pending",
+            "timeout": "status-timeout", "pending": "status-pending",
         };
         const FILTERS = [
             ["slice", "Dataset"], ["taxonomy", "Code taxonomy"], ["family", "Code family"], ["code", "Code"],
@@ -327,7 +333,14 @@
             body.innerHTML = shown.map((r) => "<tr>" + TABLE.map(([key]) => {
                 if (key === "logical_error_rate") return '<td class="num">' + lerText(r) + "</td>";
                 if (key === "ler_per_round") return '<td class="num">' + (r.status === "upper bound" ? "< " + sci(r.ler_per_round_high) : sci(r.ler_per_round)) + "</td>";
-                if (key === "status") return '<td><span class="status ' + (STATUS_CLASS[r.status] || "") + '" title="' + escapeHtml(r.note || "") + '">' + escapeHtml(r.status) + "</span></td>";
+                if (key === "status") {
+                    // A timeout says how long it ran; a circuit with undetectable logical faults gets a mark
+                    const label = r.status === "timeout" && r.note ? r.note : r.status;
+                    const mark = r.undetectable_faults > 0 ? '<span class="undetectable" title="Circuit distance 1: ' + r.undetectable_faults +
+                        " single fault" + (r.undetectable_faults > 1 ? "s" : "") + " flip a logical qubit without any detector noticing (total probability " +
+                        sci(r.undetectable_probability) + ' per shot)">&#9888;</span>' : "";
+                    return '<td><span class="status ' + (STATUS_CLASS[r.status] || "") + '" title="' + escapeHtml(r.note || "") + '">' + escapeHtml(label) + "</span>" + mark + "</td>";
+                }
                 if (key === "error_probability") return '<td class="num">' + (r[key] === null ? "–" : r[key]) + "</td>";
                 const v = r[key];
                 const numeric = typeof v === "number";
