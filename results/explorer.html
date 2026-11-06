@@ -17,6 +17,8 @@
         .explorer-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6em 1em; margin: 1em 0; }
         .explorer-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
         .explorer-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
+        .explorer-dataset { font-size: 0.9em; color: #444; margin: -0.3em 0 0.6em 0; max-width: 60em; }
+        .explorer-dataset:empty { display: none; }
         .explorer-toggles { display: flex; flex-wrap: wrap; gap: 0.4em 1.5em; margin: 0.5em 0 1em 0; font-size: 0.9em; }
         .explorer-toggles label { font-weight: normal; margin: 0; }
         .explorer-toggles input { margin: 0 0.3em 0 0; }
@@ -132,6 +134,7 @@
             <p id="data-status" style="font-size: 0.9em; color: #666;">Loading results…</p>
 
             <div class="explorer-controls" id="controls"></div>
+            <p class="explorer-dataset" id="slice-description"></p>
             <div class="explorer-toggles">
                 <label><input type="checkbox" id="hide-nofit" checked>Hide configurations that do not fit the device</label>
                 <label><input type="checkbox" id="hide-pending" checked>Hide configurations not computed yet</label>
@@ -281,6 +284,7 @@
                 const values = [...new Set(rows.map((r) => r[key]))].filter((v) => v !== null && v !== undefined).sort((a, b) =>
                     (typeof a === "number" && typeof b === "number") ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true }));
                 const isSlice = key === "slice";
+                if (isSlice) values.sort((a, b) => label(key, a).localeCompare(label(key, b)));
                 select.innerHTML = (isSlice ? "" : '<option value="">All</option>') + values.map((v) =>
                     '<option value="' + escapeHtml(v === null ? "" : v) + '">' + escapeHtml(label(key, v)) + "</option>").join("");
                 if ([...select.options].some((o) => o.value === current)) select.value = current;
@@ -399,7 +403,13 @@
             chart.innerHTML = svg + "</svg>";
         }
 
+        function describeDataset() {
+            const select = $("f-slice");
+            $("slice-description").textContent = select ? ((labels.slice_descriptions || {})[select.value] || "") : "";
+        }
+
         function render() {
+            describeDataset();
             const rows = selectedRows();
             renderChart(rows);
             renderTable(rows);
