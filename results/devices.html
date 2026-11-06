@@ -151,7 +151,12 @@
                 today; the tenfold-lower IBM model also has threefold longer T1 and T2). On shuttling devices (trapped
                 ions, neutral atoms) any two qubits interact: neighbours in place, others after a move, which costs
                 the move error, its duration and, for the Harvard array, atom loss. The T1 and T2 of the qubits of
-                IBM's planned devices are drawn at random per qubit (T1 around 190 µs, T2 around 130 µs). The layouts follow the
+                IBM's planned devices are drawn at random per qubit (T1 around 190 µs, T2 around 130 µs), once per device
+                with a fixed seed, so the values shown are the ones every simulation uses. Devices marked "projected" are
+                chains of more QPUs than IBM has announced, for qLDPC codes too large for any announced device. The
+                noise-scaling dataset multiplies every error probability of a device's noise model (and its leakage rate)
+                by 0.1, 0.25, 0.5 or 1. The native layouts of the Results Explorer are not shown: each is built for one
+                code, with a coupler for every pair of qubits its syndrome circuit entangles. The layouts follow the
                 <a href="https://www.ibm.com/quantum/blog/large-scale-ftqc">IBM roadmap</a>,
                 <a href="https://www.nature.com/articles/s41586-024-07107-7">Bravyi et al. (2024)</a> for the bicycle
                 module, <a href="https://www.nature.com/articles/s41586-024-08449-y">Google (2025)</a> for Willow and
@@ -249,7 +254,7 @@
         function qubitColors(d, by) {
             const n = d.qubits;
             if (by === "role") return Array.from({ length: n }, (_, q) => ROLES[Math.floor((q % 288) / 72)][1]);
-            if (by === "qpu") return Array.from({ length: n }, (_, q) => ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b"][Math.floor(q / d.qpu_size) % 4]);
+            if (by === "qpu") return Array.from({ length: n }, (_, q) => ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b", "#d12771"][Math.floor(q / d.qpu_size) % 5]);
             const values = by === "degree" ? d.degree : by === "t1" ? d.t1 : by === "t2" ? d.t2 : null;
             if (!values) return Array(n).fill(QUBIT);
             const known = values.filter((v) => v != null), lo = Math.min(...known), hi = Math.max(...known);
@@ -260,7 +265,7 @@
             const box = el("colorbar");
             box.innerHTML = "";
             if (by === "role" || by === "qpu") {
-                const items = by === "role" ? ROLES : Array.from({ length: d.qpus }, (_, k) => ["QPU " + (k + 1), ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b"][k % 4]]);
+                const items = by === "role" ? ROLES : Array.from({ length: d.qpus }, (_, k) => ["QPU " + (k + 1), ["#0f62fe", "#8a3ffc", "#08bdba", "#ff832b", "#d12771"][k % 5]]);
                 box.innerHTML = items.map(([name, c]) => `<span><svg width="12" height="12"><circle cx="6" cy="6" r="5.5" fill="${c}"/></svg> ${name}</span>`).join("");
                 return;
             }
