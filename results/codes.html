@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codes - ECCentric Bench</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css">
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+    <script>
+        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } });
+    </script>
+    <noscript>
+        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'>
+    </noscript>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ibm-blue: #0f62fe; --ibm-blue-dark: #002d9c; --ibm-purple: #8a3ffc; --ibm-red: #da1e28;
+            --ibm-cyan: #1192e8; --ibm-gray: #8d8d8d; --ibm-gray-light: #c6c6c6; --ibm-ink: #161616; --ibm-panel: #f4f4f4;
+        }
+        .device-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.6em 1em; margin: 1em 0; }
+        .device-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
+        .device-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
+        .device-card { border: 1px solid #e0e0e0; background: #fff; padding: 1.2em 1.4em; margin: 0.5em 0 1.5em 0; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-head { display: flex; justify-content: space-between; gap: 1.5em; flex-wrap: wrap; }
+        .device-head > div:first-child { flex: 1 1 min(320px, 100%); min-width: 0; }
+        .device-maker { font-size: 0.75em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ibm-blue); font-weight: 600; }
+        .device-title { font-family: 'IBM Plex Sans', Lato, sans-serif; font-size: 1.5em; margin: 0.1em 0 0.3em 0; color: var(--ibm-ink); font-weight: 400; }
+        .device-description { font-size: 0.9em; color: #525252; margin: 0; max-width: 46em; }
+        .device-stats { display: grid; grid-template-columns: repeat(2, minmax(7em, auto)); gap: 0.6em 1.6em; align-content: start; }
+        .device-stat .value { font-size: 1.5em; color: var(--ibm-ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
+        .device-stat .name { font-size: 0.72em; color: #6f6f6f; }
+        .device-legend { display: flex; flex-wrap: wrap; gap: 0.3em 1.2em; margin: 1em 0 0.4em 0; font-size: 0.82em; color: #393939; }
+        .device-legend label { font-weight: normal; margin: 0; display: inline-flex; align-items: center; gap: 0.4em; cursor: pointer; }
+        .device-legend input { margin: 0; }
+        .device-legend svg { flex: none; }
+        .device-banner { font-size: 0.85em; color: #393939; background: #edf5ff; border-left: 4px solid var(--ibm-blue); padding: 0.5em 0.9em; margin: 0.4em 0; }
+        .device-banner:empty { display: none; }
+        .device-map { position: relative; width: 100%; margin-top: 0.4em; }
+        .device-map svg { width: 100%; height: auto; display: block; max-height: 72vh; }
+        .device-map .coupler { fill: none; stroke-linecap: round; }
+        .device-map .qubit { stroke: #fff; stroke-width: 0.06; cursor: pointer; }
+        .device-map .qubit-label { font-family: 'IBM Plex Mono', monospace; fill: #fff; pointer-events: none; text-anchor: middle; dominant-baseline: central; }
+        .device-map.focus .coupler { opacity: 0.12; }
+        .device-map.focus .coupler.on { opacity: 1; }
+        .device-map.focus .qubit { opacity: 0.35; }
+        .device-map.focus .qubit.on { opacity: 1; }
+        .device-tooltip { position: absolute; pointer-events: none; background: var(--ibm-ink); color: #f4f4f4; font-size: 0.78em; padding: 0.45em 0.7em; line-height: 1.45; white-space: nowrap; z-index: 2; display: none; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-colorbar { display: flex; align-items: center; gap: 0.6em; font-size: 0.78em; color: #525252; margin-top: 0.6em; }
+        .device-colorbar:empty { display: none; }
+        .device-colorbar .bar { width: 200px; max-width: 45vw; height: 10px; }
+        .device-noise { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 0 2em; }
+        .device-noise h3 { font-size: 1.05em; margin: 0 0 0.4em 0; }
+        table.device-table { width: 100%; border-collapse: collapse; font-size: 0.86em; margin: 0 0 1em 0; border: none; }
+        table.device-table td { padding: 0.35em 0.5em; border-top: 1px solid #e0e0e0; background: #fff; }
+        table.device-table tr:nth-child(even) td { background: #fafafa; }
+        table.device-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.95em; }
+        .device-footnote { font-size: 0.8em; color: #6f6f6f; margin-top: -0.5em; }
+        .explorer-note { background-color: #f4ecf7; border-left: 6px solid #8e44ad; padding: 1em 1.5em; margin: 1.5em 0; font-size: 0.9em; }
+            .code-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 0 2em; }
+        .code-results h3 { font-size: 1.05em; margin: 0 0 0.4em 0; }
+        table.device-table td.where { font-size: 0.92em; color: #525252; }
+        .code-tags { font-size: 0.85em; color: #393939; margin: 0.2em 0 1em 0; }
+        .code-tags span.tag { display: inline-block; background: #edf5ff; color: #002d9c; padding: 0.05em 0.5em; margin: 0 0.3em 0.3em 0; border-radius: 2px; }
+        .code-tags span.tag.na { background: #fff1f1; color: #a2191f; }
+    </style>
+</head>
+<body id="top-of-page">
+    <div id="navigation" class="sticky">
+        <nav class="top-bar" role="navigation" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
+                </li>
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
+            </ul>
+            <section class="top-bar-section">
+                <ul class="left">
+                    <li><a href="../index.html" class="icon-home"> Home</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../overview.html">Overview</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../scope.html">Research Scope</a></li>
+                    <li class="divider"></li>
+                    <li><a href="../methodology.html">Methodology</a></li>
+                    <li class="divider"></li>
+                    <li class="has-dropdown active">
+                        <a href="#">Results</a>
+                        <ul class="dropdown">
+                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
+                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
+                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
+                            <li><a href="explorer.html">Results Explorer</a></li>
+                            <li><a href="devices.html">Devices</a></li>
+                            <li class="active"><a href="codes.html">Codes</a></li>
+                        </ul>
+                    </li>
+                    <li class="divider"></li>
+                </ul>
+                <ul class="right">
+                    <li class="divider"></li>
+                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+
+    <div class="row t60">
+        <div class="medium-12 columns">
+            <h1>Codes</h1>
+            <p>
+                The codes ECCentric benchmarks: what they are, how large their syndrome circuits are, which qubits those
+                circuits entangle, and how the codes did in the benchmark. Pick a code below. Hover over a qubit to see
+                which qubits it interacts with.
+            </p>
+            <p id="data-status" style="font-size: 0.9em; color: #666;">Loading codes…</p>
+
+            <div class="device-controls">
+                <div><label for="code">Code</label><select id="code"></select></div>
+                <div><label for="distance">Distance</label><select id="distance"></select></div>
+                <div><label for="color-by">Colour qubits by</label><select id="color-by"></select></div>
+            </div>
+
+            <div class="device-card">
+                <div class="device-head">
+                    <div>
+                        <div class="device-maker" id="taxonomy"></div>
+                        <h2 class="device-title" id="title"></h2>
+                        <p class="device-description" id="description"></p>
+                    </div>
+                    <div class="device-stats" id="stats"></div>
+                </div>
+                <div class="device-legend" id="legend"></div>
+                <div class="device-banner" id="banner"></div>
+                <div class="device-map" id="map"></div>
+                <div class="device-colorbar" id="colorbar"></div>
+            </div>
+
+            <div class="code-tags" id="decoders"></div>
+
+            <div class="code-results">
+                <div>
+                    <h3>Reference: all-to-all device, SD6 noise</h3>
+                    <table class="device-table" id="reference"></table>
+                </div>
+                <div>
+                    <h3>Best result per dataset</h3>
+                    <table class="device-table" id="datasets"></table>
+                </div>
+            </div>
+            <p class="device-footnote" id="results-note"></p>
+
+            <div class="explorer-note">
+                <p style="margin-bottom: 0;"><strong>How to read this page.</strong> The sizes are those of the syndrome
+                circuit of a memory experiment at the code's default schedule: data qubits, and the ancilla qubits that
+                measure the checks. "Logical qubits tracked" counts the logical qubits whose errors the memory experiment
+                detects (for most codes all of them; for the honeycomb code one of its two). A check's weight is the number of
+                data qubits it involves. Floquet codes and the Bacon-Shor code measure pairs of data qubits directly, so
+                their circuits have no ancillas. The drawing places the qubits at the coordinates the circuit gives them,
+                or, where it gives none, by a force-directed layout of the entangled pairs, and links every pair of
+                qubits that a two-qubit gate or measurement acts on. A logical error rate is the fraction of shots in which
+                any tracked logical qubit failed over all rounds; per round it is ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2.
+                The results come from the <a href="explorer.html">Results Explorer</a>, which lists every configuration.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
+        <div id="subfooter">
+            <nav class="row">
+                <section class="small-12 columns credits" style="text-align: center; color: #666;">
+                    <div style="margin-bottom: 1em;">
+                        <a href="https://www.munich-quantum-valley.de/">
+                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
+                        </a>
+                    </div>
+                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
+                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
+                </section>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="../assets/js/javascript.min.js"></script>
+    <script src="../assets/js/javascript.min.js"></script>
+    <script>
+    (function () {
+        const SVG = "http://www.w3.org/2000/svg";
+        const TAXONOMIES = ["Topological", "QLDPC", "Floquet", "Subsystem", "Concatenated", "Algebraic", "Hybrid", "Other"];
+        const ROLES = { data: ["Data qubit", "#0f62fe"], ancilla: ["Ancilla (check) qubit", "#da1e28"] };
+        const RAMP = ["#491d8b", "#6929c4", "#1192e8", "#08bdba", "#9ef0f0"];
+        const el = (id) => document.getElementById(id);
+        const params = new URLSearchParams(location.search);
+        let data, code;
+
+        function make(tag, attrs, parent) {
+            const node = document.createElementNS(SVG, tag);
+            for (const [k, v] of Object.entries(attrs || {})) node.setAttribute(k, v);
+            if (parent) parent.appendChild(node);
+            return node;
+        }
+        function ramp(t) {
+            t = Math.max(0, Math.min(1, t)) * (RAMP.length - 1);
+            const i = Math.min(Math.floor(t), RAMP.length - 2), f = t - i;
+            const a = RAMP[i].match(/\w\w/g).map((h) => parseInt(h, 16)), b = RAMP[i + 1].match(/\w\w/g).map((h) => parseInt(h, 16));
+            return "rgb(" + a.map((x, k) => Math.round(x + (b[k] - x) * f)).join(",") + ")";
+        }
+        function fmt(n, digits) { return Number(n).toLocaleString("en-US", { maximumFractionDigits: digits || 0 }); }
+        function sci(x) {
+            if (x == null) return "–";
+            if (x >= 0.01) return (x * 100).toPrecision(2) + "%";
+            const e = Math.floor(Math.log10(x)), m = x / Math.pow(10, e);
+            return m.toFixed(1) + "×10<sup>" + e + "</sup>";
+        }
+        function escapeHtml(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+        function title(c) {
+            if (c.sizes.length > 1) return c.family + " code";
+            const s = c.sizes[0];
+            return s && s.k != null ? `${c.family} [[${s.data},${s.k},${s.distance}]]` : `${c.family} (${c.id})`;
+        }
+
+        function size() {
+            const d = Number(el("distance").value);
+            return code.sizes.find((s) => s.distance === d) || code.sizes[0];
+        }
+
+        function details() {
+            const c = code, s = size();
+            el("taxonomy").textContent = c.taxonomy;
+            el("title").textContent = title(c);
+            el("description").textContent = c.description;
+            const stats = [];
+            if (s) {
+                stats.push([s.k != null ? `[[${fmt(s.data)}, ${s.k}, ${s.distance}]]` : `d = ${s.distance}`, s.k != null ? "[[data qubits, logical tracked, distance]]" : "Distance"]);
+                stats.push([fmt(s.ancilla), "Ancilla qubits"]);
+                stats.push([fmt(s.data + s.ancilla), "Qubits in the circuit"]);
+                if (s.checks) stats.push([fmt(s.checks), s.pair_measurements ? "Checks (incl. pair measurements)" : "Checks"]);
+                if (s.check_weight_max != null) stats.push([s.check_weight_max + (s.check_weight_mean !== s.check_weight_max ? " (mean " + fmt(s.check_weight_mean, 1) + ")" : ""), "Check weight, max"]);
+            }
+            if (c.schedules.length) stats.push([c.schedules.length, "Schedules: " + c.schedules.join(", ")]);
+            el("stats").innerHTML = stats.map(([v, n]) => `<div class="device-stat"><div class="value">${v}</div><div class="name">${escapeHtml(n)}</div></div>`).join("");
+        }
+
+        function render() {
+            const c = code, map = el("map"), dr = c.drawing, by = el("color-by").value;
+            map.innerHTML = "";
+            el("legend").innerHTML = "";
+            el("colorbar").innerHTML = "";
+            const notes = [];
+            if (!dr) {
+                const s = c.sizes[c.sizes.length - 1];
+                el("banner").textContent = s ? `The circuit is too large to draw (${fmt(s.data + s.ancilla)} qubits).` : "No circuit available.";
+                return;
+            }
+            const shown = size();
+            if (shown && shown.distance !== dr.distance) notes.push(`Drawn at distance ${dr.distance}.`);
+            notes.push(dr.how === "coordinates" ? "Qubits at the coordinates the circuit gives them." :
+                "The circuit gives no qubit coordinates: qubits placed by a force-directed layout of the pairs they interact in.");
+            if (!dr.roles.includes("ancilla")) notes.push("No ancillas: the checks measure pairs of data qubits directly.");
+            el("banner").textContent = notes.join(" ");
+            const n = dr.positions.length, degree = Array(n).fill(0), nbrs = Array.from({ length: n }, () => []);
+            for (const [a, b] of dr.edges) { degree[a]++; degree[b]++; }
+            const xs = dr.positions.map((p) => p[0]), ys = dr.positions.map((p) => p[1]);
+            const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys), 1);
+            const r = Math.max(0.12, Math.min(0.32, span / Math.sqrt(n) / 3.2)), width = r * 0.35;
+            const minX = Math.min(...xs) - 1, minY = Math.min(...ys) - 1, w = Math.max(...xs) - minX + 1, h = Math.max(...ys) - minY + 1;
+            const svg = make("svg", { viewBox: `${minX} ${minY} ${w} ${h}`, role: "img", "aria-label": title(c) + " syndrome circuit" }, map);
+            const edges = make("g", {}, svg), nodes = make("g", {}, svg);
+            for (const [a, b] of dr.edges) {
+                const p = dr.positions[a], q = dr.positions[b];
+                const path = make("path", { d: `M${p[0]},${p[1]}L${q[0]},${q[1]}`, class: "coupler", stroke: "#8d8d8d", "stroke-width": width }, edges);
+                nbrs[a].push([path, b]);
+                nbrs[b].push([path, a]);
+            }
+            let colors;
+            if (by === "degree") {
+                const lo = Math.min(...degree), hi = Math.max(...degree);
+                colors = degree.map((v) => ramp(hi > lo ? (v - lo) / (hi - lo) : 0.5));
+                el("colorbar").innerHTML = `<span>Qubits it interacts with</span><span>${lo}</span><svg class="bar" viewBox="0 0 100 10" preserveAspectRatio="none">` +
+                    `<defs><linearGradient id="ramp">${RAMP.map((col, i) => `<stop offset="${i / (RAMP.length - 1)}" stop-color="${col}"/>`).join("")}</linearGradient></defs>` +
+                    `<rect width="100" height="10" fill="url(#ramp)"/></svg><span>${hi}</span>`;
+            } else {
+                colors = dr.roles.map((role) => ROLES[role][1]);
+                const counts = { data: dr.roles.filter((x) => x === "data").length, ancilla: dr.roles.filter((x) => x === "ancilla").length };
+                el("colorbar").innerHTML = Object.entries(ROLES).filter(([k]) => counts[k]).map(([k, [name, col]]) =>
+                    `<span><svg width="12" height="12"><circle cx="6" cy="6" r="5.5" fill="${col}"/></svg> ${name} (${fmt(counts[k])})</span>`).join("");
+            }
+            el("legend").innerHTML = `<span><svg width="26" height="10"><line x1="1" y1="5" x2="25" y2="5" stroke="#8d8d8d" stroke-width="2.5" stroke-linecap="round"/></svg>` +
+                ` Qubits the circuit entangles (${fmt(dr.edges.length)} pairs)</span>`;
+            const circles = dr.positions.map((p, q) => {
+                const circle = make("circle", { cx: p[0], cy: p[1], r: r, class: "qubit", fill: colors[q] }, nodes);
+                circle.addEventListener("mouseenter", (e) => focus(q, e));
+                circle.addEventListener("mousemove", (e) => moveTip(e));
+                circle.addEventListener("mouseleave", unfocus);
+                return circle;
+            });
+            const tip = document.createElement("div");
+            tip.className = "device-tooltip";
+            map.appendChild(tip);
+            function focus(q, e) {
+                map.classList.add("focus");
+                circles[q].classList.add("on");
+                for (const [path, other] of nbrs[q]) { path.classList.add("on"); circles[other].classList.add("on"); }
+                const role = dr.roles[q];
+                const partners = nbrs[q].map(([, o]) => dr.roles[o]);
+                const nd = partners.filter((x) => x === "data").length, na = partners.length - nd;
+                tip.innerHTML = `<strong>${role === "ancilla" ? "Ancilla" : "Data qubit"}</strong><br>interacts with ` +
+                    [nd ? `${nd} data qubit${nd > 1 ? "s" : ""}` : "", na ? `${na} ancilla${na > 1 ? "s" : ""}` : ""].filter(Boolean).join(" and ");
+                tip.style.display = "block";
+                moveTip(e);
+            }
+            function moveTip(e) {
+                const box = map.getBoundingClientRect();
+                let x = e.clientX - box.left + 14, y = e.clientY - box.top + 14;
+                if (x + tip.offsetWidth > box.width) x = e.clientX - box.left - tip.offsetWidth - 14;
+                tip.style.left = x + "px";
+                tip.style.top = y + "px";
+            }
+            function unfocus() {
+                map.classList.remove("focus");
+                map.querySelectorAll(".on").forEach((node) => node.classList.remove("on"));
+                tip.style.display = "none";
+            }
+        }
+
+        function results() {
+            const c = code;
+            const tags = c.decoders.map((d) => `<span class="tag">${escapeHtml(d)}</span>`).join("") +
+                c.not_applicable.filter((d) => !c.decoders.includes(d)).map((d) => `<span class="tag na">${escapeHtml(d)}: not applicable</span>`).join("");
+            el("decoders").innerHTML = (c.decoders.length ? "<strong>Decoded with</strong> " : "") + tags +
+                (c.devices.length ? `<br><strong>Run on</strong> ${c.devices.map(escapeHtml).join(", ")}` : "");
+            const ref = c.reference.slice().sort((a, b) => a.distance - b.distance || a.p - b.p);
+            el("reference").innerHTML = ref.length ? "<tr><td><strong>d</strong></td><td><strong>p</strong></td><td class=\"num\"><strong>Best logical error rate</strong></td><td><strong>Decoder</strong></td></tr>" +
+                ref.map((x) => `<tr><td>${x.distance}</td><td>${(x.p * 100).toPrecision(2)}%</td><td class="num">${x.bound ? "&lt; " : ""}${sci(x.ler)}</td><td>${escapeHtml(x.decoder)}</td></tr>`).join("") :
+                "<tr><td>Not in the reference dataset.</td></tr>";
+            const ds = c.datasets.filter((x) => x.slice !== "reference").sort((a, b) => (a.best ? a.best.ler_per_round : 1) - (b.best ? b.best.ler_per_round : 1));
+            el("datasets").innerHTML = ds.length ? "<tr><td><strong>Dataset</strong></td><td class=\"num\"><strong>Per round</strong></td><td><strong>Where</strong></td></tr>" +
+                ds.map((x) => {
+                    const b = x.best;
+                    const where = b ? `${escapeHtml(b.device)}, ${escapeHtml(b.noise)}${b.error_probability ? " at p = " + (b.error_probability * 100).toPrecision(2) + "%" : ""}; d = ${b.distance}, ${escapeHtml(b.decoder)}` : "no logical error rate measured";
+                    return `<tr><td>${escapeHtml(x.label)} <span style="color:#8d8d8d">(${x.configurations})</span></td><td class="num">${b ? sci(b.ler_per_round) : "–"}</td><td class="where">${where}</td></tr>`;
+                }).join("") : "<tr><td>Only in the reference dataset.</td></tr>";
+            el("results-note").textContent = "Best decoder per configuration. The number after a dataset counts the configurations of this code in it; the rate is the lowest logical error rate per round among them, with at least one logical error observed.";
+        }
+
+        function select(id) {
+            code = data.codes.find((c) => c.id === id) || data.codes[0];
+            const dist = el("distance"), wanted = Number(params.get("d"));
+            dist.innerHTML = code.sizes.map((s) => `<option value="${s.distance}">${s.distance}</option>`).join("");
+            const drawn = code.drawing ? code.drawing.distance : null;
+            dist.value = code.sizes.some((s) => s.distance === wanted) ? wanted : (drawn || (code.sizes[0] || {}).distance);
+            const by = el("color-by");
+            by.innerHTML = '<option value="role">Data or ancilla</option><option value="degree">Qubits it interacts with</option>';
+            details();
+            render();
+            results();
+            history.replaceState(null, "", `?code=${code.id}`);
+        }
+
+        fetch(params.get("data") || "../data/codes.json").then((r) => r.json()).then((json) => {
+            data = json;
+            const sel = el("code");
+            sel.innerHTML = TAXONOMIES.map((t) => {
+                const items = data.codes.filter((c) => c.taxonomy === t);
+                return items.length ? `<optgroup label="${t}">${items.map((c) => `<option value="${c.id}">${escapeHtml(title(c))}</option>`).join("")}</optgroup>` : "";
+            }).join("");
+            sel.value = data.codes.some((c) => c.id === params.get("code")) ? params.get("code") : "surface";
+            sel.addEventListener("change", () => select(sel.value));
+            el("distance").addEventListener("change", () => { details(); render(); });
+            el("color-by").addEventListener("change", render);
+            el("data-status").textContent = `${data.codes.length} codes, exported ${data.generated}.`;
+            select(sel.value);
+        }).catch((err) => { el("data-status").textContent = "Could not load the codes: " + err; });
+    })();
+    </script>
+</body>
+</html>
