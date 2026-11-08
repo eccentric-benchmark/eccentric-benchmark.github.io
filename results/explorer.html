@@ -212,11 +212,11 @@
         };
         const FILTERS = [
             ["slice", "Dataset"], ["taxonomy", "Code taxonomy"], ["family", "Code family"], ["code", "Code"],
-            ["schedule", "Schedule"], ["backend", "Device"], ["error_type", "Noise model"],
+            ["schedule", "Schedule"], ["basis", "Memory basis"], ["backend", "Device"], ["error_type", "Noise model"],
             ["error_probability", "Physical error rate"], ["decoder", "Decoder"],
         ];
         const TABLE = [
-            ["code", "Code"], ["schedule", "Schedule"], ["distance", "d"], ["k", "k"], ["backend", "Device"],
+            ["code", "Code"], ["schedule", "Schedule"], ["basis", "Basis"], ["distance", "d"], ["k", "k"], ["backend", "Device"],
             ["error_type", "Noise"], ["error_probability", "p"], ["decoder", "Decoder"],
             ["logical_error_rate", "Logical error rate [95% CI]"], ["ler_per_round", "Per round"], ["status", "Status"],
             ["rounds", "Rounds"], ["code_qubits", "Qubits"], ["circuit_qubits", "Circuit qubits"], ["swaps", "SWAPs"],
@@ -235,7 +235,7 @@
                           real_infleqtion: "Infleqtion", real_harvard: "Harvard/MIT", modsi1000: "SI1000",
                           real_flamingo_m700: "Flamingo, 700 ns readout", real_flamingo_downscaled_m700: "Flamingo ÷10, 700 ns readout" },
         };
-        const CONFIG_KEY = ["slice", "code", "schedule", "distance", "rounds", "backend", "error_type", "error_probability"];
+        const CONFIG_KEY = ["slice", "code", "schedule", "basis", "distance", "rounds", "backend", "error_type", "error_probability"];
 
         let data = [], labels = {}, sort = { key: "logical_error_rate", dir: 1 };
         const $ = (id) => document.getElementById(id);
