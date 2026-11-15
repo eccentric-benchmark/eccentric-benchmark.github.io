@@ -282,12 +282,21 @@
                 if (key === changed) continue;
                 const select = $("f-" + key), current = select.value;
                 const rows = data.filter((r) => FILTERS.every(([k]) => k === key || matches(r, k)));
-                const values = [...new Set(rows.map((r) => r[key]))].filter((v) => v !== null && v !== undefined).sort((a, b) =>
+                // Each option counts the results it would show under the other filters' choices
+                const counts = new Map();
+                for (const r of rows) if (r[key] !== null && r[key] !== undefined) counts.set(r[key], (counts.get(r[key]) || 0) + 1);
+                const values = [...counts.keys()].sort((a, b) =>
                     (typeof a === "number" && typeof b === "number") ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true }));
                 const isSlice = key === "slice";
                 if (isSlice) values.sort((a, b) => label(key, a).localeCompare(label(key, b)));
-                select.innerHTML = (isSlice ? "" : '<option value="">All</option>') + values.map((v) =>
-                    '<option value="' + escapeHtml(v === null ? "" : v) + '">' + escapeHtml(label(key, v)) + "</option>").join("");
+                // Operations in the export's order: memory first, then the operations built on it
+                if (key === "operation") {
+                    const order = Object.keys(labels.operations || {});
+                    const rank = (v) => order.includes(v) ? order.indexOf(v) : order.length;
+                    values.sort((a, b) => rank(a) - rank(b));
+                }
+                select.innerHTML = '<option value="">' + (isSlice ? "All datasets" : "All") + " (" + rows.length.toLocaleString("en") + ")</option>" + values.map((v) =>
+                    '<option value="' + escapeHtml(v === null ? "" : v) + '">' + escapeHtml(label(key, v)) + " (" + counts.get(v).toLocaleString("en") + ")</option>").join("");
                 if ([...select.options].some((o) => o.value === current)) select.value = current;
             }
         }
@@ -406,7 +415,9 @@
 
         function describeDataset() {
             const select = $("f-slice");
-            $("slice-description").textContent = select ? ((labels.slice_descriptions || {})[select.value] || "") : "";
+            $("slice-description").textContent = !select ? "" : select.value === "" ?
+                "All datasets together. Pick one for a description of its experiments; every list shows only the values present under the other filters, with the number of results." :
+                ((labels.slice_descriptions || {})[select.value] || "");
         }
 
         function render() {
