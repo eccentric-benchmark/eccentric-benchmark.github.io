@@ -1,12 +1,12 @@
 {
  "updated": "2026-11-16",
- "results": 33487,
- "jobs": 58077,
- "cpu_hours": 25050,
- "shots": 3630811872,
- "logical_errors": 4599805,
+ "results": 35374,
+ "jobs": 61746,
+ "cpu_hours": 25082,
+ "shots": 3805447395,
+ "logical_errors": 4842954,
  "codes": 70,
  "devices": 25,
  "noise_models": 27,
- "decoders": 11
+ "decoders": 14
 }
