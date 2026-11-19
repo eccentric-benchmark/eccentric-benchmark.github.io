@@ -1,0 +1,32 @@
+# Copies the figures that ECCentric builds (site/figures on its main branch, `python -m eccentric.figures`)
+# into figures/, which results/findings.html shows. Runs daily and on demand; commits only when they changed.
+name: sync figures from ECCentric
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch ECCentric's site/figures
+        run: |
+          git clone --depth 1 --filter=blob:none --sparse https://github.com/TUM-DSE/eccentric.git /tmp/eccentric
+          git -C /tmp/eccentric sparse-checkout set site/figures
+          rsync -a --delete /tmp/eccentric/site/figures/ figures/
+
+      - name: Commit if changed
+        run: |
+          git add -A figures
+          if git diff --cached --quiet; then echo "figures unchanged"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Figures from ECCentric $(git -C /tmp/eccentric rev-parse --short HEAD)"
+          git push
