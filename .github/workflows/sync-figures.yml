@@ -1,10 +1,11 @@
 # Copies the figures that ECCentric builds (site/figures on its main branch, `python -m eccentric.figures`)
-# into figures/, which results/findings.html shows. Runs daily and on demand; commits only when they changed.
+# into figures/, which results/findings.html shows. Runs on the 1st and 15th of each month and on demand;
+# commits only when they changed.
 name: sync figures from ECCentric
 
 on:
   schedule:
-    - cron: "17 4 * * *"
+    - cron: "17 4 1,15 * *"
   workflow_dispatch:
 
 permissions:
