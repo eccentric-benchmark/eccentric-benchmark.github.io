@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper · ECCentric</title>
+<meta name="description" content="ECCentric: An Empirical Analysis of Quantum Error Correction Codes, ACM SIGMETRICS 2026. Paper, abstract, citation and authors.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/paper.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Paper · ECCentric">
+<meta property="og:description" content="ECCentric: An Empirical Analysis of Quantum Error Correction Codes, ACM SIGMETRICS 2026. Paper, abstract, citation and authors.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/paper.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
+</head>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="results/findings.html">Findings</a></li>
+<li><a href="results/explorer.html">Explorer</a></li>
+<li><a href="results/codes.html">Codes</a></li>
+<li><a href="results/devices.html">Devices</a></li>
+<li><a href="results/decoders.html">Decoders</a></li>
+<li><a href="method.html">Method</a></li>
+<li><a href="paper.html" aria-current="page">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
+
+<main id="main">
+<div class="wrap">
+
+<div class="page-head">
+    <p class="eyebrow">ACM SIGMETRICS 2026 · Proc. ACM Meas. Anal. Comput. Syst. 10(2), article 37</p>
+    <h1>ECCentric: An Empirical Analysis of Quantum Error Correction Codes</h1>
+    <p class="lead">Aleksandra Świerkowska, Jannik Pflieger, Emmanouil Giortamis, Pramod Bhatotia · Technical University of Munich</p>
+    <div class="button-row">
+        <a class="button" href="files/ECCentric.pdf">Paper (PDF)</a>
+        <a class="button-quiet" href="https://doi.org/10.1145/3805635">ACM Digital Library</a>
+        <a class="button-quiet" href="https://arxiv.org/abs/2511.01062">arXiv</a>
+        <a class="button-quiet" href="files/slides.pdf">Slides</a>
+    </div>
+</div>
+
+<div class="prose">
+<h2 id="abstract">Abstract</h2>
+<p>
+    Quantum Error Correction (QEC) is essential for building scalable quantum computers, but a lack of systematic,
+    end-to-end evaluation methods makes it difficult to assess how different QEC codes perform under realistic
+    conditions. The vast diversity of codes, an expansive experimental search space, and the absence of a standardized
+    framework prevent a thorough, holistic analysis. To address this, we introduce ECCentric, an end-to-end benchmarking
+    framework designed to systematically evaluate QEC codes across the full quantum computing stack. ECCentric is
+    designed to be modular, extensible, and general, allowing for a comprehensive analysis of QEC code families under
+    varying hardware topologies, noise models, and compilation strategies.
+</p>
+<p>
+    Using ECCentric, we conduct the first systematic benchmarking of major QEC code families against realistic, mid-term
+    quantum device parameters. Our empirical analysis reveals that intra-QPU execution significantly outperforms
+    distributed methods, that qubit connectivity is a far more critical factor for reducing logical errors than
+    increasing code distance, and that compiler overhead remains a major source of error. Furthermore, our findings
+    suggest that trapped-ion architectures with qubit shuttling are the most promising near-term platforms and that on
+    noisy devices, a strategic and selective application of QEC is necessary to avoid introducing more errors than are
+    corrected. This study provides crucial, actionable insights for both hardware designers and practitioners, guiding
+    the development of fault-tolerant quantum systems.
+</p>
+<p class="small muted">
+    The paper evaluates ECCentric
+    <a href="https://github.com/TUM-DSE/eccentric/tree/v1.0.0-sigmetrics26">v1.0.0-sigmetrics26</a>
+    (<a href="https://doi.org/10.5281/zenodo.19241564">artifact on Zenodo</a>). The benchmark has grown since, so the
+    <a href="results/findings.html">current results</a> can differ from the paper's.
+</p>
+</div>
+
+<div class="section-head" id="cite">
+    <h2>Cite</h2>
+</div>
+<!-- gen:bibtex -->
+<div class="copy-wrap"><pre class="bibtex">@article{10.1145/3805635,
+  author    = {\&#x27;{S}wierkowska, Aleksandra and Pflieger, Jannik and Giortamis, Emmanouil and Bhatotia, Pramod},
+  title     = {ECCentric: An Empirical Analysis of Quantum Error Correction Codes},
+  journal   = {Proc. ACM Meas. Anal. Comput. Syst.},
+  year      = {2026},
+  volume    = {10},
+  number    = {2},
+  articleno = {37},
+  numpages  = {33},
+  month     = may,
+  publisher = {Association for Computing Machinery},
+  doi       = {10.1145/3805635},
+  url       = {https://doi.org/10.1145/3805635}
+}</pre></div>
+<!-- /gen:bibtex -->
+
+<div class="section-head" id="authors">
+    <h2>Authors</h2>
+    <p><a href="contact.html">Contact</a></p>
+</div>
+<ul class="people">
+    <li><strong><a href="https://aswierkowska.github.io/">Aleksandra Świerkowska</a></strong><span>Technical University of Munich</span></li>
+    <li><strong><a href="https://jannikpflieger.github.io/">Jannik Pflieger</a></strong><span>Technical University of Munich</span></li>
+    <li><strong><a href="https://manosgior.github.io/">Emmanouil Giortamis</a></strong><span>Technical University of Munich</span></li>
+    <li><strong><a href="https://dse.in.tum.de/bhatotia/">Pramod Bhatotia</a></strong><span>Technical University of Munich</span></li>
+</ul>
+
+</div>
+</main>
+
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="assets/js/site.js" defer></script>
+<!-- /shell:footer -->
+</body>
+</html>

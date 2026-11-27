@@ -1,34 +1,43 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Results Explorer - ECCentric Bench</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css">
-    <script src="../assets/js/modernizr.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } });
-    </script>
-    <noscript>
-        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'>
-    </noscript>
+    <title>Explorer · ECCentric</title>
+    <meta name="description" content="Every logical error rate ECCentric has measured, filterable by code, device, noise model and decoder, with a plot and a CSV download.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/results/explorer.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Explorer · ECCentric">
+<meta property="og:description" content="Every logical error rate ECCentric has measured, filterable by code, device, noise model and decoder, with a plot and a CSV download.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/results/explorer.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
     <style>
-        .explorer-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6em 1em; margin: 1em 0; }
-        .explorer-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
-        .explorer-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
+        .explorer-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap: 0.6em 1em; margin: 1em 0; }
+        .explorer-controls label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin: 0 0 0.25em; }
+        .explorer-controls select { font-size: 0.88rem; }
         .explorer-dataset { font-size: 0.9em; color: #444; margin: -0.3em 0 0.6em 0; max-width: 60em; }
         .explorer-dataset:empty { display: none; }
         .explorer-toggles { display: flex; flex-wrap: wrap; gap: 0.4em 1.5em; margin: 0.5em 0 1em 0; font-size: 0.9em; }
         .explorer-toggles label { font-weight: normal; margin: 0; }
         .explorer-toggles input { margin: 0 0.3em 0 0; }
         .explorer-summary { font-size: 0.9em; color: #555; margin: 0.5em 0; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5em; }
-        .explorer-table-wrap { overflow-x: auto; border: 1px solid #ddd; max-height: 70vh; overflow-y: auto; }
+        .explorer-table-wrap { overflow-x: auto; border: 1px solid var(--line); max-height: 70vh; overflow-y: auto; }
         table.explorer { width: 100%; border-collapse: collapse; font-size: 0.82em; margin: 0; border: none; }
-        table.explorer th { position: sticky; top: 0; background: #f4ecf7; cursor: pointer; white-space: nowrap; padding: 0.5em; text-align: left; user-select: none; }
+        table.explorer th { position: sticky; top: 0; background: var(--panel); cursor: pointer; font-weight: 600; white-space: nowrap; padding: 0.5em; text-align: left; user-select: none; }
         table.explorer th.sorted-asc::after { content: " \25B2"; font-size: 0.8em; }
         table.explorer th.sorted-desc::after { content: " \25BC"; font-size: 0.8em; }
-        table.explorer td { padding: 0.35em 0.5em; white-space: nowrap; border-top: 1px solid #eee; }
+        table.explorer td { padding: 0.35em 0.5em; white-space: nowrap; border-top: 1px solid var(--line); }
+        table.explorer td a { color: inherit; text-decoration-color: var(--line-strong); }
+        table.explorer td a:hover { color: var(--accent-ink); text-decoration-color: currentColor; }
         table.explorer tr:nth-child(even) td { background: #fafafa; }
         td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .status { padding: 0.1em 0.5em; border-radius: 0.8em; font-size: 0.85em; }
@@ -42,98 +51,43 @@
         .status-pending { background: #f4f4f4; color: #999; }
         .explorer-chart { margin: 1em 0; }
         .explorer-chart svg { width: 100%; max-width: 760px; height: auto; display: block; margin: 0 auto; }
-        .explorer-note { background-color: #f4ecf7; border-left: 6px solid #8e44ad; padding: 1em 1.5em; margin: 1.5em 0; font-size: 0.9em; }
-        button.explorer-button { margin: 0; padding: 0.4em 1em; font-size: 0.85em; }
+        button.explorer-button { margin: 0; padding: 0.4em 1em; font-size: 0.85rem; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); }
+        button.explorer-button:hover { border-color: var(--ink-2); }
     </style>
 </head>
-<body id="top-of-page">
-    <div id="navigation" class="sticky">
-        <nav class="top-bar" role="navigation" data-topbar>
-            <ul class="title-area">
-                <li class="name">
-                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
-                </li>
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
-            </ul>
-            <section class="top-bar-section">
-                <ul class="left">
-                    <li><a href="../index.html" class="icon-home"> Home</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../overview.html">Overview</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../scope.html">Research Scope</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../methodology.html">Methodology</a></li>
-                    <li class="divider"></li>
-                    <li class="has-dropdown active">
-                        <a href="#">Results</a>
-                        <ul class="dropdown">
-                            <li><a href="findings.html">Findings</a></li>
-                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
-                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
-                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
-                            <li class="active"><a href="explorer.html">Results Explorer</a></li>
-                            <li><a href="devices.html">Devices</a></li>
-                            <li><a href="codes.html">Codes</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider"></li>
-                </ul>
-                <ul class="right">
-                    <li class="divider"></li>
-                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
-                </ul>
-            </section>
-        </nav>
-    </div>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="../results/findings.html">Findings</a></li>
+<li><a href="../results/explorer.html" aria-current="page">Explorer</a></li>
+<li><a href="../results/codes.html">Codes</a></li>
+<li><a href="../results/devices.html">Devices</a></li>
+<li><a href="../results/decoders.html">Decoders</a></li>
+<li><a href="../method.html">Method</a></li>
+<li><a href="../paper.html">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
 
-    <div class="row t60">
-        <div class="medium-12 columns">
-            <h1>Results Explorer</h1>
-            <p>
-                Logical error rates of quantum error correction codes, simulated with ECCentric for combinations of
-                code, syndrome-extraction schedule, device, noise model and decoder. Pick the configurations you are
-                interested in below; every row is one configuration decoded with one decoder.
-            </p>
-            <div class="effort-band" id="effort" style="display:none;">
-                <style>
-                    .effort-band { margin: 1.5em 0; }
-                    .effort-band .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 1em; text-align: center; }
-                    .effort-band .tile { background: #f4f8fb; border-top: 4px solid #007095; padding: 1em 0.6em; }
-                    .effort-band .value { font-size: 1.9em; font-weight: 700; color: #00475e; line-height: 1.1; font-variant-numeric: tabular-nums; }
-                    .effort-band .name { font-size: 0.85em; color: #555; margin-top: 0.3em; }
-                    .effort-band .note { font-size: 0.75em; color: #888; text-align: center; margin-top: 0.6em; }
-                </style>
-                <div class="tiles"></div>
-                <div class="note"></div>
-            </div>
-            <script>
-            (function () {
-                // At least: every figure rounded down to two significant digits
-                function atLeast(n) {
-                    if (n >= 1e9) return Math.floor(n / 1e8) / 10 + " billion";
-                    if (n >= 1e6) return Math.floor(n / 1e6).toLocaleString("en-US") + " million";
-                    const step = Math.pow(10, Math.max(0, Math.floor(Math.log10(n)) - 1));
-                    return (Math.floor(n / step) * step).toLocaleString("en-US") + "+";
-                }
-                fetch("../data/effort.json").then((r) => r.json()).then((e) => {
-                    const box = document.getElementById("effort");
-                    const years = e.cpu_hours / 8766;
-                    const tiles = [
-                        ...(e.results ? [[atLeast(e.results), "logical error rates measured"]] : []),
-            [atLeast(e.jobs), "simulation jobs run"],
-                        [atLeast(e.cpu_hours), "CPU-hours" + (years >= 1 ? ", over " + Math.floor(years) + " year" + (years >= 2 ? "s" : "") + " on one core" : "")],
-                        [atLeast(e.shots), "shots simulated and decoded"],
-                        [e.codes + " · " + e.devices + " · " + e.noise_models + " · " + e.decoders, "codes · devices · noise models · decoders"],
-                    ];
-                    box.querySelector(".tiles").innerHTML = tiles.map(([v, n]) => `<div class="tile"><div class="value">${v}</div><div class="name">${n}</div></div>`).join("");
-                    box.querySelector(".note").textContent = "Only the jobs behind these results count, as of " + e.updated + ": none that failed, and none that later runs replaced. " +
-                        atLeast(e.logical_errors).replace("+", "") + " logical errors observed. Each job ran on one core.";
-                    box.style.display = "block";
-                }).catch(() => {});
-            })();
-            </script>
-            <p id="data-status" style="font-size: 0.9em; color: #666;">Loading results…</p>
+    <main id="main">
+<div class="wrap">
+<div class="page-head">
+    <p class="eyebrow">Results</p>
+    <h1>Explorer</h1>
+    <p class="lead">
+        Every logical error rate ECCentric has measured, for each combination of code, syndrome-extraction schedule,
+        device, noise model and decoder. Pick the configurations you are interested in; every row is one configuration
+        decoded with one decoder. The address of the page keeps your filters, so you can share or bookmark a view.
+    </p>
+</div>
+            <p id="data-status" class="small muted">Loading results…</p>
 
             <div class="explorer-controls" id="controls"></div>
             <p class="explorer-dataset" id="slice-description"></p>
@@ -153,58 +107,101 @@
                 <table class="explorer" id="table"><thead></thead><tbody></tbody></table>
             </div>
 
-            <div class="explorer-note">
-                <p><strong>How to read the results.</strong> The logical error rate is the fraction of shots in which any
-                logical qubit failed over all syndrome-extraction rounds (by default as many rounds as the code
-                distance), with a 95% Wilson confidence interval. The per-round rate assumes independent rounds:
-                ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2. Shots are sampled until 100 logical errors, 100,000 shots
-                or one hour of decoding.</p>
-                <p style="margin-bottom: 0;"><strong>Status.</strong>
-                    <span class="status status-measured">measured</span> at least 100 logical errors;
-                    <span class="status status-low">low statistics</span> stopped by the shot or time limit before 100 errors;
-                    <span class="status status-upper">upper bound</span> no logical error seen, the 95% upper bound is given;
-                    <span class="status status-nofit">does not fit</span> the code needs more qubits than the device has;
-                    <span class="status status-na">decoder not applicable</span> e.g. matching on a code that is not matchable (hover for the reason);
-                    <span class="status status-timeout">timeout after 9 h</span> the decoder did not finish a single batch of shots
-                    within the time limit, typically a large code far above threshold;
-                    <span class="undetectable">&#9888;</span> the compiled circuit has distance 1: single faults (e.g. on a SWAP
-                    between two data qubits that routing added) flip a logical qubit without any detector noticing.
-                    "Qubits" counts the code's data and ancilla qubits, "circuit qubits" all qubits of the compiled circuit.
-                    Devices marked * are projections, not announced devices: a chain of as many Loon or Flamingo QPUs as
-                    the code needs, each linked to the next by four l-couplers.
-                    "Native layout" is a device built for the code, with a coupler for every pair of qubits its syndrome
-                    circuit entangles, so no SWAPs are needed; for bivariate bicycle codes this is IBM's planned layout,
-                    with its long-range couplers assumed to be as good as nearest-neighbour ones. "Native, noisy long-range" is the
-                    same layout with the two long-range couplers of each qubit as noisy and slow as IBM's remote couplers
-                    (3% error, 300 ns; 0.3% at tenfold lower noise).
-                    On devices with T1 and T2 (IBM, Infleqtion, Harvard/MIT), qubits decay for as long as they wait,
-                    for example while others are measured; IBM readout takes 1.56 µs, as on Heron today, and the tenfold-lower
-                    IBM model has threefold longer T1 and T2. Until 28 October 2026 waiting qubits did not decay and IBM
-                    readout took 70 ns; the results on these devices have been recomputed. Results with low statistics or
-                    that timed out are being refined with more shots in the background and are updated here as they finish.
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
-        <div id="subfooter">
-            <nav class="row">
-                <section class="small-12 columns credits" style="text-align: center; color: #666;">
-                    <div style="margin-bottom: 1em;">
-                        <a href="https://www.munich-quantum-valley.de/">
-                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
-                        </a>
+            <section class="explain" aria-labelledby="how-to-read">
+                <h2 id="how-to-read">How to read the results</h2>
+                <div class="explain-grid">
+                    <div class="explain-block wide">
+                        <h3>The numbers</h3>
+                        <ul>
+                            <li><strong>Logical error rate:</strong> the fraction of shots in which any logical qubit failed
+                                over all syndrome-extraction rounds (by default as many rounds as the code distance).</li>
+                            <li><strong>[95% CI]:</strong> the 95% Wilson confidence interval.</li>
+                            <li><strong>Per round:</strong> assumes independent rounds,
+                                ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2.</li>
+                            <li><strong>Shots:</strong> sampled until 100 logical errors, 100,000 shots or one hour of decoding,
+                                whichever comes first.</li>
+                        </ul>
                     </div>
-                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
-                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
-                </section>
-            </nav>
-        </div>
-    </footer>
 
-    <script src="../assets/js/javascript.min.js"></script>
-    <script>
+                    <div class="explain-block wide">
+                        <h3>Status</h3>
+                        <dl class="status-list">
+                            <dt><span class="status status-measured">measured</span></dt>
+                            <dd>At least 100 logical errors seen.</dd>
+                            <dt><span class="status status-low">low statistics</span></dt>
+                            <dd>Stopped by the shot or time limit before 100 errors.</dd>
+                            <dt><span class="status status-upper">upper bound</span></dt>
+                            <dd>No logical error seen; the 95% upper bound is given.</dd>
+                            <dt><span class="status status-nofit">does not fit</span></dt>
+                            <dd>The code needs more qubits than the device has.</dd>
+                            <dt><span class="status status-na">decoder not applicable</span></dt>
+                            <dd>E.g. matching on a code that is not matchable. Hover over it for the reason.</dd>
+                            <dt><span class="status status-timeout">timeout after 9 h</span></dt>
+                            <dd>The decoder did not finish a single batch of shots in time, typically a large code far above threshold.</dd>
+                            <dt><span class="undetectable" style="margin-left:0">&#9888;</span></dt>
+                            <dd>The compiled circuit has distance 1: a single fault (e.g. on a SWAP between two data qubits
+                                that routing added) flips a logical qubit without any detector noticing.</dd>
+                        </dl>
+                    </div>
+
+                    <div class="explain-block narrow">
+                        <h3>Columns</h3>
+                        <ul>
+                            <li><strong>Qubits:</strong> the code's data and ancilla qubits.</li>
+                            <li><strong>Circuit qubits:</strong> all qubits of the compiled circuit.</li>
+                            <li><strong>SWAPs:</strong> added by routing to fit the device.</li>
+                            <li><strong>2q gates:</strong> two-qubit gates of the compiled circuit.</li>
+                        </ul>
+                        <p class="small muted">Codes, devices and decoders in the table link to their pages.</p>
+                    </div>
+
+                    <div class="explain-block narrow">
+                        <h3>Devices</h3>
+                        <ul>
+                            <li><strong>Marked *:</strong> projections, not announced devices: a chain of as many Loon or
+                                Flamingo QPUs as the code needs, each linked to the next by four l-couplers.</li>
+                            <li><strong>Native layout:</strong> a device built for the code, with a coupler for every pair of
+                                qubits its syndrome circuit entangles, so no SWAPs are needed. For bivariate bicycle codes this
+                                is IBM's planned layout, with its long-range couplers as good as nearest-neighbour ones.</li>
+                            <li><strong>Native, noisy long-range:</strong> the same layout with each qubit's two long-range
+                                couplers as noisy and slow as IBM's remote couplers (3% error, 300 ns; 0.3% at tenfold lower noise).</li>
+                            <li><strong>Decay while waiting:</strong> on devices with T1 and T2 (IBM, Infleqtion, Harvard/MIT),
+                                qubits decay for as long as they wait, for example while others are measured. IBM readout takes
+                                1.56 µs, as on Heron today; the tenfold-lower IBM model has threefold longer T1 and T2.</li>
+                        </ul>
+                    </div>
+
+                    <div class="explain-block narrow">
+                        <h3>Updates</h3>
+                        <ul>
+                            <li>Results with low statistics or that timed out are refined with more shots in the background,
+                                and updated here as they finish.</li>
+                            <li>Until 28 October 2026, waiting qubits did not decay and IBM readout took 70 ns. The results on
+                                these devices have been recomputed since.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+</div>
+</main>
+
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="../paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="../contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="../assets/js/site.js" defer></script>
+<!-- /shell:footer -->
+<script>
     (function () {
         const STATUS_CLASS = {
             "measured": "status-measured", "low statistics": "status-low", "upper bound": "status-upper",
@@ -271,10 +268,35 @@
                 const wrap = document.createElement("div");
                 wrap.innerHTML = '<label for="f-' + key + '">' + title + '</label><select id="f-' + key + '"></select>';
                 box.appendChild(wrap);
-                wrap.querySelector("select").addEventListener("change", () => { refreshOptions(key); render(); });
+                wrap.querySelector("select").addEventListener("change", () => { refreshOptions(key); render(); writeState(); });
             }
-            for (const id of ["hide-nofit", "hide-pending", "best-only"]) $(id).addEventListener("change", render);
+            for (const id of ["hide-nofit", "hide-pending", "best-only"]) $(id).addEventListener("change", () => { render(); writeState(); });
             refreshOptions(null);
+        }
+
+        // The address keeps the view: ?code=surface&backend=real_willow&best=1 (filters by column name; nofit=1 and
+        // pending=1 show what is hidden by default; data=<path> loads another export)
+        const TOGGLES = [["best", "best-only", true], ["nofit", "hide-nofit", false], ["pending", "hide-pending", false]];
+        function applyState() {
+            const params = new URLSearchParams(location.search);
+            for (const [key] of FILTERS) {
+                if (!params.has(key)) continue;
+                const select = $("f-" + key);
+                if ([...select.options].some((o) => o.value === params.get(key))) {
+                    select.value = params.get(key);
+                    refreshOptions(key);
+                }
+            }
+            for (const [param, id, on] of TOGGLES) if (params.get(param) === "1") $(id).checked = on;
+        }
+        function writeState() {
+            const params = new URLSearchParams();
+            const export_ = new URLSearchParams(location.search).get("data");
+            if (export_) params.set("data", export_);
+            for (const [key] of FILTERS) if ($("f-" + key).value !== "") params.set(key, $("f-" + key).value);
+            for (const [param, id, on] of TOGGLES) if ($(id).checked === on) params.set(param, "1");
+            const query = params.toString();
+            history.replaceState(null, "", location.pathname + (query ? "?" + query : ""));
         }
 
         // Options of each filter list the values present under the other filters' current choices
@@ -361,7 +383,13 @@
                 const numeric = typeof v === "number";
                 const projected = key === "backend" && /^real_(loon|flamingo)_(\d+)_qpus$/.exec(v);
                 const text = projected ? `${projected[1] === "loon" ? "Loon" : "Flamingo"}, ${projected[2]} QPUs*` : SHORT[key] && SHORT[key][v] ? SHORT[key][v] : (["backend", "error_type", "decoder"].includes(key) ? label(key, v) : (v === null ? "–" : v));
-                return '<td class="' + (numeric ? "num" : "") + '" title="' + escapeHtml(label(key, v)) + '">' + escapeHtml(text) + "</td>";
+                // Codes, devices and decoders link to their pages
+                const href = v === null || v === undefined ? null :
+                    key === "code" ? "codes.html?code=" + encodeURIComponent(v) :
+                    key === "backend" && !String(v).startsWith("native") ? "devices.html?device=" + encodeURIComponent(v) :
+                    key === "decoder" ? "decoders.html#" + encodeURIComponent(v) : null;
+                const content = href ? '<a href="' + href + '">' + escapeHtml(text) + "</a>" : escapeHtml(text);
+                return '<td class="' + (numeric ? "num" : "") + '" title="' + escapeHtml(label(key, v)) + '">' + content + "</td>";
             }).join("") + "</tr>").join("");
             $("summary").textContent = rows.length + " results" + (rows.length > shown.length ? " (first " + shown.length + " shown, download for all)" : "");
         }
@@ -448,6 +476,7 @@
             $("data-status").textContent = "Results generated " + json.generated + " with ECCentric up to commit " + (json.commit || (json.commits || []).slice(-1)[0]) +
                 (json.complete ? "." : ". The search is still running; configurations not computed yet are marked as pending.");
             buildControls();
+            applyState();
             render();
         }).catch(() => { $("data-status").textContent = "The results could not be loaded."; });
     })();

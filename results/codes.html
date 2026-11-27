@@ -1,32 +1,38 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Codes - ECCentric Bench</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css">
-    <script src="../assets/js/modernizr.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-    <script>
-        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } });
-    </script>
-    <noscript>
-        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'>
-    </noscript>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <title>Codes · ECCentric</title>
+    <meta name="description" content="The codes ECCentric benchmarks: their syndrome circuits drawn qubit by qubit, their sizes, and how they did in the benchmark.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/results/codes.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Codes · ECCentric">
+<meta property="og:description" content="The codes ECCentric benchmarks: their syndrome circuits drawn qubit by qubit, their sizes, and how they did in the benchmark.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/results/codes.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
     <style>
         :root {
             --ibm-blue: #0f62fe; --ibm-blue-dark: #002d9c; --ibm-purple: #8a3ffc; --ibm-red: #da1e28;
             --ibm-cyan: #1192e8; --ibm-gray: #8d8d8d; --ibm-gray-light: #c6c6c6; --ibm-ink: #161616; --ibm-panel: #f4f4f4;
         }
         .device-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.6em 1em; margin: 1em 0; }
-        .device-controls label { font-size: 0.8em; font-weight: bold; color: #555; margin: 0; }
-        .device-controls select { margin: 0.2em 0 0 0; height: 2.2em; padding: 0 0.4em; font-size: 0.9em; }
-        .device-card { border: 1px solid #e0e0e0; background: #fff; padding: 1.2em 1.4em; margin: 0.5em 0 1.5em 0; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-controls label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin: 0 0 0.25em; }
+        .device-controls select { font-size: 0.88rem; }
+        .device-card { border: 1px solid #e0e0e0; background: #fff; padding: 1.2em 1.4em; margin: 0.5em 0 1.5em 0; font-family: var(--sans); }
         .device-head { display: flex; justify-content: space-between; gap: 1.5em; flex-wrap: wrap; }
         .device-head > div:first-child { flex: 1 1 min(320px, 100%); min-width: 0; }
         .device-maker { font-size: 0.75em; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ibm-blue); font-weight: 600; }
-        .device-title { font-family: 'IBM Plex Sans', Lato, sans-serif; font-size: 1.5em; margin: 0.1em 0 0.3em 0; color: var(--ibm-ink); font-weight: 400; }
+        .device-title { font-family: var(--sans); font-size: 1.5em; margin: 0.1em 0 0.3em 0; color: var(--ibm-ink); font-weight: 400; }
         .device-description { font-size: 0.9em; color: #525252; margin: 0; max-width: 46em; }
         .device-stats { display: grid; grid-template-columns: repeat(2, minmax(7em, auto)); gap: 0.6em 1.6em; align-content: start; }
         .device-stat .value { font-size: 1.5em; color: var(--ibm-ink); font-variant-numeric: tabular-nums; line-height: 1.1; }
@@ -46,7 +52,7 @@
         .device-map.focus .coupler.on { opacity: 1; }
         .device-map.focus .qubit { opacity: 0.35; }
         .device-map.focus .qubit.on { opacity: 1; }
-        .device-tooltip { position: absolute; pointer-events: none; background: var(--ibm-ink); color: #f4f4f4; font-size: 0.78em; padding: 0.45em 0.7em; line-height: 1.45; white-space: nowrap; z-index: 2; display: none; font-family: 'IBM Plex Sans', Lato, sans-serif; }
+        .device-tooltip { position: absolute; pointer-events: none; background: var(--ibm-ink); color: #f4f4f4; font-size: 0.78em; padding: 0.45em 0.7em; line-height: 1.45; white-space: nowrap; z-index: 2; display: none; font-family: var(--sans); }
         .device-colorbar { display: flex; align-items: center; gap: 0.6em; font-size: 0.78em; color: #525252; margin-top: 0.6em; }
         .device-colorbar:empty { display: none; }
         .device-colorbar .bar { width: 200px; max-width: 45vw; height: 10px; }
@@ -57,65 +63,49 @@
         table.device-table tr:nth-child(even) td { background: #fafafa; }
         table.device-table td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'IBM Plex Mono', monospace; font-size: 0.95em; }
         .device-footnote { font-size: 0.8em; color: #6f6f6f; margin-top: -0.5em; }
-        .explorer-note { background-color: #f4ecf7; border-left: 6px solid #8e44ad; padding: 1em 1.5em; margin: 1.5em 0; font-size: 0.9em; }
             .code-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 0 2em; }
         .code-results h3 { font-size: 1.05em; margin: 0 0 0.4em 0; }
         table.device-table td.where { font-size: 0.92em; color: #525252; }
         .code-tags { font-size: 0.85em; color: #393939; margin: 0.2em 0 1em 0; }
-        .code-tags span.tag { display: inline-block; background: #edf5ff; color: #002d9c; padding: 0.05em 0.5em; margin: 0 0.3em 0.3em 0; border-radius: 2px; }
-        .code-tags span.tag.na { background: #fff1f1; color: #a2191f; }
+        .code-tags a.tag { text-decoration: none; }
+        .code-tags a.tag:hover { background: #d0e2ff; }
+        .code-tags .tag { display: inline-block; background: #edf5ff; color: #002d9c; padding: 0.05em 0.5em; margin: 0 0.3em 0.3em 0; border-radius: 2px; }
+        .code-tags .tag.na { background: #fff1f1; color: #a2191f; }
     </style>
 </head>
-<body id="top-of-page">
-    <div id="navigation" class="sticky">
-        <nav class="top-bar" role="navigation" data-topbar>
-            <ul class="title-area">
-                <li class="name">
-                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
-                </li>
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
-            </ul>
-            <section class="top-bar-section">
-                <ul class="left">
-                    <li><a href="../index.html" class="icon-home"> Home</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../overview.html">Overview</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../scope.html">Research Scope</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../methodology.html">Methodology</a></li>
-                    <li class="divider"></li>
-                    <li class="has-dropdown active">
-                        <a href="#">Results</a>
-                        <ul class="dropdown">
-                            <li><a href="findings.html">Findings</a></li>
-                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
-                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
-                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
-                            <li><a href="explorer.html">Results Explorer</a></li>
-                            <li><a href="devices.html">Devices</a></li>
-                            <li class="active"><a href="codes.html">Codes</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider"></li>
-                </ul>
-                <ul class="right">
-                    <li class="divider"></li>
-                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
-                </ul>
-            </section>
-        </nav>
-    </div>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="../results/findings.html">Findings</a></li>
+<li><a href="../results/explorer.html">Explorer</a></li>
+<li><a href="../results/codes.html" aria-current="page">Codes</a></li>
+<li><a href="../results/devices.html">Devices</a></li>
+<li><a href="../results/decoders.html">Decoders</a></li>
+<li><a href="../method.html">Method</a></li>
+<li><a href="../paper.html">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
 
-    <div class="row t60">
-        <div class="medium-12 columns">
-            <h1>Codes</h1>
-            <p>
-                The codes ECCentric benchmarks: what they are, how large their syndrome circuits are, which qubits those
-                circuits entangle, and how the codes did in the benchmark. Pick a code below. Hover over a qubit to see
-                which qubits it interacts with.
-            </p>
-            <p id="data-status" style="font-size: 0.9em; color: #666;">Loading codes…</p>
+    <main id="main">
+<div class="wrap">
+<div class="page-head">
+    <p class="eyebrow">Benchmark</p>
+    <h1>Codes</h1>
+    <p class="lead">
+        The codes ECCentric benchmarks: what they are, how large their syndrome circuits are, which qubits those
+        circuits entangle, and how the codes did in the benchmark. Pick a code below, and hover over a qubit to see
+        which qubits it interacts with.
+    </p>
+</div>
+            <p id="data-status" class="small muted">Loading codes…</p>
 
             <div class="device-controls">
                 <div><label for="code">Code</label><select id="code"></select></div>
@@ -164,28 +154,26 @@
                 any tracked logical qubit failed over all rounds; per round it is ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2.
                 The results come from the <a href="explorer.html">Results Explorer</a>, which lists every configuration.</p>
             </div>
-        </div>
-    </div>
+</div>
+</main>
 
-    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
-        <div id="subfooter">
-            <nav class="row">
-                <section class="small-12 columns credits" style="text-align: center; color: #666;">
-                    <div style="margin-bottom: 1em;">
-                        <a href="https://www.munich-quantum-valley.de/">
-                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
-                        </a>
-                    </div>
-                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
-                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
-                </section>
-            </nav>
-        </div>
-    </footer>
-
-    <script src="../assets/js/javascript.min.js"></script>
-    <script src="../assets/js/javascript.min.js"></script>
-    <script>
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="../paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="../contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="../assets/js/site.js" defer></script>
+<!-- /shell:footer -->
+<script>
     (function () {
         const SVG = "http://www.w3.org/2000/svg";
         const TAXONOMIES = ["Topological", "QLDPC", "Floquet", "Subsystem", "Concatenated", "Algebraic", "Hybrid", "Other"];
@@ -327,10 +315,12 @@
 
         function results() {
             const c = code;
-            const tags = c.decoders.map((d) => `<span class="tag">${escapeHtml(d)}</span>`).join("") +
+            // Decoders and devices link to their pages (ids from data/labels.json, written by tools/build.py)
+            const tags = c.decoders.map((d) => ids.decoders[d] ? `<a class="tag" href="decoders.html#${ids.decoders[d]}">${escapeHtml(d)}</a>` : `<span class="tag">${escapeHtml(d)}</span>`).join("") +
                 c.not_applicable.filter((d) => !c.decoders.includes(d)).map((d) => `<span class="tag na">${escapeHtml(d)}: not applicable</span>`).join("");
             el("decoders").innerHTML = (c.decoders.length ? "<strong>Decoded with</strong> " : "") + tags +
-                (c.devices.length ? `<br><strong>Run on</strong> ${c.devices.map(escapeHtml).join(", ")}` : "");
+                (c.devices.length ? `<br><strong>Run on</strong> ${c.devices.map((v) => ids.devices[v] && !ids.devices[v].startsWith("native") ? `<a href="devices.html?device=${ids.devices[v]}">${escapeHtml(v)}</a>` : escapeHtml(v)).join(", ")}` : "") +
+                `<br><a class="arrow" href="explorer.html?code=${encodeURIComponent(c.id)}">All results for this code in the Explorer</a>`;
             const ref = c.reference.slice().sort((a, b) => a.distance - b.distance || a.p - b.p);
             el("reference").innerHTML = ref.length ? "<tr><td><strong>d</strong></td><td><strong>p</strong></td><td class=\"num\"><strong>Best logical error rate</strong></td><td><strong>Decoder</strong></td></tr>" +
                 ref.map((x) => `<tr><td>${x.distance}</td><td>${(x.p * 100).toPrecision(2)}%</td><td class="num">${x.bound ? "&lt; " : ""}${sci(x.ler)}</td><td>${escapeHtml(x.decoder)}</td></tr>`).join("") :
@@ -359,7 +349,12 @@
             history.replaceState(null, "", `?code=${code.id}`);
         }
 
-        fetch(params.get("data") || "../data/codes.json").then((r) => r.json()).then((json) => {
+        // Display name -> id of decoders and devices, to link them; the page works without it
+        const ids = { decoders: {}, devices: {} };
+        const labelsLoaded = fetch("../data/labels.json").then((r) => r.json()).then((l) => {
+            for (const kind of ["decoders", "devices"]) for (const [id, name] of Object.entries(l[kind] || {})) ids[kind][name] = id;
+        }).catch(() => {});
+        Promise.all([fetch(params.get("data") || "../data/codes.json").then((r) => r.json()), labelsLoaded]).then(([json]) => {
             data = json;
             const sel = el("code");
             sel.innerHTML = TAXONOMIES.map((t) => {
