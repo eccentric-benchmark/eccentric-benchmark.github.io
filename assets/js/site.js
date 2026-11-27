@@ -81,3 +81,55 @@
         wrap.appendChild(button);
     });
 })();
+
+// Homepage panel: hovering or focusing a cell previews its experiment; clicking (or Enter) keeps it.
+// Arrow keys move between cells.
+(function () {
+    var panel = document.getElementById("lerpanel");
+    if (!panel) return;
+    var data;
+    try { data = JSON.parse(document.getElementById("lp-data").textContent); } catch (e) { return; }
+    var detail = panel.querySelector(".lp-detail");
+    var cells = Array.prototype.slice.call(panel.querySelectorAll(".lp-cell"));
+    var selected = panel.querySelector('.lp-cell[aria-pressed="true"]') || cells[0];
+    function mark(cell) {
+        panel.querySelectorAll("th.on").forEach(function (th) { th.classList.remove("on"); });
+        if (!cell) return;
+        var row = panel.querySelector('tbody th[data-row="' + cell.dataset.row + '"]');
+        var col = panel.querySelector('thead th[data-col="' + cell.dataset.col + '"]');
+        if (row) row.classList.add("on");
+        if (col) col.classList.add("on");
+    }
+    function show(cell) { detail.innerHTML = data[+cell.dataset.k]; mark(cell); }
+    function select(cell) {
+        if (selected) { selected.setAttribute("aria-pressed", "false"); selected.tabIndex = -1; }
+        selected = cell;
+        cell.setAttribute("aria-pressed", "true");
+        cell.tabIndex = 0;
+        show(cell);
+    }
+    mark(selected);
+    cells.forEach(function (cell) {
+        cell.addEventListener("click", function () { select(cell); });
+        cell.addEventListener("mouseenter", function () { show(cell); });
+        cell.addEventListener("focus", function () { show(cell); });
+    });
+    panel.querySelector(".lp-grid").addEventListener("mouseleave", function () { if (selected) show(selected); });
+    panel.querySelector(".lp-grid").addEventListener("focusout", function (e) {
+        if (!panel.querySelector(".lp-grid").contains(e.relatedTarget) && selected) show(selected);
+    });
+    panel.addEventListener("keydown", function (e) {
+        var cell = e.target.closest && e.target.closest(".lp-cell");
+        if (!cell) return;
+        var moves = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] };
+        var m = moves[e.key];
+        if (!m) return;
+        e.preventDefault();
+        var r = +cell.dataset.row, c = +cell.dataset.col, next = null;
+        for (var step = 1; step < 30 && !next; step++) {
+            next = panel.querySelector('.lp-cell[data-row="' + (r + m[0] * step) + '"][data-col="' + (c + m[1] * step) + '"]');
+            if (r + m[0] * step < 0 || c + m[1] * step < 0) break;
+        }
+        if (next) { select(next); next.focus(); }
+    });
+})();
