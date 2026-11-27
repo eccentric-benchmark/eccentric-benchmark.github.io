@@ -1,0 +1,201 @@
+{
+  "source": "Condensed from docs/decoders.md in the ECCentric repository (https://github.com/TUM-DSE/eccentric/blob/main/docs/decoders.md). Edit here when that file changes; the statistics on the Decoders page are computed from data/sweep.json and figures/decoders.csv by tools/build.py.",
+  "decoders": [
+    {
+      "id": "tesseract",
+      "kind": "Search",
+      "description": "Google's most-likely-error search decoder, run with its default configuration. The most accurate decoder in the benchmark, but slow beyond a few hundred qubits; used as the accuracy reference.",
+      "applies": "All codes",
+      "links": [
+        [
+          "Tesseract (Google)",
+          "https://github.com/quantumlib/tesseract-decoder"
+        ]
+      ]
+    },
+    {
+      "id": "mwpm_corr",
+      "kind": "Matching",
+      "description": "Two-pass correlated matching with PyMatching, as in Cain et al. (2024): the first pass reweights the second. Errors that Stim cannot decompose into matching edges are split by matching their own detectors.",
+      "applies": "Matchable codes, including circuits whose errors do not decompose into edges",
+      "links": [
+        [
+          "Cain et al., PRL 133, 240602 (2024)",
+          "https://doi.org/10.1103/PhysRevLett.133.240602"
+        ]
+      ]
+    },
+    {
+      "id": "mwpm",
+      "kind": "Matching",
+      "description": "Minimum-weight perfect matching (PyMatching) on the error model decomposed into edges. Microseconds per shot. It refuses circuits whose errors do not decompose into edges, which includes some routed heavy-hex, honeycomb and surface circuits.",
+      "applies": "Matchable codes: surface, heavy-hex, Bacon-Shor, repetition, XZZX, toric, honeycomb, hyperbolic Floquet",
+      "links": [
+        [
+          "PyMatching",
+          "https://github.com/oscarhiggott/PyMatching"
+        ]
+      ]
+    },
+    {
+      "id": "relay_bp",
+      "kind": "Belief propagation",
+      "description": "IBM's Relay-BP with the paper's parameters: chains of BP runs with memory, built for bivariate bicycle codes. Run on the exact syndromes (relay-bp 0.2.1 pads them through its sinter interface).",
+      "applies": "All codes",
+      "links": [
+        [
+          "Müller et al., arXiv:2506.01779",
+          "https://arxiv.org/abs/2506.01779"
+        ]
+      ]
+    },
+    {
+      "id": "bposd_tuned",
+      "kind": "Belief propagation",
+      "description": "The same BP-OSD with tuned BP: 100 iterations, min-sum scaling 0.625. In a pilot it gave 20% lower logical error rates on topological and other low-weight codes at a tenth of the time, but up to 3× higher on some qLDPC codes, so the sweep runs it next to BP-OSD on the former.",
+      "applies": "All codes",
+      "links": [
+        [
+          "ldpc",
+          "https://github.com/quantumgizmos/ldpc"
+        ]
+      ]
+    },
+    {
+      "id": "bposd",
+      "kind": "Belief propagation",
+      "description": "Belief propagation followed by ordered-statistics decoding (ldpc). The usual choice for qLDPC codes, and the general decoder of the paper.",
+      "applies": "All codes",
+      "links": [
+        [
+          "ldpc",
+          "https://github.com/quantumgizmos/ldpc"
+        ],
+        [
+          "Roffe et al., PRR 2, 043423 (2020)",
+          "https://doi.org/10.1103/PhysRevResearch.2.043423"
+        ]
+      ]
+    },
+    {
+      "id": "bplsd",
+      "kind": "Belief propagation",
+      "description": "Belief propagation followed by localised statistics decoding (ldpc), with the same BP settings as BP-OSD.",
+      "applies": "All codes",
+      "links": [
+        [
+          "Hillmann et al., arXiv:2406.18655",
+          "https://arxiv.org/abs/2406.18655"
+        ]
+      ]
+    },
+    {
+      "id": "belief_find",
+      "kind": "Belief propagation",
+      "description": "Belief propagation followed by union-find (ldpc), with the same BP settings as BP-OSD.",
+      "applies": "All codes",
+      "links": [
+        [
+          "ldpc",
+          "https://github.com/quantumgizmos/ldpc"
+        ]
+      ]
+    },
+    {
+      "id": "gari",
+      "kind": "Belief propagation",
+      "description": "Normalized min-sum on the GARI-transformed correlated error model, with the authors' C decoder (vendored) in their standalone setting: 400 iterations, normalization 0.96875. Checked against their published results. A shot it does not converge on gets no correction.",
+      "applies": "CSS memory circuits; not applicable where detectors or errors lack the X/Z structure it needs",
+      "links": [
+        [
+          "Maan et al., arXiv:2510.14060",
+          "https://arxiv.org/abs/2510.14060"
+        ]
+      ]
+    },
+    {
+      "id": "gari_pp",
+      "kind": "Belief propagation",
+      "description": "Beta reimplementation (the authors have not released theirs): GARI for at most 7 iterations, then union-find on the residual syndrome, guided by GARI's posteriors. The paper uses Chromobius and its own hypergraph union-find as second stages; this uses ldpc's union-find everywhere.",
+      "applies": "As GARI",
+      "links": [
+        [
+          "Maan et al., arXiv:2611.12833",
+          "https://arxiv.org/abs/2611.12833"
+        ]
+      ]
+    },
+    {
+      "id": "chromobius",
+      "kind": "Color code",
+      "description": "The Möbius decoder for color codes: matching on a doubled graph, using the color and basis annotations of the color code's detectors.",
+      "applies": "The color code",
+      "links": [
+        [
+          "Chromobius (Google)",
+          "https://github.com/quantumlib/chromobius"
+        ]
+      ]
+    },
+    {
+      "id": "mwpf",
+      "kind": "Hypergraph matching",
+      "description": "Hypergraph minimum-weight parity factor, with cluster_node_limit = 50 as in its README. Matches on the undecomposed error model, so it also decodes circuits where MWPM fails.",
+      "applies": "All codes",
+      "links": [
+        [
+          "Wu et al., arXiv:2508.04969",
+          "https://arxiv.org/abs/2508.04969"
+        ]
+      ]
+    },
+    {
+      "id": "hier_bposd",
+      "kind": "Concatenated",
+      "description": "Level-by-level decoding of concatenated codes (Poulin, 2006): BP level by level, each level's posteriors as the next level's priors, then BP-OSD on all detectors.",
+      "applies": "Concatenated codes: many-hypercube, concatenated Steane at d = 9 and 27",
+      "links": [
+        [
+          "Poulin, PRA 74, 052333 (2006)",
+          "https://doi.org/10.1103/PhysRevA.74.052333"
+        ]
+      ]
+    },
+    {
+      "id": "hier_bposd_hard",
+      "kind": "Concatenated",
+      "description": "As level-by-level BP-OSD, but each level passes hard decisions instead of posteriors to the next.",
+      "applies": "As level-by-level BP-OSD",
+      "links": [
+        [
+          "Poulin, PRA 74, 052333 (2006)",
+          "https://doi.org/10.1103/PhysRevA.74.052333"
+        ]
+      ]
+    },
+    {
+      "id": "union_find",
+      "kind": "Union-find",
+      "description": "Weighted union-find (ldpc). Fast on topological codes; fails on qLDPC codes.",
+      "applies": "Topological codes",
+      "links": [
+        [
+          "Delfosse and Nickerson, arXiv:1709.06218",
+          "https://arxiv.org/abs/1709.06218"
+        ]
+      ]
+    },
+    {
+      "id": "belief_matching",
+      "kind": "Matching",
+      "description": "Belief propagation followed by matching with the BP marginals as edge weights.",
+      "applies": "Matchable codes",
+      "links": [
+        [
+          "Higgott et al., arXiv:2203.04948",
+          "https://arxiv.org/abs/2203.04948"
+        ]
+      ]
+    }
+  ]
+}

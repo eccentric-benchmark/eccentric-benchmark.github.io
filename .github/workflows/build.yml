@@ -1,0 +1,35 @@
+# Rebuilds the generated parts of the pages (tools/build.py) whenever data, figures or pages change on main,
+# so a new sweep export (data/sweep.json, data/effort.json, ...) shows up everywhere without running the build
+# by hand. Commits only when the build changed something. (Commits made by a workflow do not start this one again.)
+name: build pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/**"
+      - "figures/**"
+      - "tools/**"
+      - "**.html"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build
+        run: python3 tools/build.py
+
+      - name: Commit if changed
+        run: |
+          git add -A data *.html results
+          if git diff --cached --quiet; then echo "pages up to date"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Rebuild pages from data"
+          git push

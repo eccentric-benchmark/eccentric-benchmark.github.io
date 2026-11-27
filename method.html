@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Method · ECCentric</title>
+<meta name="description" content="How ECCentric produces a logical error rate: the codes and operations, compilation onto devices, the noise models, the decoders, and how results are sampled and reported.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/site.css">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/method.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Method · ECCentric">
+<meta property="og:description" content="How ECCentric produces a logical error rate: the codes and operations, compilation onto devices, the noise models, the decoders, and how results are sampled and reported.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/method.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
+</head>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="results/findings.html">Findings</a></li>
+<li><a href="results/explorer.html">Explorer</a></li>
+<li><a href="results/codes.html">Codes</a></li>
+<li><a href="results/devices.html">Devices</a></li>
+<li><a href="results/decoders.html">Decoders</a></li>
+<li><a href="method.html" aria-current="page">Method</a></li>
+<li><a href="paper.html">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
+
+<main id="main">
+<div class="wrap">
+
+<div class="page-head">
+    <p class="eyebrow">Method</p>
+    <h1>How a logical error rate is made</h1>
+    <p class="lead">
+        ECCentric takes a code's syndrome-extraction circuit, compiles it onto a device, adds the device's noise,
+        samples it with Stim and decodes it. Every result in the benchmark is one path through these stages, and every
+        stage is a set of interchangeable modules, so codes, devices, noise models and decoders can be compared on
+        equal terms.
+    </p>
+</div>
+
+<!-- gen:pipeline -->
+<ol class="pipeline">
+<li class="stage" id="stage-codes">
+<a class="stage-card" href="results/codes.html"><span class="stage-step">01</span><span class="stage-name">Code</span><span class="stage-count">70 codes in 26 families</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-codes" aria-label="List of code" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-codes"><div class="stage-pop-inner">
+<p>Every code family with results. Pick one to see its circuit and results.</p><dl><dt>Topological</dt><dd><a href="results/codes.html?code=color">Color</a>, <a href="results/codes.html?code=ls_cnot">Lattice surgery (surface-code patches)</a>, <a href="results/codes.html?code=rm15">Quantum Reed-Muller</a>, <a href="results/codes.html?code=repetition">Repetition</a>, <a href="results/codes.html?code=surface">Surface</a>, <a href="results/codes.html?code=toric">Toric</a>, <a href="results/codes.html?code=xzzx">XZZX surface</a></dd><dt>QLDPC</dt><dd><a href="results/codes.html?code=bpc36">Balanced product cyclic</a>, <a href="results/codes.html?code=bb54">Bivariate bicycle</a>, <a href="results/codes.html?code=cbb30">Coprime bivariate bicycle</a>, <a href="results/codes.html?code=gb46">Generalized bicycle</a>, <a href="results/codes.html?code=hgp225">Hypergraph product</a>, <a href="results/codes.html?code=lcs15">Lift-connected surface</a>, <a href="results/codes.html?code=lp">Lifted product</a>, <a href="results/codes.html?code=mitten150">Mitten</a>, <a href="results/codes.html?code=qt36">Quantum Tanner</a>, <a href="results/codes.html?code=tb30">Trivariate bicycle</a></dd><dt>Floquet</dt><dd><a href="results/codes.html?code=honeycomb">Honeycomb</a>, <a href="results/codes.html?code=hyperbolic_floquet_60">Hyperbolic Floquet</a>, <a href="results/codes.html?code=planar_honeycomb">Planar honeycomb</a>, <a href="results/codes.html?code=semi_hyperbolic_floquet_64">Semi-hyperbolic Floquet</a></dd><dt>Subsystem</dt><dd><a href="results/codes.html?code=bacon">Bacon-Shor</a></dd><dt>Concatenated</dt><dd><a href="results/codes.html?code=steane">Concatenated Steane</a>, <a href="results/codes.html?code=mhc36">Many-hypercube</a></dd><dt>Algebraic</dt><dd><a href="results/codes.html?code=golay23">Quantum Golay</a></dd><dt>Hybrid</dt><dd><a href="results/codes.html?code=hh">Heavy-hex</a></dd></dl><a class="pop-more arrow" href="results/codes.html">All codes</a>
+</div></div>
+</li>
+<li class="stage" id="stage-operations">
+<a class="stage-card" href="results/explorer.html?operation=memory"><span class="stage-step">02</span><span class="stage-name">Operation</span><span class="stage-count">Memory, lattice surgery, logical gates</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-operations" aria-label="List of operation" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-operations"><div class="stage-pop-inner">
+<p>What the circuit does with the encoded qubits, in the Z or X basis.</p><dl><dt>Operations</dt><dd><a href="results/explorer.html?operation=memory">Memory</a>, <a href="results/explorer.html?operation=memory_ec">Memory (qLDPC syndrome extraction)</a>, <a href="results/explorer.html?operation=measure_z">Logical Z measurement (surgery)</a>, <a href="results/explorer.html?operation=measure_x">Logical X measurement (surgery)</a>, <a href="results/explorer.html?operation=joint_zz">Joint ZZ measurement (surgery)</a>, <a href="results/explorer.html?operation=joint_xx">Joint XX measurement (surgery)</a>, <a href="results/explorer.html?operation=transversal_cnot">Transversal CNOT (two blocks)</a>, <a href="results/explorer.html?operation=ls_memory">Memory (lattice-surgery patch)</a>, <a href="results/explorer.html?operation=ls_merge">Merge: ZZ or XX measurement (lattice surgery)</a>, <a href="results/explorer.html?operation=ls_cnot">CNOT (lattice surgery)</a></dd></dl><a class="pop-more arrow" href="method.html#operations">How operations are built</a>
+</div></div>
+</li>
+<li class="stage" id="stage-devices">
+<a class="stage-card" href="results/devices.html"><span class="stage-step">03</span><span class="stage-name">Device</span><span class="stage-count">25 devices from 6 makers</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-devices" aria-label="List of device" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-devices"><div class="stage-pop-inner">
+<p>Real and announced devices, projections, and synthetic topologies, each with its couplers and noise.</p><dl><dt>IBM</dt><dd><a href="results/devices.html?device=real_torino">IBM Heron r1 (Torino)</a>, <a href="results/devices.html?device=real_flamingo_1_qpu">IBM Flamingo, 1 QPU</a>, <a href="results/devices.html?device=real_flamingo">IBM Flamingo, 3 QPUs</a>, <a href="results/devices.html?device=real_flamingo_4_qpus">IBM Flamingo, 4 QPUs (projected)</a>, <a href="results/devices.html?device=real_flamingo_5_qpus">IBM Flamingo, 5 QPUs (projected)</a>, <a href="results/devices.html?device=real_loon_1_qpu">IBM Loon/Nighthawk, 1 QPU</a>, <a href="results/devices.html?device=real_loon">IBM Loon/Nighthawk, 2 QPUs</a>, <a href="results/devices.html?device=real_loon_3_qpus">IBM Loon/Nighthawk, 3 QPUs (projected)</a>, <a href="results/devices.html?device=real_loon_4_qpus">IBM Loon/Nighthawk, 4 QPUs (projected)</a>, <a href="results/devices.html?device=real_loon_5_qpus">IBM Loon/Nighthawk, 5 QPUs (projected)</a>, <a href="results/devices.html?device=real_bicycle">IBM bicycle architecture module</a>, <a href="results/devices.html?device=real_bicycle_lr">IBM bicycle module, noisy c-couplers</a>, <a href="results/devices.html?device=real_bicycle_2_qpus">IBM bicycle modules, 2 chained</a>, <a href="results/devices.html?device=real_bicycle_lr_2_qpus">IBM bicycle modules, 2 chained, noisy c-couplers</a></dd><dt>Google</dt><dd><a href="results/devices.html?device=real_willow">Google Willow (extended)</a></dd><dt>Quantinuum</dt><dd><a href="results/devices.html?device=real_apollo">Quantinuum Apollo</a>, <a href="results/devices.html?device=real_nsapollo">Quantinuum Apollo, no shuttling</a></dd><dt>Infleqtion</dt><dd><a href="results/devices.html?device=real_infleqtion">Infleqtion (neutral atoms)</a>, <a href="results/devices.html?device=real_nsinfleqtion">Infleqtion, no shuttling</a></dd><dt>Harvard/MIT</dt><dd><a href="results/devices.html?device=real_harvard">Harvard/MIT neutral-atom array</a></dd><dt>Synthetic</dt><dd><a href="results/devices.html?device=custom_grid">Square grid</a>, <a href="results/devices.html?device=custom_diamond">Diamond grid</a>, <a href="results/devices.html?device=custom_heavyhex">Heavy-hex</a>, <a href="results/devices.html?device=custom_cube">Cube</a>, <a href="results/devices.html?device=custom_full">All-to-all</a></dd><dt>Built for the code</dt><dd><a href="results/explorer.html?backend=native">Native layouts</a>: a coupler for every pair of qubits the circuit entangles</dd></dl><a class="pop-more arrow" href="results/devices.html">All devices</a>
+</div></div>
+</li>
+<li class="stage" id="stage-compile">
+<a class="stage-card" href="method.html#compilation"><span class="stage-step">04</span><span class="stage-name">Compilation</span><span class="stage-count">Layout, routing, gate translation</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-compile" aria-label="List of compilation" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-compile"><div class="stage-pop-inner">
+<p>The circuit is fitted to the device: qubits placed, SWAPs added where qubits are not coupled, gates translated to the native gate set.</p><dl><dt>Layout</dt><dd>Qiskit: trivial, dense, SABRE</dd><dt>Routing</dt><dd>Qiskit: basic, SABRE, stochastic, lookahead</dd><dt>Translation</dt><dd>Qiskit, BQSKit or TKET</dd><dt>What it costs</dt><dd><a href="results/findings.html#routing">Routing overhead</a>, <a href="results/findings.html#translation">translation overhead</a>, <a href="results/findings.html#routing-vs-native">routing vs native layout</a></dd></dl><a class="pop-more arrow" href="method.html#compilation">How compilation works</a>
+</div></div>
+</li>
+<li class="stage" id="stage-noise">
+<a class="stage-card" href="method.html#noise"><span class="stage-step">05</span><span class="stage-name">Noise</span><span class="stage-count">27 noise models</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-noise" aria-label="List of noise" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-noise"><div class="stage-pop-inner">
+<p>Noise added gate by gate: gate, readout, idle and leakage errors, decay while qubits wait, shuttling and atom loss.</p><dl><dt>Hardware models</dt><dd><a href="results/explorer.html?error_type=real_heron">IBM Heron</a>, <a href="results/explorer.html?error_type=real_flamingo">IBM Flamingo</a>, <a href="results/explorer.html?error_type=real_flamingo_downscaled">IBM Flamingo, 10x lower</a>, <a href="results/explorer.html?error_type=real_flamingo_m700">IBM Flamingo, 700 ns readout</a>, <a href="results/explorer.html?error_type=real_flamingo_downscaled_m700">IBM Flamingo, 10x lower, 700 ns readout</a>, <a href="results/explorer.html?error_type=real_willow">Google Willow (paper model)</a>, <a href="results/explorer.html?error_type=real_willow_spec">Google Willow (spec sheet)</a>, <a href="results/explorer.html?error_type=real_apollo">Quantinuum Apollo</a>, <a href="results/explorer.html?error_type=real_infleqtion">Infleqtion</a>, <a href="results/explorer.html?error_type=real_harvard">Harvard/MIT array</a></dd><dt>Circuit-level models</dt><dd><a href="results/explorer.html?error_type=sd6">SD6 (uniform depolarizing)</a>, <a href="results/explorer.html?error_type=modsi1000">SI1000 (superconducting-inspired)</a></dd><dt>Scaled down</dt><dd>IBM Flamingo, Harvard/MIT array, IBM Heron, Infleqtion, Google Willow (paper model), each at ×0.1, ×0.25 and ×0.5 (<a href="results/explorer.html?slice=noise_scaling">results</a>)</dd></dl><a class="pop-more arrow" href="method.html#noise">How noise is modelled</a>
+</div></div>
+</li>
+<li class="stage" id="stage-decoders">
+<a class="stage-card" href="results/decoders.html"><span class="stage-step">06</span><span class="stage-name">Decoder</span><span class="stage-count">14 decoders</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-decoders" aria-label="List of decoder" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-decoders"><div class="stage-pop-inner">
+<p>Every syndrome is decoded by every decoder that applies to the code.</p><dl><dt>Search</dt><dd><a href="results/decoders.html#tesseract">Tesseract</a></dd><dt>Matching</dt><dd><a href="results/decoders.html#mwpm">MWPM</a>, <a href="results/decoders.html#mwpm_corr">Correlated MWPM</a></dd><dt>Hypergraph matching</dt><dd><a href="results/decoders.html#mwpf">MWPF</a></dd><dt>Belief propagation</dt><dd><a href="results/decoders.html#bposd">BP-OSD</a>, <a href="results/decoders.html#bplsd">BP-LSD</a>, <a href="results/decoders.html#relay_bp">Relay-BP</a>, <a href="results/decoders.html#belief_find">BeliefFind</a>, <a href="results/decoders.html#gari">GARI</a>, <a href="results/decoders.html#gari_pp">GARI++ (beta reimplementation)</a>, <a href="results/decoders.html#bposd_tuned">BP-OSD (tuned BP)</a></dd><dt>Color code</dt><dd><a href="results/decoders.html#chromobius">Chromobius</a></dd><dt>Concatenated</dt><dd><a href="results/decoders.html#hier_bposd">Level-by-level BP-OSD (soft)</a>, <a href="results/decoders.html#hier_bposd_hard">Level-by-level BP-OSD (hard decisions)</a></dd><dt>On the GPU</dt><dd><a href="results/decoders.html#gpu">GPU versions and NVIDIA's TCBP-JOBS</a> (separate runs)</dd></dl><a class="pop-more arrow" href="results/decoders.html">Compare the decoders</a>
+</div></div>
+</li>
+<li class="stage stage-out" id="stage-results">
+<a class="stage-card" href="results/explorer.html"><span class="stage-step">07</span><span class="stage-name">Logical error rate</span><span class="stage-count">35,374 results</span></a>
+<button class="stage-toggle" type="button" aria-expanded="false" aria-controls="pop-results" aria-label="List of logical error rate" hidden>&#9662;</button>
+<div class="stage-pop" id="pop-results"><div class="stage-pop-inner">
+<p>Each result: the logical error rate with its 95% interval, per round, and the shots, SWAPs and gates behind it.</p><dl><dt>Read them</dt><dd><a href="results/findings.html">Findings</a>: what the results show, figure by figure</dd><dt>Filter them</dt><dd><a href="results/explorer.html">Explorer</a>: every result, filterable and downloadable</dd><dt>How they are measured</dt><dd><a href="method.html#statistics">Shots, intervals and statuses</a></dd></dl>
+</div></div>
+</li>
+</ol>
+<p class="pipeline-hint">Hover over or focus a stage to see what it covers; select it to open its page.</p>
+<!-- /gen:pipeline -->
+
+<div class="prose">
+
+<h2 id="codes">Codes</h2>
+<p>
+    The benchmark covers <!-- n:codes -->70<!-- /n:codes --> codes with results, from the surface code to the
+    bivariate bicycle codes IBM plans to build, grouped by the principle they are built on. Each code comes with its
+    syndrome-extraction schedule; some have several, compared in the benchmark. The <a href="results/codes.html">Codes</a>
+    page draws each code's circuit and lists its results.
+</p>
+</div>
+<!-- gen:families -->
+<div class="table-wrap"><table class="families"><thead><tr><th scope="col">Taxonomy</th><th scope="col">Idea</th><th scope="col">Families (codes with results)</th><th scope="col" class="num">Codes</th></tr></thead><tbody>
+<tr><td>Topological</td><td>Information stored in global features of a lattice, robust against local errors; the distance grows with the lattice.</td><td><a href="results/codes.html?code=color">Color</a> (1), <a href="results/codes.html?code=ls_cnot">Lattice surgery (surface-code patches)</a> (3), <a href="results/codes.html?code=rm15">Quantum Reed-Muller</a> (1), <a href="results/codes.html?code=repetition">Repetition</a> (1), <a href="results/codes.html?code=surface">Surface</a> (1), <a href="results/codes.html?code=toric">Toric</a> (1), <a href="results/codes.html?code=xzzx">XZZX surface</a> (1)</td><td class="num">9</td></tr>
+<tr><td>QLDPC</td><td>Sparse checks that keep a constant encoding rate as the distance grows, at the price of long-range connections.</td><td><a href="results/codes.html?code=bpc36">Balanced product cyclic</a> (9), <a href="results/codes.html?code=bb54">Bivariate bicycle</a> (9), <a href="results/codes.html?code=cbb30">Coprime bivariate bicycle</a> (6), <a href="results/codes.html?code=gb46">Generalized bicycle</a> (3), <a href="results/codes.html?code=hgp225">Hypergraph product</a> (2), <a href="results/codes.html?code=lcs15">Lift-connected surface</a> (5), <a href="results/codes.html?code=lp">Lifted product</a> (1), <a href="results/codes.html?code=mitten150">Mitten</a> (1), <a href="results/codes.html?code=qt36">Quantum Tanner</a> (2), <a href="results/codes.html?code=tb30">Trivariate bicycle</a> (4)</td><td class="num">42</td></tr>
+<tr><td>Floquet</td><td>Codes whose checks are two-qubit measurements in a repeating schedule, so the circuit needs no ancillas.</td><td><a href="results/codes.html?code=honeycomb">Honeycomb</a> (1), <a href="results/codes.html?code=hyperbolic_floquet_60">Hyperbolic Floquet</a> (6), <a href="results/codes.html?code=planar_honeycomb">Planar honeycomb</a> (1), <a href="results/codes.html?code=semi_hyperbolic_floquet_64">Semi-hyperbolic Floquet</a> (5)</td><td class="num">13</td></tr>
+<tr><td>Subsystem</td><td>Stabilizer codes that encode into a subsystem, using gauge qubits to simplify syndrome extraction.</td><td><a href="results/codes.html?code=bacon">Bacon-Shor</a> (1)</td><td class="num">1</td></tr>
+<tr><td>Concatenated</td><td>One code nested inside another, level by level.</td><td><a href="results/codes.html?code=steane">Concatenated Steane</a> (1), <a href="results/codes.html?code=mhc36">Many-hypercube</a> (2)</td><td class="num">3</td></tr>
+<tr><td>Algebraic</td><td>Codes built from classical algebraic codes, such as the CSS code of the classical Golay code.</td><td><a href="results/codes.html?code=golay23">Quantum Golay</a> (1)</td><td class="num">1</td></tr>
+<tr><td>Hybrid</td><td>Codes designed around one device&#x27;s connectivity, such as IBM&#x27;s heavy-hex lattice.</td><td><a href="results/codes.html?code=hh">Heavy-hex</a> (1)</td><td class="num">1</td></tr>
+</tbody></table></div><p class="small muted" style="margin-top:0.8em">4 more codes are defined but have no results yet: <a href="results/codes.html?code=bb756">bb756</a> (Bivariate bicycle), <a href="results/codes.html?code=hgp625">hgp625</a> (Hypergraph product), <a href="results/codes.html?code=hgp900">hgp900</a> (Hypergraph product), <a href="results/codes.html?code=qlp544">qlp544</a> (Quasi-cyclic lifted product).</p>
+<!-- /gen:families -->
+<div class="prose">
+
+<h2 id="operations">Operations</h2>
+<p>
+    Most results are memory experiments: prepare the logical qubits, run the syndrome circuit for as many rounds as the
+    code distance, and measure, in the Z or the X basis. On top of memory, the benchmark runs
+</p>
+<ul>
+    <li><strong>lattice surgery</strong> on rotated surface-code patches, built with <a href="https://github.com/tqec/tqec">tqec</a>:
+        a patch's memory, a merge (ZZ or XX measurement), and the lattice-surgery CNOT;</li>
+    <li><strong>fault-tolerant operations on CSS codes</strong>: logical Z and X measurements, joint ZZ and XX measurements,
+        and a transversal CNOT between two blocks, where decoders see the errors that cross the gate.</li>
+</ul>
+<p>An operation fails when any of its logical observables comes out wrong.</p>
+
+<h2 id="devices">Devices</h2>
+<p>
+    Codes run on <!-- n:devices -->25<!-- /n:devices --> device models: IBM's Heron, Flamingo, Loon/Nighthawk and the bicycle
+    architecture module (with projected multi-QPU chains for codes too large for any announced device), Google Willow,
+    Quantinuum Apollo, Infleqtion and the Harvard/MIT neutral-atom array, each with and without shuttling where the
+    hardware moves qubits, and synthetic topologies from a line to all-to-all. A native layout, built for one code
+    with a coupler for every pair of qubits its circuit entangles, shows what the code achieves without SWAPs. The
+    <a href="results/devices.html">Devices</a> page draws each device's couplers and lists its noise.
+</p>
+
+<h2 id="compilation">Compilation</h2>
+<p>
+    The code's circuit is compiled onto the device with Qiskit: a layout places the circuit's qubits on the device's
+    (trivial, dense or SABRE), and routing inserts SWAPs wherever a two-qubit gate acts on uncoupled qubits (basic,
+    SABRE, stochastic or lookahead). The gates are then translated to the device's native gate set with Qiskit, BQSKit
+    or TKET. Gates on couplers between QPUs, or on long-range couplers marked as noisy, get the remote error and duration.
+    Routing is where many codes lose most: see <a href="results/findings.html#routing">routing overhead</a>,
+    <a href="results/findings.html#translation">translation overhead</a> and
+    <a href="results/findings.html#routing-vs-native">routing against native layouts</a>.
+</p>
+
+<h2 id="noise">Noise</h2>
+<p>
+    Noise is added gate by gate to the compiled circuit. The benchmark uses <!-- n:noise_models -->27<!-- /n:noise_models -->
+    noise models:
+</p>
+<ul>
+    <li><strong>circuit-level models</strong> with one parameter <em>p</em>: SD6 (uniform depolarizing) and SI1000
+        (superconducting-inspired), among others;</li>
+    <li><strong>hardware models</strong> of IBM Heron and Flamingo, Google Willow (from Google's paper and from its spec
+        sheet), Quantinuum Apollo, Infleqtion and the Harvard/MIT array, with one- and two-qubit gate errors, readout
+        errors, leakage, shuttling errors and atom loss as each platform reports them;</li>
+    <li><strong>scaled hardware models</strong>: every error probability of a hardware model multiplied by 0.1, 0.25 or
+        0.5, to see how far each device is from protecting a code.</li>
+</ul>
+<p>
+    On devices with T1 and T2 (IBM, Infleqtion, Harvard/MIT), every qubit decays for as long as it waits in each layer
+    of the circuit, for example while other qubits are measured (1.56 µs readout on IBM devices, as on Heron today).
+    Crosstalk is not modelled. Atom loss is modelled per qubit, and where the hardware detects it, the decoder is told
+    where losses happened.
+</p>
+
+<h2 id="decoders">Decoding</h2>
+<p>
+    The noisy circuit is sampled with <a href="https://github.com/quantumlib/Stim">Stim</a>, and its detector error model
+    is handed to every decoder that applies to the code: <!-- n:decoders -->14<!-- /n:decoders --> decoders, from matching
+    to belief propagation, GARI and the Tesseract search decoder. Each decoder sees the same shots, so differences between
+    decoders are not sampling noise. The <a href="results/decoders.html">Decoders</a> page compares them.
+</p>
+
+<h2 id="statistics">How results are measured and reported</h2>
+<p>
+    A logical error rate is the fraction of shots in which any logical qubit failed over all syndrome-extraction rounds,
+    with a 95% Wilson interval. The per-round rate assumes independent rounds:
+    ε = (1 − (1 − 2P)<sup>1/rounds</sup>)/2. Each configuration is sampled until 100 logical errors are seen or its
+    job's shot or time budget runs out; results short of 100 errors are refined with more shots in the background. Every
+    result carries a status:
+</p>
+<ul>
+    <li><strong>measured</strong>: at least 100 logical errors seen;</li>
+    <li><strong>low statistics</strong>: stopped by the shot or time limit before 100 errors;</li>
+    <li><strong>upper bound</strong>: no logical error seen; the 95% upper bound is reported;</li>
+    <li><strong>does not fit</strong>: the code needs more qubits than the device has;</li>
+    <li><strong>decoder not applicable</strong>: the decoder refused the circuit, e.g. matching on errors that do not decompose into edges;</li>
+    <li><strong>timeout</strong>: the decoder did not finish a single batch of shots within the time limit.</li>
+</ul>
+<p>
+    A compiled circuit can have a lower distance than its code: a SWAP between two data qubits, added by routing, can let
+    a single fault flip a logical qubit unnoticed. The Explorer marks such circuits. The dataset's columns are documented in
+    <a href="https://github.com/TUM-DSE/eccentric/blob/main/docs/dataset.md">docs/dataset.md</a>.
+</p>
+
+<h2 id="versions">Versions</h2>
+<p>
+    The version evaluated in the SIGMETRICS'26 paper is tagged
+    <a href="https://github.com/TUM-DSE/eccentric/tree/v1.0.0-sigmetrics26">v1.0.0-sigmetrics26</a>. The benchmark has kept
+    growing since: more codes, devices, decoders and shots, and refined device models, so its numbers can differ from the
+    paper's (<a href="https://github.com/TUM-DSE/eccentric/blob/main/CHANGELOG.md">changelog</a>). The
+    <a href="results/findings.html">Findings</a> are always drawn from the current version; the results as
+    published are in the <a href="paper.html">paper</a>.
+</p>
+
+</div>
+
+</div>
+</main>
+
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="assets/js/site.js" defer></script>
+<!-- /shell:footer -->
+</body>
+</html>

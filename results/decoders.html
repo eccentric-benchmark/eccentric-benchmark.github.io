@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decoders · ECCentric</title>
+<meta name="description" content="The decoders ECCentric runs on every code and device: how often each is as accurate as the best, how fast it is, and on which code families it works.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/results/decoders.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Decoders · ECCentric">
+<meta property="og:description" content="The decoders ECCentric runs on every code and device: how often each is as accurate as the best, how fast it is, and on which code families it works.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/results/decoders.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
+</head>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="../results/findings.html">Findings</a></li>
+<li><a href="../results/explorer.html">Explorer</a></li>
+<li><a href="../results/codes.html">Codes</a></li>
+<li><a href="../results/devices.html">Devices</a></li>
+<li><a href="../results/decoders.html" aria-current="page">Decoders</a></li>
+<li><a href="../method.html">Method</a></li>
+<li><a href="../paper.html">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
+
+<main id="main">
+<div class="wrap">
+
+<div class="page-head">
+    <p class="eyebrow">Results</p>
+    <h1>Decoders</h1>
+    <p class="lead">
+        ECCentric decodes every syndrome with every decoder that applies to the code, so decoders are compared on the
+        same shots of the same circuits. This page shows how often each decoder is as accurate as the best one, how long
+        it takes, and where it works. The <a href="#gpu">GPU decoders</a>, run separately, are at the end.
+    </p>
+</div>
+
+<!-- gen:decoders-figure -->
+<figure class="fig" id="figure" style="border-top:0;padding-top:0;margin-top:0">
+<p class="finding">BP-OSD, the usual choice for qLDPC codes, is as accurate as the best decoder on only 39% of configurations; Tesseract on 99.8%, and at 3.2× less median time per shot.</p>
+<img src="../figures/decoders.svg" alt="Decoder accuracy against decoding time. BP-OSD, the usual choice for qLDPC codes, is as accurate as the best decoder on only 39% of configurations; Tesseract on 99.8%, and at 3.2× less median time per shot." loading="lazy">
+<figcaption class="caption">4,257 configurations below threshold (best logical error rate &lt; 0.4), each decoded by at least three decoders. A decoder counts as good enough when its 95% interval reaches the best decoder&#x27;s. Times are per shot on one CPU core, sampling and building the decoder included; MWPM, correlated MWPM and Chromobius, which take microseconds per shot, are timed with 10^5 shots on the same circuits. Decoders with fewer than 100 configurations are left out. Tesseract&#x27;s timeouts (no result) are not counted, which favours it on the largest circuits.</figcaption>
+<p class="link-row"><a href="../figures/decoders.csv" download>Data (CSV)</a> <a href="../figures/decoders.png">PNG</a> <a href="../figures/decoders.svg">SVG</a></p>
+</figure>
+<!-- /gen:decoders-figure -->
+
+<div class="section-head" id="table">
+    <h2>All decoders</h2>
+    <p>Select a column heading to sort.</p>
+</div>
+<!-- gen:decoders-table -->
+<div class="table-wrap"><table class="data" id="decoder-table"><thead><tr><th data-sort="text" scope="col">Decoder</th><th data-sort="text" scope="col">Kind</th><th data-sort="num" class="num" scope="col" aria-sort="descending">As good as the best</th><th data-sort="num" class="num" scope="col">Configurations compared</th><th data-sort="num" class="num" scope="col">Median time per shot</th><th data-sort="num" class="num" scope="col">Results</th><th data-sort="num" class="num" scope="col">Codes</th><th data-sort="num" class="num" scope="col">Not applicable</th></tr></thead><tbody>
+<tr><td><a href="#tesseract">Tesseract</a></td><td>Search</td><td class="num" data-value="99.82"><span class="bar-cell">99.8%<span class="bar" aria-hidden="true"><span style="width:99.8%"></span></span></span></td><td class="num" data-value="3996">3,996</td><td class="num" data-value="39.2986">39 ms</td><td class="num" data-value="5056">5,056</td><td class="num" data-value="70">70</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#mwpm_corr">Correlated MWPM</a></td><td>Matching</td><td class="num" data-value="69.98"><span class="bar-cell">70%<span class="bar" aria-hidden="true"><span style="width:70.0%"></span></span></span></td><td class="num" data-value="1479">1,479</td><td class="num" data-value="0.00947066">9.5 µs</td><td class="num" data-value="1676">1,676</td><td class="num" data-value="22">22</td><td class="num" data-value="6">6</td></tr>
+<tr><td><a href="#hier_bposd">Level-by-level BP-OSD (soft)</a></td><td>Concatenated</td><td class="num" data-value="64.58"><span class="bar-cell">65%<span class="bar" aria-hidden="true"><span style="width:64.6%"></span></span></span></td><td class="num" data-value="48">48</td><td class="num" data-value="">–</td><td class="num" data-value="106">106</td><td class="num" data-value="3">3</td><td class="num" data-value="4">4</td></tr>
+<tr><td><a href="#relay_bp">Relay-BP</a></td><td>Belief propagation</td><td class="num" data-value="63.91"><span class="bar-cell">64%<span class="bar" aria-hidden="true"><span style="width:63.9%"></span></span></span></td><td class="num" data-value="2979">2,979</td><td class="num" data-value="14.6575">15 ms</td><td class="num" data-value="4174">4,174</td><td class="num" data-value="70">70</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#bposd_tuned">BP-OSD (tuned BP)</a></td><td>Belief propagation</td><td class="num" data-value="61.59"><span class="bar-cell">62%<span class="bar" aria-hidden="true"><span style="width:61.6%"></span></span></span></td><td class="num" data-value="2515">2,515</td><td class="num" data-value="13.9608">14 ms</td><td class="num" data-value="3570">3,570</td><td class="num" data-value="67">67</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#mwpf">MWPF</a></td><td>Hypergraph matching</td><td class="num" data-value="50.00"><span class="bar-cell">50%<span class="bar" aria-hidden="true"><span style="width:50.0%"></span></span></span></td><td class="num" data-value="56">56</td><td class="num" data-value="">–</td><td class="num" data-value="69">69</td><td class="num" data-value="19">19</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#mwpm">MWPM</a></td><td>Matching</td><td class="num" data-value="45.79"><span class="bar-cell">46%<span class="bar" aria-hidden="true"><span style="width:45.8%"></span></span></span></td><td class="num" data-value="1400">1,400</td><td class="num" data-value="0.00446498">4.5 µs</td><td class="num" data-value="1577">1,577</td><td class="num" data-value="22">22</td><td class="num" data-value="105">105</td></tr>
+<tr><td><a href="#bposd">BP-OSD</a></td><td>Belief propagation</td><td class="num" data-value="39.11"><span class="bar-cell">39%<span class="bar" aria-hidden="true"><span style="width:39.1%"></span></span></span></td><td class="num" data-value="2843">2,843</td><td class="num" data-value="125.866">126 ms</td><td class="num" data-value="3988">3,988</td><td class="num" data-value="70">70</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#bplsd">BP-LSD</a></td><td>Belief propagation</td><td class="num" data-value="23.91"><span class="bar-cell">24%<span class="bar" aria-hidden="true"><span style="width:23.9%"></span></span></span></td><td class="num" data-value="2183">2,183</td><td class="num" data-value="110.217">110 ms</td><td class="num" data-value="3197">3,197</td><td class="num" data-value="67">67</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#gari_pp">GARI++ (beta reimplementation)</a></td><td>Belief propagation</td><td class="num" data-value="22.34"><span class="bar-cell">22%<span class="bar" aria-hidden="true"><span style="width:22.3%"></span></span></span></td><td class="num" data-value="3219">3,219</td><td class="num" data-value="2.4508">2.5 ms</td><td class="num" data-value="4263">4,263</td><td class="num" data-value="53">53</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#gari">GARI</a></td><td>Belief propagation</td><td class="num" data-value="20.07"><span class="bar-cell">20%<span class="bar" aria-hidden="true"><span style="width:20.1%"></span></span></span></td><td class="num" data-value="3219">3,219</td><td class="num" data-value="3.30029">3.3 ms</td><td class="num" data-value="4263">4,263</td><td class="num" data-value="53">53</td><td class="num" data-value="781">781</td></tr>
+<tr><td><a href="#belief_find">BeliefFind</a></td><td>Belief propagation</td><td class="num" data-value="19.71"><span class="bar-cell">20%<span class="bar" aria-hidden="true"><span style="width:19.7%"></span></span></span></td><td class="num" data-value="2177">2,177</td><td class="num" data-value="108.793">109 ms</td><td class="num" data-value="3162">3,162</td><td class="num" data-value="67">67</td><td class="num" data-value="0">0</td></tr>
+<tr><td><a href="#chromobius">Chromobius</a></td><td>Color code</td><td class="num" data-value="13.86"><span class="bar-cell">14%<span class="bar" aria-hidden="true"><span style="width:13.9%"></span></span></span></td><td class="num" data-value="166">166</td><td class="num" data-value="0.0078784">7.9 µs</td><td class="num" data-value="168">168</td><td class="num" data-value="1">1</td><td class="num" data-value="97">97</td></tr>
+<tr><td><a href="#hier_bposd_hard">Level-by-level BP-OSD (hard decisions)</a></td><td>Concatenated</td><td class="num" data-value="6.38"><span class="bar-cell">6%<span class="bar" aria-hidden="true"><span style="width:6.4%"></span></span></span></td><td class="num" data-value="47">47</td><td class="num" data-value="">–</td><td class="num" data-value="105">105</td><td class="num" data-value="3">3</td><td class="num" data-value="4">4</td></tr>
+</tbody></table></div>
+<!-- /gen:decoders-table -->
+<p class="small muted" style="margin-top:0.8em">
+    "As good as the best" counts the configurations (a code at one distance, schedule and basis, on one device under one noise
+    model) that are below threshold (best logical error rate under 0.4) and were decoded by at least three decoders:
+    <!-- gen:decoders-count -->
+4,252
+<!-- /gen:decoders-count --> in all (the figure counts 4,257: the Explorer's dataset, which this table is computed
+    from, leaves out the compilation settings and device sizes that tell a few configurations apart). A decoder is as good as the best when the low end of its 95% interval reaches the
+    high end of the best decoder's. Decoders that apply to few codes are compared on few configurations, so their shares
+    are not comparable with the others'. Times are the median per shot on one CPU core, sampling and building the decoder included, from the
+    figure above (MWPM, correlated MWPM and Chromobius re-timed with 10<sup>5</sup> shots); decoders with fewer than 100 configurations have none. "Results" and "Codes" count every result
+    with a logical error rate, below threshold or not.
+</p>
+
+<div class="section-head" id="by-family">
+    <h2>By code family</h2>
+    <p>The same share, for each kind of code. Hover over a cell for the counts.</p>
+</div>
+<!-- gen:decoders-heat -->
+<div class="table-wrap" style="border:0"><table class="heat"><thead><tr><th scope="col"><span class="visually-hidden">Decoder</span></th><th scope="col">Topological</th><th scope="col">QLDPC</th><th scope="col">Floquet</th><th scope="col">Subsystem</th><th scope="col">Concatenated</th><th scope="col">Algebraic</th><th scope="col">Hybrid</th></tr></thead><tbody>
+<tr><th scope="row"><a href="#tesseract">Tesseract</a></th><td style="background:#0e3d7e;color:#fff" title="Tesseract on Topological codes: as good as the best on 1,353 of 1,356 configurations">99.8%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on QLDPC codes: as good as the best on 1,712 of 1,713 configurations">99.9%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on Floquet codes: as good as the best on 262 of 263 configurations">99.6%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on Subsystem codes: as good as the best on 86 of 87 configurations">99%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on Concatenated codes: as good as the best on 84 of 84 configurations">100%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on Algebraic codes: as good as the best on 73 of 73 configurations">100%</td><td style="background:#0e3d7e;color:#fff" title="Tesseract on Hybrid codes: as good as the best on 419 of 420 configurations">99.8%</td></tr>
+<tr><th scope="row"><a href="#mwpm_corr">Correlated MWPM</a></th><td style="background:#1757ac;color:#fff" title="Correlated MWPM on Topological codes: as good as the best on 590 of 787 configurations">75%</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#1757ac;color:#fff" title="Correlated MWPM on Floquet codes: as good as the best on 208 of 265 configurations">78%</td><td style="background:#2370cd;color:#fff" title="Correlated MWPM on Subsystem codes: as good as the best on 71 of 103 configurations">69%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#338ced;color:#161616" title="Correlated MWPM on Hybrid codes: as good as the best on 166 of 324 configurations">51%</td></tr>
+<tr><th scope="row"><a href="#hier_bposd">Level-by-level BP-OSD (soft)</a></th><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#2370cd;color:#fff" title="Level-by-level BP-OSD (soft) on Concatenated codes: as good as the best on 31 of 48 configurations">65%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td></tr>
+<tr><th scope="row"><a href="#relay_bp">Relay-BP</a></th><td style="background:#338ced;color:#161616" title="Relay-BP on Topological codes: as good as the best on 530 of 928 configurations">57%</td><td style="background:#2370cd;color:#fff" title="Relay-BP on QLDPC codes: as good as the best on 805 of 1,305 configurations">62%</td><td style="background:#1757ac;color:#fff" title="Relay-BP on Floquet codes: as good as the best on 207 of 265 configurations">78%</td><td style="background:#2370cd;color:#fff" title="Relay-BP on Subsystem codes: as good as the best on 27 of 45 configurations">60%</td><td style="background:#2370cd;color:#fff" title="Relay-BP on Concatenated codes: as good as the best on 51 of 77 configurations">66%</td><td style="background:#338ced;color:#161616" title="Relay-BP on Algebraic codes: as good as the best on 24 of 54 configurations">44%</td><td style="background:#1757ac;color:#fff" title="Relay-BP on Hybrid codes: as good as the best on 260 of 305 configurations">85%</td></tr>
+<tr><th scope="row"><a href="#bposd_tuned">BP-OSD (tuned BP)</a></th><td style="background:#2370cd;color:#fff" title="BP-OSD (tuned BP) on Topological codes: as good as the best on 407 of 675 configurations">60%</td><td style="background:#338ced;color:#161616" title="BP-OSD (tuned BP) on QLDPC codes: as good as the best on 647 of 1,158 configurations">56%</td><td style="background:#1757ac;color:#fff" title="BP-OSD (tuned BP) on Floquet codes: as good as the best on 195 of 265 configurations">74%</td><td style="background:#0e3d7e;color:#fff" title="BP-OSD (tuned BP) on Subsystem codes: as good as the best on 53 of 54 configurations">98%</td><td style="background:#2370cd;color:#fff" title="BP-OSD (tuned BP) on Concatenated codes: as good as the best on 37 of 60 configurations">62%</td><td style="background:#cce3fd;color:#161616" title="BP-OSD (tuned BP) on Algebraic codes: as good as the best on 2 of 28 configurations">7%</td><td style="background:#1757ac;color:#fff" title="BP-OSD (tuned BP) on Hybrid codes: as good as the best on 208 of 275 configurations">76%</td></tr>
+<tr><th scope="row"><a href="#mwpf">MWPF</a></th><td class="empty" title="13 configurations: too few to compare">·</td><td class="empty" title="11 configurations: too few to compare">·</td><td style="background:#6aabf1;color:#161616" title="MWPF on Floquet codes: as good as the best on 7 of 20 configurations">35%</td><td class="empty" title="6 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="6 configurations: too few to compare">·</td></tr>
+<tr><th scope="row"><a href="#mwpm">MWPM</a></th><td style="background:#6aabf1;color:#161616" title="MWPM on Topological codes: as good as the best on 314 of 766 configurations">41%</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#338ced;color:#161616" title="MWPM on Floquet codes: as good as the best on 113 of 246 configurations">46%</td><td style="background:#2370cd;color:#fff" title="MWPM on Subsystem codes: as good as the best on 71 of 103 configurations">69%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#338ced;color:#161616" title="MWPM on Hybrid codes: as good as the best on 143 of 285 configurations">50%</td></tr>
+<tr><th scope="row"><a href="#bposd">BP-OSD</a></th><td style="background:#6aabf1;color:#161616" title="BP-OSD on Topological codes: as good as the best on 375 of 969 configurations">39%</td><td style="background:#6aabf1;color:#161616" title="BP-OSD on QLDPC codes: as good as the best on 419 of 1,132 configurations">37%</td><td style="background:#338ced;color:#161616" title="BP-OSD on Floquet codes: as good as the best on 148 of 265 configurations">56%</td><td style="background:#2370cd;color:#fff" title="BP-OSD on Subsystem codes: as good as the best on 62 of 87 configurations">71%</td><td style="background:#9dc8f7;color:#161616" title="BP-OSD on Concatenated codes: as good as the best on 20 of 77 configurations">26%</td><td style="background:#cce3fd;color:#161616" title="BP-OSD on Algebraic codes: as good as the best on 6 of 49 configurations">12%</td><td style="background:#6aabf1;color:#161616" title="BP-OSD on Hybrid codes: as good as the best on 82 of 264 configurations">31%</td></tr>
+<tr><th scope="row"><a href="#bplsd">BP-LSD</a></th><td style="background:#9dc8f7;color:#161616" title="BP-LSD on Topological codes: as good as the best on 109 of 603 configurations">18%</td><td style="background:#9dc8f7;color:#161616" title="BP-LSD on QLDPC codes: as good as the best on 221 of 950 configurations">23%</td><td style="background:#338ced;color:#161616" title="BP-LSD on Floquet codes: as good as the best on 118 of 265 configurations">45%</td><td style="background:#338ced;color:#161616" title="BP-LSD on Subsystem codes: as good as the best on 20 of 44 configurations">45%</td><td style="background:#9dc8f7;color:#161616" title="BP-LSD on Concatenated codes: as good as the best on 11 of 53 configurations">21%</td><td style="background:#cce3fd;color:#161616" title="BP-LSD on Algebraic codes: as good as the best on 2 of 27 configurations">7%</td><td style="background:#9dc8f7;color:#161616" title="BP-LSD on Hybrid codes: as good as the best on 41 of 241 configurations">17%</td></tr>
+<tr><th scope="row"><a href="#gari_pp">GARI++ (beta reimplementation)</a></th><td style="background:#9dc8f7;color:#161616" title="GARI++ (beta reimplementation) on Topological codes: as good as the best on 307 of 1,194 configurations">26%</td><td style="background:#9dc8f7;color:#161616" title="GARI++ (beta reimplementation) on QLDPC codes: as good as the best on 258 of 1,666 configurations">15%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#338ced;color:#161616" title="GARI++ (beta reimplementation) on Concatenated codes: as good as the best on 23 of 48 configurations">48%</td><td style="background:#cce3fd;color:#161616" title="GARI++ (beta reimplementation) on Algebraic codes: as good as the best on 1 of 52 configurations">2%</td><td style="background:#338ced;color:#161616" title="GARI++ (beta reimplementation) on Hybrid codes: as good as the best on 130 of 259 configurations">50%</td></tr>
+<tr><th scope="row"><a href="#gari">GARI</a></th><td style="background:#9dc8f7;color:#161616" title="GARI on Topological codes: as good as the best on 226 of 1,194 configurations">19%</td><td style="background:#9dc8f7;color:#161616" title="GARI on QLDPC codes: as good as the best on 286 of 1,666 configurations">17%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#338ced;color:#161616" title="GARI on Concatenated codes: as good as the best on 24 of 48 configurations">50%</td><td style="background:#cce3fd;color:#161616" title="GARI on Algebraic codes: as good as the best on 5 of 52 configurations">10%</td><td style="background:#6aabf1;color:#161616" title="GARI on Hybrid codes: as good as the best on 105 of 259 configurations">41%</td></tr>
+<tr><th scope="row"><a href="#belief_find">BeliefFind</a></th><td style="background:#9dc8f7;color:#161616" title="BeliefFind on Topological codes: as good as the best on 95 of 605 configurations">16%</td><td style="background:#9dc8f7;color:#161616" title="BeliefFind on QLDPC codes: as good as the best on 167 of 939 configurations">18%</td><td style="background:#6aabf1;color:#161616" title="BeliefFind on Floquet codes: as good as the best on 103 of 265 configurations">39%</td><td style="background:#6aabf1;color:#161616" title="BeliefFind on Subsystem codes: as good as the best on 16 of 44 configurations">36%</td><td style="background:#9dc8f7;color:#161616" title="BeliefFind on Concatenated codes: as good as the best on 9 of 54 configurations">17%</td><td style="background:#cce3fd;color:#161616" title="BeliefFind on Algebraic codes: as good as the best on 1 of 27 configurations">4%</td><td style="background:#9dc8f7;color:#161616" title="BeliefFind on Hybrid codes: as good as the best on 38 of 243 configurations">16%</td></tr>
+<tr><th scope="row"><a href="#chromobius">Chromobius</a></th><td style="background:#cce3fd;color:#161616" title="Chromobius on Topological codes: as good as the best on 23 of 166 configurations">14%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td></tr>
+<tr><th scope="row"><a href="#hier_bposd_hard">Level-by-level BP-OSD (hard decisions)</a></th><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td><td style="background:#cce3fd;color:#161616" title="Level-by-level BP-OSD (hard decisions) on Concatenated codes: as good as the best on 3 of 47 configurations">6%</td><td class="empty" title="0 configurations: too few to compare">·</td><td class="empty" title="0 configurations: too few to compare">·</td></tr>
+</tbody></table></div>
+<p class="heat-legend">0% <span class="ramp" aria-hidden="true"><span style="background:#cce3fd"></span><span style="background:#9dc8f7"></span><span style="background:#6aabf1"></span><span style="background:#338ced"></span><span style="background:#2370cd"></span><span style="background:#1757ac"></span><span style="background:#0e3d7e"></span></span> 100% of configurations where the decoder is as good as the best. · marks fewer than 20 configurations.</p>
+<!-- /gen:decoders-heat -->
+
+<div class="callout" style="margin-top:2.5em" id="matchmaker">
+    <p><strong>Picking a decoder before decoding.</strong>
+    <a href="https://github.com/TUM-DSE/eccentric/tree/main/tools/matchmaker">QEC Matchmaker</a>, trained on this dataset,
+    predicts from a circuit alone, in seconds, whether it is above threshold, its logical error rate, each decoder's time
+    per shot, and which decoder to use. On codes it never saw in training, its choice is good enough for 95% of circuits
+    at 1.9× the time of the cheapest good decoder, where always running Tesseract costs 55×. With a GPU, it also plans
+    for the <a href="#gpu">GPU decoders</a>.</p>
+</div>
+
+<div class="section-head" id="list">
+    <h2>The decoders</h2>
+    <p>In the order of the table. Each links to its results in the Explorer.</p>
+</div>
+<!-- gen:decoders-cards -->
+<div class="decoder-list">
+<article class="decoder" id="tesseract">
+<span class="kind">Search</span>
+<h3>Tesseract</h3>
+<p>Google&#x27;s most-likely-error search decoder, run with its default configuration. The most accurate decoder in the benchmark, but slow beyond a few hundred qubits; used as the accuracy reference.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>99.8% of 3,996 configurations</dd>
+<dt>Median time per shot</dt><dd>39 ms</dd>
+<dt>Results</dt><dd>5,056 on 70 codes, 256 timed out</dd>
+<dt>Reference</dt><dd><a href="https://github.com/quantumlib/tesseract-decoder">Tesseract (Google)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=tesseract">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="mwpm_corr">
+<span class="kind">Matching</span>
+<h3>Correlated MWPM</h3>
+<p>Two-pass correlated matching with PyMatching, as in Cain et al. (2024): the first pass reweights the second. Errors that Stim cannot decompose into matching edges are split by matching their own detectors.</p>
+<dl>
+<dt>Applies to</dt><dd>Matchable codes, including circuits whose errors do not decompose into edges</dd>
+<dt>As good as the best</dt><dd>70% of 1,479 configurations</dd>
+<dt>Median time per shot</dt><dd>9.5 µs</dd>
+<dt>Results</dt><dd>1,676 on 22 codes</dd>
+<dt>Reference</dt><dd><a href="https://doi.org/10.1103/PhysRevLett.133.240602">Cain et al., PRL 133, 240602 (2024)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=mwpm_corr">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="hier_bposd">
+<span class="kind">Concatenated</span>
+<h3>Level-by-level BP-OSD (soft)</h3>
+<p>Level-by-level decoding of concatenated codes (Poulin, 2006): BP level by level, each level&#x27;s posteriors as the next level&#x27;s priors, then BP-OSD on all detectors.</p>
+<dl>
+<dt>Applies to</dt><dd>Concatenated codes: many-hypercube, concatenated Steane at d = 9 and 27</dd>
+<dt>As good as the best</dt><dd>65% of 48 configurations</dd>
+<dt>Results</dt><dd>106 on 3 codes, 2 timed out</dd>
+<dt>Reference</dt><dd><a href="https://doi.org/10.1103/PhysRevA.74.052333">Poulin, PRA 74, 052333 (2006)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=hier_bposd">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="relay_bp">
+<span class="kind">Belief propagation</span>
+<h3>Relay-BP</h3>
+<p>IBM&#x27;s Relay-BP with the paper&#x27;s parameters: chains of BP runs with memory, built for bivariate bicycle codes. Run on the exact syndromes (relay-bp 0.2.1 pads them through its sinter interface).</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>64% of 2,979 configurations</dd>
+<dt>Median time per shot</dt><dd>15 ms</dd>
+<dt>Results</dt><dd>4,174 on 70 codes, 3 timed out</dd>
+<dt>Reference</dt><dd><a href="https://arxiv.org/abs/2506.01779">Müller et al., arXiv:2506.01779</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=relay_bp">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="bposd_tuned">
+<span class="kind">Belief propagation</span>
+<h3>BP-OSD (tuned BP)</h3>
+<p>The same BP-OSD with tuned BP: 100 iterations, min-sum scaling 0.625. In a pilot it gave 20% lower logical error rates on topological and other low-weight codes at a tenth of the time, but up to 3× higher on some qLDPC codes, so the sweep runs it next to BP-OSD on the former.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>62% of 2,515 configurations</dd>
+<dt>Median time per shot</dt><dd>14 ms</dd>
+<dt>Results</dt><dd>3,570 on 67 codes, 9 timed out</dd>
+<dt>Reference</dt><dd><a href="https://github.com/quantumgizmos/ldpc">ldpc</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=bposd_tuned">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="mwpf">
+<span class="kind">Hypergraph matching</span>
+<h3>MWPF</h3>
+<p>Hypergraph minimum-weight parity factor, with cluster_node_limit = 50 as in its README. Matches on the undecomposed error model, so it also decodes circuits where MWPM fails.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>50% of 56 configurations</dd>
+<dt>Results</dt><dd>69 on 19 codes, 16 timed out</dd>
+<dt>Reference</dt><dd><a href="https://arxiv.org/abs/2508.04969">Wu et al., arXiv:2508.04969</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=mwpf">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="mwpm">
+<span class="kind">Matching</span>
+<h3>MWPM</h3>
+<p>Minimum-weight perfect matching (PyMatching) on the error model decomposed into edges. Microseconds per shot. It refuses circuits whose errors do not decompose into edges, which includes some routed heavy-hex, honeycomb and surface circuits.</p>
+<dl>
+<dt>Applies to</dt><dd>Matchable codes: surface, heavy-hex, Bacon-Shor, repetition, XZZX, toric, honeycomb, hyperbolic Floquet</dd>
+<dt>As good as the best</dt><dd>46% of 1,400 configurations</dd>
+<dt>Median time per shot</dt><dd>4.5 µs</dd>
+<dt>Results</dt><dd>1,577 on 22 codes</dd>
+<dt>Reference</dt><dd><a href="https://github.com/oscarhiggott/PyMatching">PyMatching</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=mwpm">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="bposd">
+<span class="kind">Belief propagation</span>
+<h3>BP-OSD</h3>
+<p>Belief propagation followed by ordered-statistics decoding (ldpc). The usual choice for qLDPC codes, and the general decoder of the paper.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>39% of 2,843 configurations</dd>
+<dt>Median time per shot</dt><dd>126 ms</dd>
+<dt>Results</dt><dd>3,988 on 70 codes, 38 timed out</dd>
+<dt>Reference</dt><dd><a href="https://github.com/quantumgizmos/ldpc">ldpc</a> · <a href="https://doi.org/10.1103/PhysRevResearch.2.043423">Roffe et al., PRR 2, 043423 (2020)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=bposd">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="bplsd">
+<span class="kind">Belief propagation</span>
+<h3>BP-LSD</h3>
+<p>Belief propagation followed by localised statistics decoding (ldpc), with the same BP settings as BP-OSD.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>24% of 2,183 configurations</dd>
+<dt>Median time per shot</dt><dd>110 ms</dd>
+<dt>Results</dt><dd>3,197 on 67 codes, 5 timed out</dd>
+<dt>Reference</dt><dd><a href="https://arxiv.org/abs/2406.18655">Hillmann et al., arXiv:2406.18655</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=bplsd">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="gari_pp">
+<span class="kind">Belief propagation</span>
+<h3>GARI++ (beta reimplementation)</h3>
+<p>Beta reimplementation (the authors have not released theirs): GARI for at most 7 iterations, then union-find on the residual syndrome, guided by GARI&#x27;s posteriors. The paper uses Chromobius and its own hypergraph union-find as second stages; this uses ldpc&#x27;s union-find everywhere.</p>
+<dl>
+<dt>Applies to</dt><dd>As GARI</dd>
+<dt>As good as the best</dt><dd>22% of 3,219 configurations</dd>
+<dt>Median time per shot</dt><dd>2.5 ms</dd>
+<dt>Results</dt><dd>4,263 on 53 codes</dd>
+<dt>Reference</dt><dd><a href="https://arxiv.org/abs/2611.12833">Maan et al., arXiv:2611.12833</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=gari_pp">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="gari">
+<span class="kind">Belief propagation</span>
+<h3>GARI</h3>
+<p>Normalized min-sum on the GARI-transformed correlated error model, with the authors&#x27; C decoder (vendored) in their standalone setting: 400 iterations, normalization 0.96875. Checked against their published results. A shot it does not converge on gets no correction.</p>
+<dl>
+<dt>Applies to</dt><dd>CSS memory circuits; not applicable where detectors or errors lack the X/Z structure it needs</dd>
+<dt>As good as the best</dt><dd>20% of 3,219 configurations</dd>
+<dt>Median time per shot</dt><dd>3.3 ms</dd>
+<dt>Results</dt><dd>4,263 on 53 codes</dd>
+<dt>Reference</dt><dd><a href="https://arxiv.org/abs/2510.14060">Maan et al., arXiv:2510.14060</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=gari">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="belief_find">
+<span class="kind">Belief propagation</span>
+<h3>BeliefFind</h3>
+<p>Belief propagation followed by union-find (ldpc), with the same BP settings as BP-OSD.</p>
+<dl>
+<dt>Applies to</dt><dd>All codes</dd>
+<dt>As good as the best</dt><dd>20% of 2,177 configurations</dd>
+<dt>Median time per shot</dt><dd>109 ms</dd>
+<dt>Results</dt><dd>3,162 on 67 codes, 1 timed out</dd>
+<dt>Reference</dt><dd><a href="https://github.com/quantumgizmos/ldpc">ldpc</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=belief_find">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="chromobius">
+<span class="kind">Color code</span>
+<h3>Chromobius</h3>
+<p>The Möbius decoder for color codes: matching on a doubled graph, using the color and basis annotations of the color code&#x27;s detectors.</p>
+<dl>
+<dt>Applies to</dt><dd>The color code</dd>
+<dt>As good as the best</dt><dd>14% of 166 configurations</dd>
+<dt>Median time per shot</dt><dd>7.9 µs</dd>
+<dt>Results</dt><dd>168 on 1 codes</dd>
+<dt>Reference</dt><dd><a href="https://github.com/quantumlib/chromobius">Chromobius (Google)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=chromobius">Its results in the Explorer</a></p>
+</article>
+<article class="decoder" id="hier_bposd_hard">
+<span class="kind">Concatenated</span>
+<h3>Level-by-level BP-OSD (hard decisions)</h3>
+<p>As level-by-level BP-OSD, but each level passes hard decisions instead of posteriors to the next.</p>
+<dl>
+<dt>Applies to</dt><dd>As level-by-level BP-OSD</dd>
+<dt>As good as the best</dt><dd>6% of 47 configurations</dd>
+<dt>Results</dt><dd>105 on 3 codes, 3 timed out</dd>
+<dt>Reference</dt><dd><a href="https://doi.org/10.1103/PhysRevA.74.052333">Poulin, PRA 74, 052333 (2006)</a></dd>
+</dl>
+<p class="link-row"><a class="arrow" href="explorer.html?decoder=hier_bposd_hard">Its results in the Explorer</a></p>
+</article>
+</div>
+<!-- /gen:decoders-cards -->
+
+<div class="section-head" id="gpu">
+    <h2>GPU decoders</h2>
+    <p>
+        Run separately on one NVIDIA H200, so not yet part of the results above. All times compare one GPU against one
+        CPU core: they are latency per shot, not cost.
+    </p>
+</div>
+
+<div class="split">
+<div>
+    <h3 style="margin-top:0">GPU versions of the CPU decoders</h3>
+    <p class="small">
+        Nine decoders have a GPU version with the same settings, mostly as ECCentric's own CUDA kernels; BP-OSD runs on
+        NVIDIA's nv-qldpc decoder. Checked against the CPU decoder on 10<sup>6</sup> shots of up to seven sweep circuits
+        (SD6 noise):
+    </p>
+    <div class="table-wrap">
+    <table class="data compact">
+        <thead><tr><th scope="col">GPU version of</th><th scope="col">Agreement with the CPU version</th><th scope="col" class="num">Speed-up</th></tr></thead>
+        <tbody>
+            <tr><td><a href="#bplsd">BP-LSD</a></td><td>identical on every shot</td><td class="num">36–213×</td></tr>
+            <tr><td><a href="#belief_find">BeliefFind</a></td><td>identical on every shot</td><td class="num">39–185×</td></tr>
+            <tr><td><a href="#gari">GARI</a></td><td>identical on every shot</td><td class="num">21–177×</td></tr>
+            <tr><td><a href="#hier_bposd_hard">Level-by-level BP-OSD (hard)</a></td><td>identical on every shot tested</td><td class="num">2–4×</td></tr>
+            <tr><td><a href="#hier_bposd">Level-by-level BP-OSD (soft)</a></td><td>99.0–99.4% of shots; same logical error rate within statistical error</td><td class="num">2–9×</td></tr>
+            <tr><td><a href="#relay_bp">Relay-BP</a></td><td>identical with the same memory strengths; same logical error rate with random ones (the default)</td><td class="num">86–452×</td></tr>
+            <tr><td><a href="#bposd">BP-OSD</a></td><td>98.1–100% of shots; same logical error rate within statistical error</td><td class="num">12–148×</td></tr>
+            <tr><td><a href="#bposd_tuned">BP-OSD (tuned BP)</a></td><td>as BP-OSD</td><td class="num">27–107×</td></tr>
+            <tr><td>Union-find</td><td>54–99.7% of shots; logical error rates differ by 0.1–2% (relative) on 5 of 7 circuits</td><td class="num">208–489×</td></tr>
+        </tbody>
+    </table>
+    </div>
+    <p class="small muted" style="margin-top:0.6em">
+        The CPU runs shared the machine with others, which makes them 10–20% slower and the speed-ups that much too
+        high. Matching decoders, Tesseract and MWPF stay on the CPU.
+    </p>
+</div>
+
+<div id="tcbp_jobs_sc_gpu">
+<h3 style="margin-top:0">TCBP-JOBS, GPU only</h3>
+<p class="small">NVIDIA's new decoder, on a first slice of circuits.</p>
+<article class="decoder">
+    <span class="kind">NVIDIA · preliminary</span>
+    <p style="margin-top:0.3em">
+        The decoder of Howe, Maurya et al. (<a href="https://arxiv.org/abs/2611.21321">arXiv:2611.21321</a>, preprint),
+        through NVIDIA's CUDA-Q QEC nv-qldpc decoder: belief propagation on a model of the code fitted once per code,
+        with JOBS post-processing. ECCentric runs it on every shot (the <code>tcbp-jobs-sc</code> preset), because BP
+        can converge to the wrong logical class; the paper's default, which runs JOBS only where BP does not converge,
+        was worse than Tesseract on 11 of 145 circuits.
+    </p>
+    <p>
+        <strong>On a slice of 306 circuits, all below threshold</strong>, each decoded with the same settings and shot
+        budget as its CPU decoders:
+    </p>
+    <ul class="small">
+        <li>never statistically worse than Tesseract or any CPU decoder (95% intervals);</li>
+        <li>as accurate as Tesseract on 281 circuits and more accurate on 5;</li>
+        <li>a median 306× less time per shot than Tesseract on one CPU core (9× to 29,000× for 80% of the circuits).</li>
+    </ul>
+    <p class="small muted">
+        Not yet in the dataset. Decoding the rest of the circuits is under way; until then, its accuracy beyond these 306
+        circuits (larger circuits, circuits above threshold) is not measured. Noise learning, rare-event splitting and
+        gap-based postselection from the paper are not used.
+    </p>
+</article>
+</div>
+</div>
+
+<p class="note">
+    The settings of every decoder are documented in
+    <a href="https://github.com/TUM-DSE/eccentric/blob/main/docs/decoders.md">docs/decoders.md</a>; the GPU decoders,
+    how they were checked and how to run them in
+    <a href="https://github.com/TUM-DSE/eccentric/blob/main/analysis/GPU.md">analysis/GPU.md</a>.
+</p>
+
+</div>
+</main>
+
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="../paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="../contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="../assets/js/site.js" defer></script>
+<!-- /shell:footer -->
+</body>
+</html>

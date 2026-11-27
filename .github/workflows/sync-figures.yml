@@ -1,5 +1,5 @@
 # Copies the figures that ECCentric builds (site/figures on its main branch, `python -m eccentric.figures`)
-# into figures/, which results/findings.html shows. Runs on the 1st and 15th of each month and on demand;
+# into figures/, then rebuilds the pages that show them (tools/build.py: findings, home page, paper-era notes). Runs on the 1st and 15th of each month and on demand;
 # commits only when they changed.
 name: sync figures from ECCentric
 
@@ -23,9 +23,12 @@ jobs:
           git -C /tmp/eccentric sparse-checkout set site/figures
           rsync -a --delete /tmp/eccentric/site/figures/ figures/
 
+      - name: Rebuild the pages from the figures
+        run: python3 tools/build.py
+
       - name: Commit if changed
         run: |
-          git add -A figures
+          git add -A figures data *.html results
           if git diff --cached --quiet; then echo "figures unchanged"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"

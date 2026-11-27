@@ -1,137 +1,205 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Findings - ECCentric Bench</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/styles_feeling_responsive.css"> 
-    <script src="../assets/js/modernizr.min.js"></script> 
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script> 
-    <script> 
-        WebFont.load({ google: { families: [ 'Lato:400,700,400italic:latin', 'Volkhov::latin' ] } }); 
-    </script> 
-    <noscript>
-        <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic%7CVolkhov' rel='stylesheet' type='text/css'> 
-    </noscript>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Findings · ECCentric</title>
+<meta name="description" content="What the ECCentric dataset shows: every code on every device model, under each device's noise and scaled versions of it, with every applicable decoder. Each figure with the values it plots.">
+<!-- shell:head -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/site.css">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://eccentric-benchmark.github.io/results/findings.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ECCentric">
+<meta property="og:title" content="Findings · ECCentric">
+<meta property="og:description" content="What the ECCentric dataset shows: every code on every device model, under each device's noise and scaled versions of it, with every applicable decoder. Each figure with the values it plots.">
+<meta property="og:url" content="https://eccentric-benchmark.github.io/results/findings.html">
+<meta property="og:image" content="https://eccentric-benchmark.github.io/figures/where-codes-work.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- /shell:head -->
 </head>
-<body id="top-of-page">
-    <div id="navigation" class="sticky">
-        <nav class="top-bar" role="navigation" data-topbar>
-            <ul class="title-area">
-                <li class="name">
-                    <h1 class="show-for-small-only"><a href="../index.html" class="icon-tree"> ECCentric Bench</a></h1>
-                </li>
-                <li class="toggle-topbar menu-icon"><a href="#"><span>Navigation</span></a></li>
-            </ul>
-            <section class="top-bar-section">
-                <ul class="left">
-                    <li><a href="../index.html" class="icon-home"> Home</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../overview.html">Overview</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../scope.html">Research Scope</a></li>
-                    <li class="divider"></li>
-                    <li><a href="../methodology.html">Methodology</a></li>
-                    <li class="divider"></li>
-                    <li class="has-dropdown active">
-                        <a href="#">Results</a>
-                        <ul class="dropdown">
-                            <li class="active"><a href="findings.html">Findings</a></li>
-                            <li><a href="hardware_restrictions.html">Hardware Restrictions</a></li>
-                            <li><a href="framework_analysis.html">Framework Analysis</a></li>
-                            <li><a href="qec_analysis.html">QEC Analysis</a></li>
-                            <li><a href="explorer.html">Results Explorer</a></li>
-                            <li><a href="devices.html">Devices</a></li>
-                            <li><a href="codes.html">Codes</a></li>
-                        </ul>
-                    </li>
-                    <li class="divider"></li>
-                </ul>
-                <ul class="right">
-                    <li class="divider"></li>
-                    <li class="contact-link"><a href="../contact.html" class="icon-mail"> Contact</a></li>
-                </ul>
-            </section>
-        </nav>
-    </div>
-    
-    <style>
-        .fig { margin: 2.5em 0 3em; }
-        .fig img { width: 100%; max-width: 980px; display: block; margin: 1em auto; border: 1px solid #e1e0d9; }
-        .fig .finding { background-color: #e7f3f8; border-left: 6px solid #2980b9; padding: 1em 1.4em; margin: 1em 0; }
-        .fig .caption { color: #52514e; font-size: 0.9em; }
-        .fig .files a { margin-right: 1.2em; font-size: 0.9em; }
-        #source { color: #52514e; font-size: 0.9em; }
-    </style>
-    <div class="row t60">
-        <div class="medium-12 columns">
-            <h1>Findings</h1>
-            <p>
-                What the ECCentric dataset shows: every code on every device model, under each device's own noise and
-                scaled versions of it, with every applicable decoder. Each figure comes with the values it plots
-                (CSV); all of them are built by <code>python -m eccentric.figures</code> in the
-                <a href="https://github.com/TUM-DSE/eccentric">ECCentric repository</a> and copied here.
-            </p>
-            <p id="source"></p>
-            <hr>
-            <h2>Featured findings</h2>
-            <div id="featured"><p>Loading figures…</p></div>
-            <hr>
-            <h2>Benchmark experiments</h2>
-            <p>
-                The experiments of our <a href="https://doi.org/10.1145/3805635">SIGMETRICS'26 paper</a> (topology,
-                hardware technologies, distributed QPUs, routing, gate-set translation, break-even), redrawn from the
-                current version of the benchmark: more decoders, more shots, and refined device models.
-            </p>
-            <div id="benchmark"></div>
-            <noscript><p>The figures are listed in <a href="../figures/manifest.json">figures/manifest.json</a>.</p></noscript>
-        </div>
-    </div>
-    <script>
-        function el(tag, attrs, text) {
-            var e = document.createElement(tag);
-            for (var k in attrs) e.setAttribute(k, attrs[k]);
-            if (text) e.textContent = text;
-            return e;
-        }
-        fetch("../figures/manifest.json").then(function (r) { return r.json(); }).then(function (m) {
-            var s = m.source;
-            document.getElementById("source").textContent = "Built " + s.built + " from " + s.results.toLocaleString("en") +
-                " results (dataset schema " + s.schema_version + (s.commit ? ", commit " + s.commit : "") + ").";
-            ["featured", "benchmark"].forEach(function (g) { document.getElementById(g).innerHTML = ""; });
-            m.figures.forEach(function (f) {
-                var box = el("div", {"class": "fig", "id": f.id});
-                box.appendChild(el("h3", {}, f.title));
-                box.appendChild(el("div", {"class": "finding"}, f.finding));
-                box.appendChild(el("img", {"src": "../figures/" + f.files.svg, "alt": f.title + ". " + f.finding, "loading": "lazy"}));
-                box.appendChild(el("p", {"class": "caption"}, f.caption));
-                var files = el("p", {"class": "files"});
-                files.appendChild(el("a", {"href": "../figures/" + f.files.csv, "download": ""}, "Data (CSV)"));
-                files.appendChild(el("a", {"href": "../figures/" + f.files.png}, "PNG"));
-                files.appendChild(el("a", {"href": "../figures/" + f.files.svg}, "SVG"));
-                box.appendChild(files);
-                document.getElementById(f.group).appendChild(box);
-            });
-        }).catch(function () {
-            document.getElementById("featured").textContent = "The figures could not be loaded.";
-        });
-    </script>
-    <footer id="footer-content" class="bg-grau" style="margin-top: 3em; padding-top: 2em; background-color: #f6f6f6;">
-        <div id="subfooter">
-            <nav class="row">
-                <section class="small-12 columns credits" style="text-align: center; color: #666;">
-                    <div style="margin-bottom: 1em;">
-                        <a href="https://www.munich-quantum-valley.de/">
-                            <img src="../images/mqv.png" alt="Munich Quantum Valley" style="height: 50px;">
-                        </a>
-                    </div>
-                    <p>ECCentric Benchmark. Supported by Munich Quantum Valley.</p>
-                    <p>Based on <a href="https://intel-mpx.github.io/index.html">Intel MPX Explained</a> template.</p>
-                </section>
-            </nav>
-        </div>
-    </footer>
-    
-    <script src="../assets/js/javascript.min.js"></script>
+<body>
+<!-- shell:header -->
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
+<nav class="site-nav" aria-label="Main">
+<ul>
+<li><a href="../results/findings.html" aria-current="page">Findings</a></li>
+<li><a href="../results/explorer.html">Explorer</a></li>
+<li><a href="../results/codes.html">Codes</a></li>
+<li><a href="../results/devices.html">Devices</a></li>
+<li><a href="../results/decoders.html">Decoders</a></li>
+<li><a href="../method.html">Method</a></li>
+<li><a href="../paper.html">Paper</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<!-- /shell:header -->
+
+<main id="main">
+<div class="wrap">
+
+<div class="page-head">
+    <p class="eyebrow">Results</p>
+    <h1>Findings</h1>
+    <p class="lead">
+        What the ECCentric dataset shows: every code on every device model, under each device's own noise and scaled
+        versions of it, with every applicable decoder. Each figure comes with the values it plots (CSV) and a link to
+        the results behind it in the <a href="explorer.html">Explorer</a>.
+    </p>
+<!-- gen:findings-source -->
+<p class="small muted">Built 2026-11-20 from 35,374 results (dataset schema 1, ECCentric commit bf55e7f) by <code>python -m eccentric.figures</code>. The list of figures is <a href="../figures/manifest.json">figures/manifest.json</a>.</p>
+<!-- /gen:findings-source -->
+</div>
+
+<!-- gen:findings-toc -->
+<ul class="toc">
+<li><span class="group">Featured</span><a href="#where-codes-work">Code families × devices at today&#x27;s noise</a></li>
+<li><span class="group">Featured</span><a href="#routing-vs-native">Routing vs native layout for bivariate bicycle codes</a></li>
+<li><span class="group">Featured</span><a href="#below-threshold">Error suppression as device noise is scaled</a></li>
+<li><span class="group">Featured</span><a href="#decoders">Decoder accuracy against decoding time</a></li>
+<li><span class="group">Featured</span><a href="#x-vs-z">X-basis against Z-basis memory</a></li>
+<li><span class="group">Featured</span><a href="#willow">The Willow model against Google&#x27;s experiment</a></li>
+<li><span class="group">Paper experiment</span><a href="#topology">Connectivity</a></li>
+<li><span class="group">Paper experiment</span><a href="#technologies">Shuttling on trapped-ion and neutral-atom devices</a></li>
+<li><span class="group">Paper experiment</span><a href="#distributed">Single vs multi-QPU execution</a></li>
+<li><span class="group">Paper experiment</span><a href="#routing">Routing overhead by initial layout</a></li>
+<li><span class="group">Paper experiment</span><a href="#translation">Gate-set translation overhead</a></li>
+<li><span class="group">Paper experiment</span><a href="#break-even">Break-even against an idle qubit</a></li>
+</ul>
+<!-- /gen:findings-toc -->
+
+<div class="section-head">
+    <h2>Featured findings</h2>
+</div>
+<!-- gen:findings-featured -->
+<section class="fig" id="where-codes-work">
+<h3>Code families × devices at today&#x27;s noise</h3>
+<p class="finding">Trapped ions protect the most code families: below 10⁻³ per round, 19 families on Quantinuum Apollo against 0 on IBM Heron.</p>
+<img src="../figures/where-codes-work.svg" alt="Code families × devices at today&#x27;s noise. Trapped ions protect the most code families: below 10⁻³ per round, 19 families on Quantinuum Apollo against 0 on IBM Heron." loading="lazy">
+<p class="caption">Lowest per-round logical error rate of any code of the family, any distance and decoder, Z-basis memory, under the device&#x27;s own noise model. Where no logical error was seen, the 95% upper bound is used. IBM devices use the Flamingo noise model, Heron its own.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?operation=memory&basis=Z&best=1">Explore these results</a> <a href="../figures/where-codes-work.csv" download>Data (CSV)</a> <a href="../figures/where-codes-work.png">PNG</a> <a href="../figures/where-codes-work.svg">SVG</a></p>
+</section>
+<section class="fig" id="routing-vs-native">
+<h3>Routing vs native layout for bivariate bicycle codes</h3>
+<p class="finding">Routed onto IBM&#x27;s heavy-hex devices, bivariate bicycle codes are 42× to 228,237× worse than on a layout that gives each of their checks its couplers.</p>
+<img src="../figures/routing-vs-native.svg" alt="Routing vs native layout for bivariate bicycle codes. Routed onto IBM&#x27;s heavy-hex devices, bivariate bicycle codes are 42× to 228,237× worse than on a layout that gives each of their checks its couplers." loading="lazy">
+<p class="caption">Best logical error rate over all decoders, Z-basis memory, Flamingo noise with gate errors ÷10 and T1/T2 ×3 on both. Routed: the better of IBM Flamingo (3 QPUs) and Loon (2 QPUs).</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=bb_native">Explore these results</a> <a href="../figures/routing-vs-native.csv" download>Data (CSV)</a> <a href="../figures/routing-vs-native.png">PNG</a> <a href="../figures/routing-vs-native.svg">SVG</a></p>
+</section>
+<section class="fig" id="below-threshold">
+<h3>Error suppression as device noise is scaled</h3>
+<p class="finding">At today&#x27;s noise, the surface code is below threshold on 6 of 8 device models and the color code on 3. IBM Heron needs about 40% of its noise for either.</p>
+<img src="../figures/below-threshold.svg" alt="Error suppression as device noise is scaled. At today&#x27;s noise, the surface code is below threshold on 6 of 8 device models and the color code on 3. IBM Heron needs about 40% of its noise for either." loading="lazy">
+<p class="caption">Λ is the per-round logical error rate at d = 3 divided by that at d = 5 (d rounds, best decoder); Λ &gt; 1 means a larger code helps. Every error probability of the device&#x27;s noise model is scaled by the factor on the x-axis; the compiled circuit is the same at every scale.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=noise_scaling">Explore these results</a> <a href="../figures/below-threshold.csv" download>Data (CSV)</a> <a href="../figures/below-threshold.png">PNG</a> <a href="../figures/below-threshold.svg">SVG</a></p>
+</section>
+<section class="fig" id="decoders">
+<h3>Decoder accuracy against decoding time</h3>
+<p class="finding">BP-OSD, the usual choice for qLDPC codes, is as accurate as the best decoder on only 39% of configurations; Tesseract on 99.8%, and at 3.2× less median time per shot.</p>
+<img src="../figures/decoders.svg" alt="Decoder accuracy against decoding time. BP-OSD, the usual choice for qLDPC codes, is as accurate as the best decoder on only 39% of configurations; Tesseract on 99.8%, and at 3.2× less median time per shot." loading="lazy">
+<p class="caption">4,257 configurations below threshold (best logical error rate &lt; 0.4), each decoded by at least three decoders. A decoder counts as good enough when its 95% interval reaches the best decoder&#x27;s. Times are per shot on one CPU core, sampling and building the decoder included; MWPM, correlated MWPM and Chromobius, which take microseconds per shot, are timed with 10^5 shots on the same circuits. Decoders with fewer than 100 configurations are left out. Tesseract&#x27;s timeouts (no result) are not counted, which favours it on the largest circuits.</p>
+<p class="link-row"><a class="arrow" href="../results/decoders.html">Decoders page</a> <a href="../figures/decoders.csv" download>Data (CSV)</a> <a href="../figures/decoders.png">PNG</a> <a href="../figures/decoders.svg">SVG</a></p>
+</section>
+<section class="fig" id="x-vs-z">
+<h3>X-basis against Z-basis memory</h3>
+<p class="finding">Measured in the X basis, 72% of configurations do worse than in the usual Z basis; on Infleqtion by a median 6.1×.</p>
+<img src="../figures/x-vs-z.svg" alt="X-basis against Z-basis memory. Measured in the X basis, 72% of configurations do worse than in the usual Z basis; on Infleqtion by a median 6.1×." loading="lazy">
+<p class="caption">1,716 configurations run in both bases with the same compiled circuit; per basis, the lowest per-round logical error rate over the decoders run in both. Upper bounds are left out.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=basis_x">Explore these results</a> <a href="../figures/x-vs-z.csv" download>Data (CSV)</a> <a href="../figures/x-vs-z.png">PNG</a> <a href="../figures/x-vs-z.svg">SVG</a></p>
+</section>
+<section class="fig" id="willow">
+<h3>The Willow model against Google&#x27;s experiment</h3>
+<p class="finding">With matching decoders on both sides, the model is 1.2–1.3× optimistic and reproduces the error suppression (Λ = 2.21 against Google&#x27;s 2.05).</p>
+<img src="../figures/willow.svg" alt="The Willow model against Google&#x27;s experiment. With matching decoders on both sides, the model is 1.2–1.3× optimistic and reproduces the error suppression (Λ = 2.21 against Google&#x27;s 2.05)." loading="lazy">
+<p class="caption">Rotated surface-code memory over 10 cycles on the Willow device model (real_willow noise). Google: ensembled matching decoder, Nature 638, 920 (2025), Table S1. The gap to Tesseract is the decoder: a stronger decoder lowers the same circuit&#x27;s error by another 2×.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=willow_surface">Explore these results</a> <a href="../figures/willow.csv" download>Data (CSV)</a> <a href="../figures/willow.png">PNG</a> <a href="../figures/willow.svg">SVG</a></p>
+</section>
+<!-- /gen:findings-featured -->
+
+<div class="section-head" id="benchmark">
+    <h2>The paper's experiments, on the current benchmark</h2>
+    <p>
+        The experiments of the SIGMETRICS'26 paper (topology, hardware technologies, distributed QPUs, routing, gate-set
+        translation, break-even), redrawn from the current version of the benchmark: more decoders, more shots, and
+        refined device models. The figures as published are in the <a href="../files/ECCentric.pdf">paper</a>.
+    </p>
+</div>
+<!-- gen:findings-benchmark -->
+<section class="fig" id="topology">
+<h3>Connectivity</h3>
+<p class="finding">Restricting connectivity raises the logical error per round by a median 21× on a 2D grid and 24× on a 3D cube over all-to-all: the third dimension does not help.</p>
+<img src="../figures/topology.svg" alt="Connectivity. Restricting connectivity raises the logical error per round by a median 21× on a 2D grid and 24× on a 3D cube over all-to-all: the third dimension does not help." loading="lazy">
+<p class="caption">SI1000 noise at p = 0.002, the largest distance that fits on all three devices, best of all decoders, Z-basis memory; hollow markers are 95% upper bounds (no logical error seen). Codes at or above threshold on a device are not drawn. Sweep slice paper_topology.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=paper_topology&error_type=modsi1000">Explore these results</a> <a href="../figures/topology.csv" download>Data (CSV)</a> <a href="../figures/topology.png">PNG</a> <a href="../figures/topology.svg">SVG</a></p>
+</section>
+<section class="fig" id="technologies">
+<h3>Shuttling on trapped-ion and neutral-atom devices</h3>
+<p class="finding">Shuttling lowers the logical error rate for 5 of 6 codes on Infleqtion and 4 of 5 on Quantinuum Apollo.</p>
+<img src="../figures/technologies.svg" alt="Shuttling on trapped-ion and neutral-atom devices. Shuttling lowers the logical error rate for 5 of 6 codes on Infleqtion and 4 of 5 on Quantinuum Apollo." loading="lazy">
+<p class="caption">Each device under its own noise model, with and without moving qubits, at the largest distance both versions fit; best of all decoders. Hollow markers are 95% upper bounds (no logical error seen); a code at or above threshold on one version is not drawn. Sweep slice paper_topology.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=paper_topology">Explore these results</a> <a href="../figures/technologies.csv" download>Data (CSV)</a> <a href="../figures/technologies.png">PNG</a> <a href="../figures/technologies.svg">SVG</a></p>
+</section>
+<section class="fig" id="distributed">
+<h3>Single vs multi-QPU execution</h3>
+<p class="finding">Spreading a larger code over several QPUs connected by remote gates does not pay off: a single QPU gives the lower logical error rate in 75% of code and device combinations.</p>
+<img src="../figures/distributed.svg" alt="Single vs multi-QPU execution. Spreading a larger code over several QPUs connected by remote gates does not pay off: a single QPU gives the lower logical error rate in 75% of code and device combinations." loading="lazy">
+<p class="caption">Each code at the best distance that fits on one QPU, or on all QPUs with remote gates between them, best of all decoders. Today&#x27;s IBM Flamingo noise, and the same with gate errors ÷10 and T1/T2 ×3. Hollow markers are 95% upper bounds. Sweep slice paper_dqc.</p>
+<p class="link-row"><a class="arrow" href="../results/explorer.html?slice=paper_dqc">Explore these results</a> <a href="../figures/distributed.csv" download>Data (CSV)</a> <a href="../figures/distributed.png">PNG</a> <a href="../figures/distributed.svg">SVG</a></p>
+</section>
+<section class="fig" id="routing">
+<h3>Routing overhead by initial layout</h3>
+<p class="finding">Choosing the initial layout with SABRE instead of placing qubits in order needs a median 2.5× fewer SWAPs; no layout removes them.</p>
+<img src="../figures/routing.svg" alt="Routing overhead by initial layout. Choosing the initial layout with SABRE instead of placing qubits in order needs a median 2.5× fewer SWAPs; no layout removes them." loading="lazy">
+<p class="caption">SWAPs Qiskit&#x27;s routing adds to each code&#x27;s circuit on a 289-qubit 2D grid and a heavy-hex device, best routing method for each initial layout. Codes that need no SWAPs on a device are not drawn. Source: experiment_results/Routing_grid, Routing_hh.</p>
+<p class="link-row"><a href="../figures/routing.csv" download>Data (CSV)</a> <a href="../figures/routing.png">PNG</a> <a href="../figures/routing.svg">SVG</a></p>
+</section>
+<section class="fig" id="translation">
+<h3>Gate-set translation overhead</h3>
+<p class="finding">Even with optimization, translating a code&#x27;s circuit to native gates adds 1.3–3.7 gates for every gate of the circuit.</p>
+<img src="../figures/translation.svg" alt="Gate-set translation overhead. Even with optimization, translating a code&#x27;s circuit to native gates adds 1.3–3.7 gates for every gate of the circuit." loading="lazy">
+<p class="caption">Gates added when translating each code&#x27;s circuit (all-to-all device) to the IBM Heron and Quantinuum H2 native gate sets. Source: experiment_results/Translation.</p>
+<p class="link-row"><a href="../figures/translation.csv" download>Data (CSV)</a> <a href="../figures/translation.png">PNG</a> <a href="../figures/translation.svg">SVG</a></p>
+</section>
+<section class="fig" id="break-even">
+<h3>Break-even against an idle qubit</h3>
+<p class="finding">Encoding pays off only at low noise: the gross code stays ahead of an unencoded qubit idling for the same time up to p = 0.005, the Bacon-Shor code only up to p = 0.0005.</p>
+<img src="../figures/break-even.svg" alt="Break-even against an idle qubit. Encoding pays off only at low noise: the gross code stays ahead of an unencoded qubit idling for the same time up to p = 0.005, the Bacon-Shor code only up to p = 0.0005." loading="lazy">
+<p class="caption">Logical error rate of each code&#x27;s memory over the idle error of one unencoded qubit for the same duration, all-to-all device, SI1000 noise, BP-OSD, 10,000 shots. Points with no logical error are not drawn. Source: experiment_results/Accumulated.</p>
+<p class="link-row"><a href="../figures/break-even.csv" download>Data (CSV)</a> <a href="../figures/break-even.png">PNG</a> <a href="../figures/break-even.svg">SVG</a></p>
+</section>
+<!-- /gen:findings-benchmark -->
+
+<p class="note">
+    All figures are built by <code>python -m eccentric.figures</code> in the
+    <a href="https://github.com/TUM-DSE/eccentric">ECCentric repository</a> and copied here on the 1st and 15th of
+    every month. How the logical error rates are measured is described on the <a href="../method.html#statistics">Method</a> page.
+</p>
+
+</div>
+</main>
+
+<!-- shell:footer -->
+<footer class="site-footer">
+<div class="wrap footer-inner">
+<div class="footer-about">
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
+</div>
+<ul class="footer-links">
+<li><a href="../paper.html">Paper</a></li>
+<li><a href="https://github.com/TUM-DSE/eccentric">Code on GitHub</a></li>
+<li><a href="../contact.html">Contact</a></li>
+</ul>
+</div>
+</footer>
+<script src="../assets/js/site.js" defer></script>
+<!-- /shell:footer -->
 </body>
 </html>
