@@ -29,12 +29,12 @@
 <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
 <nav class="site-nav" aria-label="Main">
 <ul>
+<li><a href="../method.html">Method</a></li>
 <li><a href="../results/findings.html">Findings</a></li>
 <li><a href="../results/explorer.html">Explorer</a></li>
 <li><a href="../results/codes.html">Codes</a></li>
 <li><a href="../results/devices.html">Devices</a></li>
 <li><a href="../results/decoders.html" aria-current="page">Decoders</a></li>
-<li><a href="../method.html">Method</a></li>
 <li><a href="../paper.html">Paper</a></li>
 </ul>
 </nav>
@@ -87,16 +87,8 @@
 </tbody></table></div>
 <!-- /gen:decoders-table -->
 <p class="small muted" style="margin-top:0.8em">
-    "As good as the best" counts the configurations (a code at one distance, schedule and basis, on one device under one noise
-    model) that are below threshold (best logical error rate under 0.4) and were decoded by at least three decoders:
-    <!-- gen:decoders-count -->
-4,252
-<!-- /gen:decoders-count --> in all (the figure counts 4,257: the Explorer's dataset, which this table is computed
-    from, leaves out the compilation settings and device sizes that tell a few configurations apart). A decoder is as good as the best when the low end of its 95% interval reaches the
-    high end of the best decoder's. Decoders that apply to few codes are compared on few configurations, so their shares
-    are not comparable with the others'. Times are the median per shot on one CPU core, sampling and building the decoder included, from the
-    figure above (MWPM, correlated MWPM and Chromobius re-timed with 10<sup>5</sup> shots); decoders with fewer than 100 configurations have none. "Results" and "Codes" count every result
-    with a logical error rate, below threshold or not.
+    "As good as the best": within statistical error (95% intervals) of the most accurate decoder, on configurations
+    below threshold that at least three decoders decoded.
 </p>
 
 <div class="section-head" id="by-family">
@@ -352,10 +344,6 @@
         </tbody>
     </table>
     </div>
-    <p class="small muted" style="margin-top:0.6em">
-        The CPU runs shared the machine with others, which makes them 10–20% slower and the speed-ups that much too
-        high. Matching decoders, Tesseract and MWPF stay on the CPU.
-    </p>
 </div>
 
 <div id="tcbp_jobs_sc_gpu">
@@ -379,11 +367,6 @@
         <li>as accurate as Tesseract on 281 circuits and more accurate on 5;</li>
         <li>a median 306× less time per shot than Tesseract on one CPU core (9× to 29,000× for 80% of the circuits).</li>
     </ul>
-    <p class="small muted">
-        Not yet in the dataset. Decoding the rest of the circuits is under way; until then, its accuracy beyond these 306
-        circuits (larger circuits, circuits above threshold) is not measured. Noise learning, rare-event splitting and
-        gap-based postselection from the paper are not used.
-    </p>
 </article>
 </div>
 </div>
@@ -402,7 +385,7 @@
 <footer class="site-footer">
 <div class="wrap footer-inner">
 <div class="footer-about">
-<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="109" height="44"></a>
 <p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
 </div>
 <ul class="footer-links">

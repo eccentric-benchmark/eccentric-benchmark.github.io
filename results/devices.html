@@ -73,12 +73,12 @@
 <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
 <nav class="site-nav" aria-label="Main">
 <ul>
+<li><a href="../method.html">Method</a></li>
 <li><a href="../results/findings.html">Findings</a></li>
 <li><a href="../results/explorer.html">Explorer</a></li>
 <li><a href="../results/codes.html">Codes</a></li>
 <li><a href="../results/devices.html" aria-current="page">Devices</a></li>
 <li><a href="../results/decoders.html">Decoders</a></li>
-<li><a href="../method.html">Method</a></li>
 <li><a href="../paper.html">Paper</a></li>
 </ul>
 </nav>
@@ -159,7 +159,7 @@
 <footer class="site-footer">
 <div class="wrap footer-inner">
 <div class="footer-about">
-<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="109" height="44"></a>
 <p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
 </div>
 <ul class="footer-links">
@@ -441,7 +441,7 @@
             sel.addEventListener("change", () => select(sel.value));
             el("noise").addEventListener("change", () => { noiseTables(); history.replaceState(null, "", `?device=${device.id}&noise=${el("noise").value}`); });
             el("color-by").addEventListener("change", render);
-            el("data-status").textContent = `${data.devices.length} devices, exported ${data.generated}.`;
+            el("data-status").textContent = "";
             select(sel.value);
         }).catch((err) => { el("data-status").textContent = "Could not load the devices: " + err; });
     })();
