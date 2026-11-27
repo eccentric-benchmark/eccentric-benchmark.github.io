@@ -103,7 +103,8 @@ main > .wrap > :first-child { margin-top: 0; }
 .site-footer { background: var(--panel); border-top: 1px solid var(--line); padding: 2.5em 0; font-size: 0.88rem; color: var(--muted); }
 .footer-inner { display: flex; flex-wrap: wrap; gap: 1.5em 3em; justify-content: space-between; align-items: flex-start; }
 .footer-about { display: flex; gap: 1.2em; align-items: center; max-width: 34em; }
-.footer-about img { height: 44px; width: auto; flex: none; }
+.footer-about a:has(img) { flex: none; display: block; line-height: 0; }
+.footer-about img { height: 44px; width: auto; max-width: none; }
 .footer-about p { margin: 0; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0.4em 1.5em; list-style: none; margin: 0; padding: 0; }
 .footer-links li { margin: 0; }
@@ -336,3 +337,5 @@ table.heat td.empty { color: var(--line-strong); background: var(--surface); }
 
 /* Two columns that stack on narrow screens */
 .split { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 0 2.5em; }
+
+#data-status:empty { display: none; }

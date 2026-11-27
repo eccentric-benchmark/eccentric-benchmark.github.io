@@ -28,12 +28,12 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "https://eccentric-benchmark.github.io/"
 
 NAV = [
+    ("method", "Method", "method.html"),
     ("findings", "Findings", "results/findings.html"),
     ("explorer", "Explorer", "results/explorer.html"),
     ("codes", "Codes", "results/codes.html"),
     ("devices", "Devices", "results/devices.html"),
     ("decoders", "Decoders", "results/decoders.html"),
-    ("method", "Method", "method.html"),
     ("paper", "Paper", "paper.html"),
 ]
 
@@ -232,7 +232,7 @@ def shell_header(page, p):
 
 def shell_footer(page, p):
     return (f'<footer class="site-footer">\n<div class="wrap footer-inner">\n<div class="footer-about">\n'
-            f'<a href="https://www.munich-quantum-valley.de/"><img src="{p}images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>\n'
+            f'<a href="https://www.munich-quantum-valley.de/"><img src="{p}images/mqv.png" alt="Munich Quantum Valley" width="109" height="44"></a>\n'
             f'<p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical '
             f'University of Munich, supported by Munich Quantum Valley.</p>\n</div>\n'
             f'<ul class="footer-links">\n'
@@ -257,9 +257,7 @@ def gen_effort(d, p):
         (f'{x["codes"]} · {x["devices"]} · {x["noise_models"]} · {x["decoders"]}', "codes · devices · noise models · decoders"),
     ]
     body = "\n".join(f'<div class="tile"><div class="value">{v}</div><div class="name">{e(n)}</div></div>' for v, n in tiles)
-    note = (f'Only the jobs behind these results count, as of {x["updated"]}: none that failed, and none that later runs '
-            f'replaced. {at_least(x["logical_errors"]).replace("+", "")} logical errors observed. Each job ran on one core.')
-    return f'<div class="tiles">\n{body}\n</div>\n<p class="tiles-note">{e(note)}</p>'
+    return f'<div class="tiles">\n{body}\n</div>'
 
 
 def gen_hero(d, p):
@@ -317,13 +315,6 @@ def gen_findings(group):
                 f'<p class="caption">{e(f["caption"])}</p>\n<p class="link-row">{" ".join(links)}</p>\n</section>')
         return "\n".join(blocks)
     return gen
-
-
-def gen_findings_source(d, p):
-    s = d.manifest["source"]
-    return (f'<p class="small muted">Built {e(s["built"])} from {s["results"]:,} results (dataset schema {s["schema_version"]}'
-            f'{", ECCentric commit " + e(s["commit"]) if s.get("commit") else ""}) by <code>python -m eccentric.figures</code>. '
-            f'The list of figures is <a href="../figures/manifest.json">figures/manifest.json</a>.</p>')
 
 
 def gen_bibtex(d, p):
@@ -422,8 +413,7 @@ def gen_pipeline(d, p):
                          f'<dt>Filter them</dt><dd><a href="{p}results/explorer.html">Explorer</a>: every result, filterable and downloadable</dd>'
                          f'<dt>How they are measured</dt><dd><a href="{p}method.html#statistics">Shots, intervals and statuses</a></dd></dl>',
                          out=True))
-    return ('<ol class="pipeline">\n' + "\n".join(stages) + '\n</ol>\n'
-            '<p class="pipeline-hint">Hover over or focus a stage to see what it covers; select it to open its page.</p>')
+    return '<ol class="pipeline">\n' + "\n".join(stages) + '\n</ol>'
 
 
 # ---------------- decoders page
@@ -562,14 +552,9 @@ def gen_families(d, p):
         links = [f'<a href="{p}results/codes.html?code={e(cs[0]["id"])}">{e(fam)}</a> ({len(cs)})' for fam, cs in families.items()]
         n = sum(len(cs) for cs in families.values())
         rows.append(f'<tr><td>{e(tax)}</td><td>{e(TAXONOMY_TEXT.get(tax, ""))}</td><td>{", ".join(links)}</td><td class="num">{n}</td></tr>')
-    pending = [c for c in d.codes if c["id"] not in sweep_codes]
-    note = (f'<p class="small muted" style="margin-top:0.8em">{len(pending)} more code{"s are" if len(pending) != 1 else " is"} defined but '
-            f'{"have" if len(pending) != 1 else "has"} no results yet: ' +
-            ", ".join(f'<a href="{p}results/codes.html?code={e(c["id"])}">{e(c["id"])}</a> ({e(c["family"])})' for c in pending) + ".</p>"
-            if pending else "")
     return ('<div class="table-wrap"><table class="families"><thead><tr><th scope="col">Taxonomy</th><th scope="col">Idea</th>'
             '<th scope="col">Families (codes with results)</th><th scope="col" class="num">Codes</th></tr></thead><tbody>\n'
-            + "\n".join(rows) + "\n</tbody></table></div>" + note)
+            + "\n".join(rows) + "\n</tbody></table></div>")
 
 
 GENERATORS = {
@@ -581,7 +566,6 @@ GENERATORS = {
     "findings-toc": gen_findings_toc,
     "findings-featured": gen_findings("featured"),
     "findings-benchmark": gen_findings("benchmark"),
-    "findings-source": gen_findings_source,
     "decoders-figure": gen_decoders_figure,
     "decoders-table": gen_decoders_table,
     "decoders-heat": gen_decoders_heat,

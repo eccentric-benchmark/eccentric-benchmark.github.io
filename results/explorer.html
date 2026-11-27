@@ -63,12 +63,12 @@
 <a class="brand" href="../index.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="4" fill="#0f62fe"/><g fill="#fff"><circle cx="7" cy="7" r="2"/><circle cx="17" cy="7" r="2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></g><circle cx="12" cy="12" r="2.4" fill="#a6c8ff"/></svg> ECCentric</a>
 <nav class="site-nav" aria-label="Main">
 <ul>
+<li><a href="../method.html">Method</a></li>
 <li><a href="../results/findings.html">Findings</a></li>
 <li><a href="../results/explorer.html" aria-current="page">Explorer</a></li>
 <li><a href="../results/codes.html">Codes</a></li>
 <li><a href="../results/devices.html">Devices</a></li>
 <li><a href="../results/decoders.html">Decoders</a></li>
-<li><a href="../method.html">Method</a></li>
 <li><a href="../paper.html">Paper</a></li>
 </ul>
 </nav>
@@ -144,7 +144,7 @@
                         </dl>
                     </div>
 
-                    <div class="explain-block narrow">
+                    <div class="explain-block wide">
                         <h3>Columns</h3>
                         <ul>
                             <li><strong>Qubits:</strong> the code's data and ancilla qubits.</li>
@@ -155,7 +155,7 @@
                         <p class="small muted">Codes, devices and decoders in the table link to their pages.</p>
                     </div>
 
-                    <div class="explain-block narrow">
+                    <div class="explain-block wide">
                         <h3>Devices</h3>
                         <ul>
                             <li><strong>Marked *:</strong> projections, not announced devices: a chain of as many Loon or
@@ -170,16 +170,6 @@
                                 1.56 µs, as on Heron today; the tenfold-lower IBM model has threefold longer T1 and T2.</li>
                         </ul>
                     </div>
-
-                    <div class="explain-block narrow">
-                        <h3>Updates</h3>
-                        <ul>
-                            <li>Results with low statistics or that timed out are refined with more shots in the background,
-                                and updated here as they finish.</li>
-                            <li>Until 28 October 2026, waiting qubits did not decay and IBM readout took 70 ns. The results on
-                                these devices have been recomputed since.</li>
-                        </ul>
-                    </div>
                 </div>
             </section>
 </div>
@@ -189,7 +179,7 @@
 <footer class="site-footer">
 <div class="wrap footer-inner">
 <div class="footer-about">
-<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="104" height="44"></a>
+<a href="https://www.munich-quantum-valley.de/"><img src="../images/mqv.png" alt="Munich Quantum Valley" width="109" height="44"></a>
 <p>ECCentric is developed by the <a href="https://dse.in.tum.de/">Systems Research Group</a> at the Technical University of Munich, supported by Munich Quantum Valley.</p>
 </div>
 <ul class="footer-links">
@@ -473,8 +463,7 @@
         fetch(source).then((r) => r.json()).then((json) => {
             labels = json.labels;
             data = json.rows.map((row) => Object.fromEntries(json.columns.map((c, i) => [c, row[i]])));
-            $("data-status").textContent = "Results generated " + json.generated + " with ECCentric up to commit " + (json.commit || (json.commits || []).slice(-1)[0]) +
-                (json.complete ? "." : ". The search is still running; configurations not computed yet are marked as pending.");
+            $("data-status").textContent = "";
             buildControls();
             applyState();
             render();
