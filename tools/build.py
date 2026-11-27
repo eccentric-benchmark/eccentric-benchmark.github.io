@@ -260,12 +260,169 @@ def gen_effort(d, p):
     return f'<div class="tiles">\n{body}\n</div>'
 
 
-def gen_hero(d, p):
-    f = d.figures.get(HERO_FIGURE) or next(x for x in d.manifest["figures"] if x["group"] == "featured")
-    return (f'<figure class="hero-figure">\n<a href="{p}results/findings.html#{f["id"]}">'
-            f'<img src="{p}figures/{f["files"]["svg"]}" alt="{e(f["title"])}. {e(f["finding"])}" width="900" height="600"></a>\n'
-            f'<figcaption>One of ECCentric\'s results: {e(f["title"][0].lower() + f["title"][1:])}. '
-            f'<a href="{p}results/findings.html#{f["id"]}">About this figure</a></figcaption>\n</figure>')
+# ---------------- the homepage panel: best logical error per round of each code family on each device, today
+
+# As eccentric/figures/featured.py (where_codes_work): memory in the Z basis, each device under its own noise today
+PANEL_DEVICES = ["real_apollo", "real_infleqtion", "real_willow", "real_harvard", "real_bicycle", "real_loon",
+                 "real_loon_1_qpu", "real_flamingo", "real_flamingo_1_qpu", "real_torino"]
+PANEL_SHORT = {"real_apollo": "Apollo", "real_infleqtion": "Infleqtion", "real_willow": "Willow",
+               "real_harvard": "Harvard/MIT", "real_bicycle": "Bicycle module", "real_loon": "Loon, 2 QPUs",
+               "real_loon_1_qpu": "Loon, 1 QPU", "real_flamingo": "Flamingo, 3 QPUs",
+               "real_flamingo_1_qpu": "Flamingo, 1 QPU", "real_torino": "Heron"}
+PANEL_TODAY = {"real_torino": "real_heron", "real_flamingo": "real_flamingo", "real_flamingo_1_qpu": "real_flamingo",
+               "real_loon": "real_flamingo", "real_loon_1_qpu": "real_flamingo", "real_bicycle": "real_flamingo",
+               "real_willow": "real_willow", "real_apollo": "real_apollo", "real_infleqtion": "real_infleqtion",
+               "real_harvard": "real_harvard"}
+# Bins of the figure: < 1e-6, 1e-6..1e-5, ..., 1e-2..1e-1 (dark to light), then >= 1e-1 or above threshold
+PANEL_BINS = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1]
+PANEL_COLORS = ["#0d366b", "#184f95", "#256abf", "#3987e5", "#6da7ec", "#9ec5f4"]
+PANEL_LABELS = ["< 10⁻⁶", "10⁻⁶", "10⁻⁵", "10⁻⁴", "10⁻³", "10⁻²"]
+PANEL_ABOVE = "#b9b8b1"
+PANEL_DEFAULT = ("Surface", "real_infleqtion")
+SUP = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
+
+
+def sci(x):
+    """1.2 × 10⁻³"""
+    if x is None:
+        return "–"
+    if x >= 0.01:
+        return f"{x:.3f}"
+    m, ex = f"{x:.1e}".split("e")
+    return f"{m} × 10{str(int(ex)).translate(SUP)}"
+
+
+def code_title(c):
+    if c is None:
+        return ""
+    if len(c["sizes"]) > 1:
+        return c["family"] + " code"
+    s = c["sizes"][0] if c["sizes"] else None
+    return f'{c["family"]} [[{s["data"]},{s["k"]},{s["distance"]}]]' if s and s.get("k") is not None else f'{c["family"]} ({c["id"]})'
+
+
+def panel_cells(d):
+    cells = collections.defaultdict(list)
+    for r in d.rows:
+        if (r["operation"] == "memory" and r["basis"] == "Z" and r["backend"] in PANEL_TODAY
+                and r["error_type"] == PANEL_TODAY[r["backend"]] and not r["family"].startswith("Lattice surgery")):
+            cells[(r["family"], r["backend"])].append(r)
+    out = {}
+    for key, rs in cells.items():
+        rated = [r for r in rs if r["ler_per_round"] is not None]
+        bounded = [r for r in rs if r["ler_per_round_high"] is not None]
+        with_rate = [r for r in rs if r["status"] in WITH_RATE]
+        if rated:
+            best = min(rated, key=lambda r: r["ler_per_round"])
+            out[key] = dict(kind="rate", value=best["ler_per_round"], best=best, rows=with_rate)
+        elif bounded:
+            best = min(bounded, key=lambda r: r["ler_per_round_high"])
+            out[key] = dict(kind="bound", value=best["ler_per_round_high"], best=best, rows=with_rate)
+        elif with_rate:
+            best = min(with_rate, key=lambda r: r["logical_error_rate"] if r["logical_error_rate"] is not None else 2)
+            out[key] = dict(kind="above", value=None, best=best, rows=with_rate)
+        else:
+            out[key] = dict(kind="nofit", value=None, best=min(rs, key=lambda r: r["code_qubits"] or 1e9), rows=rs)
+    return out
+
+
+def panel_color(c):
+    if c["kind"] in ("above", "nofit") or c["value"] >= 0.1:
+        return PANEL_ABOVE if c["kind"] != "nofit" else None
+    for edge, color in zip(PANEL_BINS, PANEL_COLORS):
+        if c["value"] < edge:
+            return color
+    return PANEL_ABOVE
+
+
+def panel_detail(d, fam, dev, c, p):
+    codes = {x["id"]: x for x in d.codes}
+    b = c["best"]
+    dev_name, noise_name = d.labels["devices"].get(dev, dev), d.labels["noise"].get(b["error_type"], b["error_type"])
+    explore = (f'{p}results/explorer.html?family={html.escape(fam, quote=True)}&amp;backend={dev}&amp;error_type={b["error_type"]}'
+               f'&amp;operation=memory&amp;basis=Z')
+    head = f'<p class="lp-title">{e(fam)} <span>on</span> {e(PANEL_SHORT.get(dev, dev_name))}</p>'
+    if c["kind"] == "nofit":
+        need = min(r["code_qubits"] for r in c["rows"] if r["code_qubits"])
+        have = c["rows"][0]["device_qubits"]
+        return (head + f'<p class="lp-rate"><span class="lp-swatch lp-empty"></span><strong>Does not fit</strong></p>'
+                f'<p class="lp-note">The smallest code of the family needs {need:,} qubits; {e(PANEL_SHORT.get(dev, dev_name))} has {have:,}.</p>')
+    swatch = panel_color(c) or "transparent"
+    if c["kind"] == "rate":
+        rate = f'<strong>{sci(c["value"])}</strong> logical errors per round'
+    elif c["kind"] == "bound":
+        rate = f'<strong>&lt; {sci(c["value"])}</strong> per round: no logical error seen'
+    else:
+        rate = '<strong>Above threshold</strong>: a logical error rate of 0.5 or more over all rounds'
+    code = codes.get(b["code"])
+    title = code_title(code)
+    dist = "" if "[[" in title else f', distance {b["distance"]}'
+    decoders = {r["decoder"] for r in c["rows"]}
+    ncodes = len({r["code"] for r in c["rows"]})
+    total = (f'{sci(b["logical_error_rate"])} [{sci(b["ler_low"])}, {sci(b["ler_high"])}]' if b["logical_error_rate"] is not None
+             else f'&lt; {sci(b["ler_high"])}')
+    rows = [
+        ("Code", f'<a href="{p}results/codes.html?code={e(b["code"])}">{e(title)}</a>{dist}, {b["rounds"]} rounds'),
+        ("Device", f'<a href="{p}results/devices.html?device={dev}&amp;noise={b["error_type"]}">{e(dev_name)}</a>'),
+        ("Noise", e(noise_name)),
+        ("Decoder", f'<a href="{p}results/decoders.html#{b["decoder"]}">{e(d.labels["decoders"].get(b["decoder"], b["decoder"]))}</a>'),
+        ("Circuit", f'{b["circuit_qubits"]:,.0f} qubits, {b["swaps"]:,.0f} SWAPs, {b["two_qubit_gates"]:,.0f} two-qubit gates'
+                    if b["circuit_qubits"] is not None else "–"),
+        ("All rounds", f'{total}: {b["errors"]:,.0f} logical error{"s" if b["errors"] != 1 else ""} in {b["shots"]:,.0f} shots'
+                       if b["shots"] else total),
+    ]
+    dl = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in rows)
+    if b["status"] == "low statistics":
+        rate += ' <span class="lp-flag" title="Stopped by the shot or time limit before 100 logical errors">low statistics</span>'
+    return (head + f'<p class="lp-rate"><span class="lp-swatch" style="background:{swatch}"></span>{rate}</p>'
+            f'<dl class="lp-setup">{dl}</dl>'
+            f'<p class="lp-note">Best of {len(c["rows"]):,} results: {ncodes} code{"s" if ncodes != 1 else ""}, '
+            f'{len(decoders)} decoder{"s" if len(decoders) != 1 else ""}. <a class="arrow" href="{explore}">All of them</a></p>')
+
+
+def gen_hero_panel(d, p):
+    cells = panel_cells(d)
+    fams = sorted({f for f, _ in cells}, key=lambda f: (min([c["value"] for (g, _), c in cells.items() if g == f and c["value"] is not None], default=9), f))
+    default = PANEL_DEFAULT if PANEL_DEFAULT in cells else next(iter(cells))
+    details, head, body = [], [], []
+    head.append('<tr><td></td>' + "".join(f'<th scope="col" data-col="{j}"><span>{e(PANEL_SHORT[dev])}</span></th>' for j, dev in enumerate(PANEL_DEVICES)) + "</tr>")
+    for i, fam in enumerate(fams):
+        tds = []
+        for j, dev in enumerate(PANEL_DEVICES):
+            c = cells.get((fam, dev))
+            if c is None:
+                tds.append('<td class="lp-none" title="Not run"></td>')
+                continue
+            k = len(details)
+            details.append(panel_detail(d, fam, dev, c, p))
+            color = panel_color(c)
+            label = {"rate": sci(c["value"]) + " per round", "bound": "< " + sci(c["value"]) + " per round",
+                     "above": "above threshold", "nofit": "does not fit"}[c["kind"]]
+            sel = (fam, dev) == default
+            style = f' style="background:{color}"' if color else ""
+            tds.append(f'<td><button type="button" class="lp-cell{" lp-nofit" if c["kind"] == "nofit" else ""}{" lp-bound" if c["kind"] == "bound" else ""}"'
+                       f'{style} data-k="{k}" data-row="{i}" data-col="{j}" aria-pressed="{"true" if sel else "false"}"'
+                       f' tabindex="{"0" if sel else "-1"}" aria-label="{e(fam)} on {e(PANEL_SHORT[dev])}: {label}"></button></td>')
+        body.append(f'<tr><th scope="row" data-row="{i}">{e(fam)}</th>{"".join(tds)}</tr>')
+    default_index = None
+    k = 0
+    for fam in fams:
+        for dev in PANEL_DEVICES:
+            if (fam, dev) in cells:
+                if (fam, dev) == default:
+                    default_index = k
+                k += 1
+    legend = "".join(f'<span><i style="background:{c}"></i>{l}</span>' for c, l in zip(PANEL_COLORS, PANEL_LABELS))
+    legend += f'<span><i style="background:{PANEL_ABOVE}"></i>≥ 10⁻¹ or above threshold</span><span><i class="lp-empty"></i>does not fit</span><span><i class="lp-dot"></i>no logical error seen (upper bound)</span>'
+    data = json.dumps(details, ensure_ascii=False).replace("</", "<\\/")
+    return (f'<figure class="lerpanel" id="lerpanel">\n'
+            f'<figcaption class="lp-head"><strong>Where each code family works today</strong>'
+            f'<span>Lowest logical error per round of any code of the family, on each device under its own noise. '
+            f'Select a cell for the experiment behind it.</span></figcaption>\n'
+            f'<div class="lp-scroll"><table class="lp-grid"><thead>{"".join(head)}</thead><tbody>\n' + "\n".join(body) +
+            f'\n</tbody></table></div>\n<p class="lp-legend">{legend}</p>\n'
+            f'<div class="lp-detail" aria-live="polite">{details[default_index]}</div>\n'
+            f'<script type="application/json" id="lp-data">{data}</script>\n</figure>')
 
 
 def figure_links(f, p, csv=True):
@@ -559,7 +716,7 @@ def gen_families(d, p):
 
 GENERATORS = {
     "effort": gen_effort,
-    "hero": gen_hero,
+    "hero-panel": gen_hero_panel,
     "featured": gen_featured,
     "pipeline": gen_pipeline,
     "bibtex": gen_bibtex,
