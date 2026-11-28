@@ -96,6 +96,7 @@
   "willow_surface": "Surface code on Google Willow",
   "floquet_devices": "Floquet codes on devices",
   "noise_scaling": "Device noise scaled down",
+  "willow_qldpc": "qLDPC and other codes on Google Willow",
   "basis_x": "Memory in the X basis",
   "reference": "Reference: all codes on an all-to-all device",
   "lattice_surgery": "Lattice surgery: memory, merge and CNOT of surface-code patches",
